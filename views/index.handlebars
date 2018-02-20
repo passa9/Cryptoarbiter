@@ -9,7 +9,9 @@
     <thead>
         <tr>
             <th>Code</th>
-            <th>Bittrex Last</th>
+            <th>Bittrex</th>
+            <th>Binance</th>
+            <th>Poloniex</th>
         </tr>
     </thead>
 
@@ -28,32 +30,100 @@
                 {
                     "data": "bittrex.last", "orderable": true, render: function (data, type, row, meta) {
 
-                        test(meta, data);
-                        var settings = meta.settings;
-                        var api = new $.fn.dataTable.Api(settings);
-                        var value = api.cell(meta.row, meta.col);
+                        if (data == undefined)
+                            return "-";
 
-                        var a_ndx = api.column('a:name').index();
-                        return 'xx' + row[a_ndx];
+                        var difference = compare(meta, data);
+
+                        if (difference == 1) {
+                            return '<span style="color:green">' + data.toFixed(8) + '</span>'
+                        }
+                        if (difference == 0) {
+                            return '<span >' + data.toFixed(8) + '</span>'
+                        }
+                        if (difference == -1) {
+                            return '<span style="color:red">' + data.toFixed(8) + '</span>'
+                        }
+
                     }
                 },
+                {
+                    "data": "binance.last", "orderable": true, render: function (data, type, row, meta) {
+                     
+                        if (data == undefined)
+                            return "-";
+                        data = Number(data);
+                        var difference = compare(meta, data);
+
+                        if (difference == 1) {
+                            return '<span style="color:green">' + data.toFixed(8) + '</span>'
+                        }
+                        if (difference == 0) {
+                            return '<span >' + data.toFixed(8) + '</span>'
+                        }
+                        if (difference == -1) {
+                            return '<span style="color:red">' + data.toFixed(8) + '</span>'
+                        }
+
+                    }
+                },
+                  {
+                    "data": "poloniex.last", "orderable": true, render: function (data, type, row, meta) {
+                     
+                        if (data == undefined)
+                            return "-";
+                        data = Number(data);
+                        var difference = compare(meta, data);
+
+                        if (difference == 1) {
+                            return '<span style="color:green">' + data.toFixed(8) + '</span>'
+                        }
+                        if (difference == 0) {
+                            return '<span >' + data.toFixed(8) + '</span>'
+                        }
+                        if (difference == -1) {
+                            return '<span style="color:red">' + data.toFixed(8) + '</span>'
+                        }
+
+                    }
+                },
+
             ],
         });
         var prevTable;
 
-        function test(meta, value) {
+        function compare(meta, value) {
 
             if (prevTable !== undefined) {
-                var next_data = prevTable.cell(meta.row, meta.col).data();
-                if (next_data != value) {
-                    console.log("diverso");
+                var prev_data;
+                if (meta.col == 1) {
+                    prev_data = prevTable[meta.row].bittrex;
                 }
+                else if (meta.col == 2) {
+                    prev_data = prevTable[meta.row].binance;
+                }
+                 else if (meta.col == 3) {
+                    prev_data = prevTable[meta.row].poloniex;
+                }
+
+                if(prev_data == undefined)
+                return 0;
+                
+                if (prev_data.last < value)
+                    return 1;
+                else if (prev_data.last == value)
+                    return 0;
+                else return -1;
+
             }
+            else
+                return 0;
 
         }
 
         setInterval(function () {
-            prevTable = JSON.parse(JSON.stringify(table));// Object.assign({}, table);
+            var json = table.ajax.json();
+            prevTable = json.data;
             table.ajax.reload(null, false); // user paging is not reset on reload
         }, 3000);
     });
