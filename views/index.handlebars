@@ -3,9 +3,37 @@
     <p class="lead">Jot down ideas for your next YouTube videos</p>
     <a href="/ideas/add" class="btn btn-dark btn-lg">Add Video Idea</a>
 </div>
+<div>
 
-<table id="example" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
+
+</div>
+<table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
+        <tr>
+            <td colspan="7">
+                Exchange: &nbsp;
+                <button class="btn btn-sm btn-secondary toggle-vis" data-column="1" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    Bittrex
+                </button>
+                <button class="btn btn-sm btn-secondary toggle-vis" data-column="2" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    Binance
+                </button>
+                <button class="btn btn-sm btn-secondary toggle-vis" data-column="3" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    Poloniex
+                </button>
+                <button class="btn btn-sm btn-secondary toggle-vis" data-column="4" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    Cryptopia
+                </button>
+                <button class="btn btn-sm btn-secondary toggle-vis" data-column="5" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    Livecoin
+                </button>
+            </td>
+        </tr>
         <tr>
             <th>Code</th>
             <th>Bittrex</th>
@@ -21,10 +49,12 @@
 
 <script>
     $(document).ready(function () {
-        var table = $('#example').DataTable({
+        var table = $('#table').DataTable({
             "ajax": 'http://localhost:5000/tickers',
             responsive: true,
             fixedHeader: true,
+             "order": [[ 6, "desc" ]]
+
             "columns": [
                 {
                     "data": "id", "orderable": true,
@@ -130,11 +160,8 @@
                     }
                 },
                 {
-                    "data": "percentage", "orderable": true, render: function (data, type, row, meta) {
+                    "data": "null", "orderable": true, render: function (data, type, row, meta) {
 
-                        if (data == undefined)
-                            return "-";
-                        data = Number(data);
                         var difference = compare(meta, data);
 
                         if (difference == 1) {
@@ -205,7 +232,51 @@
             prevTable = json.data;
             table.ajax.reload(null, false); // user paging is not reset on reload
         }, 3000);
+
+        $('button.toggle-vis').on('click', function (e) {
+            e.preventDefault();
+
+            // Get the column API object
+            var column = table.column($(this).attr('data-column'));
+
+            // Toggle the visibility
+            column.visible(!column.visible());
+        });
+
     });
+
+
+    function exchange(element) {
+        var icon = element.children[0];
+
+        element.children[0].classList.toggle('fa-square');
+        element.children[0].classList.toggle('fa-check-square');
+    }
+
 </script>
-<style>
-</style>
+
+
+
+
+
+
+{{!-- {
+                    "data": "percentage", "orderable": true, render: function (data, type, row, meta) {
+
+                        if (data == undefined)
+                            return "-";
+                        data = Number(data);
+                        var difference = compare(meta, data);
+
+                        if (difference == 1) {
+                            return '<span style="color:green">' + data.toFixed(2) + '</span>'
+                        }
+                        if (difference == 0) {
+                            return '<span >' + data.toFixed(2) + '</span>'
+                        }
+                        if (difference == -1) {
+                            return '<span style="color:red">' + data.toFixed(2) + '</span>'
+                        }
+
+                    }
+                }, --}}

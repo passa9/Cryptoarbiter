@@ -95,7 +95,6 @@ async function LivecoinTickers() {
   });
 }
 
-
 async function BittrexTickers() {
   const url =
     "https://bittrex.com/api/v1.1/public/getmarketsummaries";
