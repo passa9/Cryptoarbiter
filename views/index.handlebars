@@ -42,7 +42,7 @@
 <script>
     $(document).ready(function () {
         var table = $('#table').DataTable({
-            "ajax": 'http://localhost:5000/tickers',
+            "ajax": location.protocol + '//' + location.host + '/tickers',
             responsive: true,
             fixedHeader: true,
             iDisplayLength: 50,
