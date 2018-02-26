@@ -31,7 +31,7 @@ async function init() {
   await BittrexTickers();
   await BinanceTickers();
   await PoloniexTickers();
-  await YobitTickers();
+  // await YobitTickers();
   await CryptopiaTickers();
   await LivecoinTickers();
   // await YobitTickers();
@@ -60,8 +60,14 @@ async function LivecoinTickers() {
 
     if (error || response.statusCode != 200)
       return;
-
-    let json = JSON.parse(body);
+    let json;
+    try {
+      json = JSON.parse(body);
+    }
+    catch(e)
+    {
+      return;
+    }
 
     json.forEach(element => {
 
