@@ -81,7 +81,9 @@ async function LivecoinTickers() {
         tickers.push({
           id: basecurrency + "-" + currency,
           livecoin: {
-            last: element.last
+            last: element.last,
+            bid: element.max_bid,
+            ask: element.min_ask,
           },
           binance: {},
           poloniex: {},
@@ -123,7 +125,9 @@ async function BittrexTickers() {
         tickers.push({
           id: element.MarketName,
           bittrex: {
-            last: element.Last
+            last: element.Last,
+            bid: element.Bid,
+            ask: element.Ask,
           },
           binance: {},
           poloniex: {},
@@ -162,7 +166,9 @@ async function PoloniexTickers() {
         tickers.push({
           id: key.replace('_', '-'),
           poloniex: {
-            last: obj[key].last
+            last: obj[key].last,
+            ask: obj[key].lowestAsk,
+            bid: obj[key].highestBid
           },
           binance: {},
           bittrex: {},
@@ -182,7 +188,7 @@ async function PoloniexTickers() {
 
 function BinanceTickers() {
   const url =
-    "https://api.binance.com/api/v3/ticker/price";
+    "https://api.binance.com/api/v3/ticker/bookTicker";
   request.get(url, (error, response, body) => {
     if (error)
       return;
@@ -210,7 +216,9 @@ function BinanceTickers() {
         tickers.push({
           id: basecurrency + '-' + currency,
           binance: {
-            last: element.price
+            last: element.price,
+            ask:element.askPrice,
+            bid: element.bidPrice
           },
           bittrex: {},
           poloniex: {},
@@ -276,7 +284,9 @@ async function CryptopiaTickers() {
           binance: {},
           poloniex: {},
           cryptopia: {
-            last: element.LastPrice
+            last: element.LastPrice,
+            bid: element.BidPrice,
+            ask: element.AskPrice
           },
           livecoin: {},
           percentage: 0,

@@ -33,8 +33,22 @@ $(document).ready(function () {
                     else if (max) {
                         cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
                     }
-
-                    if (difference == 1) {
+                    cell += '<table style="margin:0;padding:0;border:0;background-color:trasparent">'
+                    cell += '<tbody style="margin:0;padding:0;border:0;background-color:trasparent">'
+                    cell += "<tr>"
+                    cell += "<td>"
+                    cell += "ciiao"
+                    cell += "</td>"
+                    cell += "</tr>"
+                    cell += "<tr>"
+                    cell += "<td>"
+                    cell += "ciaooo"
+                    cell += "</td>"
+                    cell += "</tr>"
+                    cell += "</tbody>"
+                    cell += "</table>"
+                   
+                 /*    if (difference == 1) {
                         cell += '<span style="color:green">' + data.toFixed(8) + '</span>'
                     }
                     if (difference == 0) {
@@ -42,7 +56,7 @@ $(document).ready(function () {
                     }
                     if (difference == -1) {
                         cell += '<span style="color:red">' + data.toFixed(8) + '</span>'
-                    }
+                    } */
                     cell += '</div>';
 
                     return cell;
