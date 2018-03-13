@@ -11,15 +11,16 @@ $(document).ready(function () {
                 "data": "id", "orderable": true,
             },
             {
-                "data": "bittrex.last", "orderable": true, render: function (data, type, row, meta) {
+                "data": "bittrex", "orderable": true, render: function (data, type, row, meta) {
 
                     if (data == undefined)
                         return "-";
 
-                    var difference = compare(meta, data);
+                    var differenceBid = compare(meta, data.bid, "bid");
+                    var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data, "Bittrex");
-                    var max = high(row, data, "Bittrex");
+                    var min = low(row, data.ask, "Bittrex");
+                    var max = high(row, data.bid, "Bittrex");
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -33,30 +34,31 @@ $(document).ready(function () {
                     else if (max) {
                         cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
                     }
-                    cell += '<table style="margin:0;padding:0;border:0;background-color:trasparent">'
-                    cell += '<tbody style="margin:0;padding:0;border:0;background-color:trasparent">'
-                    cell += "<tr>"
-                    cell += "<td>"
-                    cell += "ciiao"
-                    cell += "</td>"
-                    cell += "</tr>"
-                    cell += "<tr>"
-                    cell += "<td>"
-                    cell += "ciaooo"
-                    cell += "</td>"
-                    cell += "</tr>"
-                    cell += "</tbody>"
-                    cell += "</table>"
-                   
-                 /*    if (difference == 1) {
-                        cell += '<span style="color:green">' + data.toFixed(8) + '</span>'
+                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                    cell += '<font size="2">';
+                    if (differenceAsk == 1) {
+                        cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
                     }
-                    if (difference == 0) {
-                        cell += '<span >' + data.toFixed(8) + '</span>'
+                    else if (differenceAsk == 0) {
+                        cell += '<span >' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
                     }
-                    if (difference == -1) {
-                        cell += '<span style="color:red">' + data.toFixed(8) + '</span>'
-                    } */
+                    else if (differenceAsk == -1) {
+                        cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                    }
+                    cell += '</font>'
+                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                    cell += '<font size="2">';
+                    if (differenceBid == 1) {
+                        cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                    }
+                    if (differenceBid == 0) {
+                        cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                    }
+                    if (differenceBid == -1) {
+                        cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                    }
+                    '</div></div></div></div>';
+
                     cell += '</div>';
 
                     return cell;
@@ -291,6 +293,50 @@ $(document).ready(function () {
 
     }
 
+    function compare(meta, value, type) {
+
+        if (prevTable !== undefined) {
+            var prev_data;
+
+
+            if (meta.col == 1) {
+                prev_data = prevTable[meta.row].bittrex;
+            }
+            else if (meta.col == 2) {
+                prev_data = prevTable[meta.row].binance;
+            }
+            else if (meta.col == 3) {
+                prev_data = prevTable[meta.row].poloniex;
+            }
+            else if (meta.col == 4) {
+                prev_data = prevTable[meta.row].cryptopia;
+            }
+            else if (meta.col == 5) {
+                prev_data = prevTable[meta.row].livecoin;
+            }
+
+            if (prev_data == undefined)
+                return 0;
+
+            if (type == "bid") {
+                prev_data = prev_data.bid;
+            }
+            else {
+                prev_data = prev_data.ask;
+            }
+
+            if (prev_data < value)
+                return 1;
+            else if (prev_data == value)
+                return 0;
+            else return -1;
+
+        }
+        else
+            return 0;
+
+    }
+
     function comparePercentage(value, pair) {
         var index = prevPercentage.findIndex(x => x.id == pair);
 
@@ -345,16 +391,16 @@ function exchange(element) {
 function low(row, value, exchange) {
     var arr = [];
 
-    if (row.poloniex.last != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.poloniex.last);
-    if (row.bittrex.last != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bittrex.last);
-    if (row.cryptopia.last != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
-        arr.push(row.cryptopia.last);
-    if (row.binance.last != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
-        arr.push(row.binance.last);
-    if (row.livecoin.last != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
-        arr.push(row.livecoin.last);
+    if (row.poloniex.ask != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.poloniex.ask);
+    if (row.bittrex.ask != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.bittrex.ask);
+    if (row.cryptopia.ask != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
+        arr.push(row.cryptopia.ask);
+    if (row.binance.ask != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
+        arr.push(row.binance.ask);
+    if (row.livecoin.ask != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
+        arr.push(row.livecoin.ask);
 
     var min = Math.min(...arr);
 
@@ -364,21 +410,19 @@ function low(row, value, exchange) {
         return false;
 }
 
-
-
 function high(row, value, exchange) {
     var arr = [];
 
-    if (row.poloniex.last != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.poloniex.last);
-    if (row.bittrex.last != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bittrex.last);
-    if (row.cryptopia.last != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
-        arr.push(row.cryptopia.last);
-    if (row.binance.last != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
-        arr.push(row.binance.last);
-    if (row.livecoin.last != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
-        arr.push(row.livecoin.last);
+    if (row.poloniex.bid != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.poloniex.bid);
+    if (row.bittrex.bid != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.bittrex.bid);
+    if (row.cryptopia.bid != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
+        arr.push(row.cryptopia.bid);
+    if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
+        arr.push(row.binance.bid);
+    if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
+        arr.push(row.livecoin.bid);
 
     var max = Math.max(...arr);
 
@@ -391,16 +435,16 @@ function high(row, value, exchange) {
 function getMin(row) {
     var arr = [];
 
-    if (row.poloniex.last != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.poloniex.last);
-    if (row.bittrex.last != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bittrex.last);
-    if (row.cryptopia.last != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
-        arr.push(row.cryptopia.last);
-    if (row.binance.last != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
-        arr.push(row.binance.last);
-    if (row.livecoin.last != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
-        arr.push(row.livecoin.last);
+    if (row.poloniex.ask != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.poloniex.ask);
+    if (row.bittrex.ask != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.bittrex.ask);
+    if (row.cryptopia.ask != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
+        arr.push(row.cryptopia.ask);
+    if (row.binance.ask != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
+        arr.push(row.binance.ask);
+    if (row.livecoin.ask != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
+        arr.push(row.livecoin.ask);
 
     if (arr.length == 0)
         return 0;
@@ -411,16 +455,16 @@ function getMin(row) {
 function getMax(row) {
     var arr = [];
 
-    if (row.poloniex.last != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.poloniex.last);
-    if (row.bittrex.last != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bittrex.last);
-    if (row.cryptopia.last != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
-        arr.push(row.cryptopia.last);
-    if (row.binance.last != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
-        arr.push(row.binance.last);
-    if (row.livecoin.last != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
-        arr.push(row.livecoin.last);
+    if (row.poloniex.bid != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.poloniex.bid);
+    if (row.bittrex.bid != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square"))
+        arr.push(row.bittrex.bid);
+    if (row.cryptopia.bid != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square"))
+        arr.push(row.cryptopia.bid);
+    if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square"))
+        arr.push(row.binance.bid);
+    if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
+        arr.push(row.livecoin.bid);
 
     if (arr.length == 0)
         return 0;

@@ -88,14 +88,14 @@ async function LivecoinTickers() {
           binance: {},
           poloniex: {},
           cryptopia: {},
-          bittrex: {},
-          percentage: 0,
+          bittrex: {}
         });
 
       }
       else {
         ticker.livecoin.last = element.last;
-        ticker.percentage = calcPerc(ticker);
+        ticker.livecoin.bid = element.max_bid;
+        ticker.livecoin.ask = element.min_ask;
       }
 
     });
@@ -133,13 +133,13 @@ async function BittrexTickers() {
           poloniex: {},
           cryptopia: {},
           livecoin: {},
-          percentage: 0,
         });
 
       }
       else {
         ticker.bittrex.last = element.Last;
-        ticker.percentage = calcPerc(ticker);
+        ticker.bittrex.bid = element.Bid;
+        ticker.bittrex.ask = element.Ask;
       }
 
     });
@@ -174,13 +174,12 @@ async function PoloniexTickers() {
           bittrex: {},
           cryptopia: {},
           livecoin: {},
-          percentage: 0,
         });
-
       }
       else {
         ticker.poloniex.last = obj[key].last;
-        ticker.percentage = calcPerc(ticker);
+        ticker.poloniex.bid = obj[key].highestBid;
+        ticker.poloniex.ask = obj[key].lowestAsk;
       }
     });
   });
@@ -223,14 +222,14 @@ function BinanceTickers() {
           bittrex: {},
           poloniex: {},
           cryptopia: {},
-          livecoin: {},
-          percentage: 0,
+          livecoin: {}
         });
 
       }
       else {
         ticker.binance.last = element.price;
-        ticker.percentage = calcPerc(ticker);
+        ticker.binance.ask = element.askPrice;
+        ticker.binance.bid = element.bidPrice;
       }
 
     });
@@ -288,14 +287,14 @@ async function CryptopiaTickers() {
             bid: element.BidPrice,
             ask: element.AskPrice
           },
-          livecoin: {},
-          percentage: 0,
+          livecoin: {}
         });
 
       }
       else {
         ticker.cryptopia.last = element.LastPrice;
-        ticker.percentage = calcPerc(ticker);
+        ticker.cryptopia.bid = element.BidPrice;
+        ticker.cryptopia.ask = element.AskPrice;
       }
 
     });
@@ -320,7 +319,6 @@ function calcPerc(ticker) {
 
   return (((max / min) * 100) - 100);
 }
-
 
 async function YobitTickers() {
   var apiUrlAssetPairs = 'https://yobit.net/api/3/info',
