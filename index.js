@@ -34,6 +34,9 @@ async function init() {
   // await YobitTickers();
   await CryptopiaTickers();
   await LivecoinTickers();
+
+  await MappingIdLiqui();
+ 
   // await YobitTickers();
   //  await KrakenTickers();
   update();
@@ -41,6 +44,7 @@ async function init() {
 init();
 
 var tickers = [];
+var mappingLiqui = [];
 
 function update() {
   setInterval(function () {
@@ -49,6 +53,7 @@ function update() {
     PoloniexTickers();
     CryptopiaTickers();
     LivecoinTickers();
+    LiquiTickers();
 
   }, 3000);
 }
@@ -64,8 +69,7 @@ async function LivecoinTickers() {
     try {
       json = JSON.parse(body);
     }
-    catch(e)
-    {
+    catch (e) {
       return;
     }
 
@@ -82,9 +86,10 @@ async function LivecoinTickers() {
           id: basecurrency + "-" + currency,
           livecoin: {
             last: element.last,
-            bid: element.max_bid,
-            ask: element.min_ask,
+            bid: element.best_bid,
+            ask: element.best_ask,
           },
+          liqui: {},
           binance: {},
           poloniex: {},
           cryptopia: {},
@@ -94,8 +99,57 @@ async function LivecoinTickers() {
       }
       else {
         ticker.livecoin.last = element.last;
-        ticker.livecoin.bid = element.max_bid;
-        ticker.livecoin.ask = element.min_ask;
+        ticker.livecoin.bid = element.best_bid;
+        ticker.livecoin.ask = element.best_ask;
+      }
+
+    });
+
+  });
+}
+
+async function LiquiTickers() {
+  const url =
+    "https://cacheapi.liqui.io/Market/Tickers";
+  request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200)
+      return;
+    let json;
+    try {
+      json = JSON.parse(body);
+    }
+    catch (e) {
+      return;
+    }
+
+    json.forEach(element => {
+
+      var currency = mappingLiqui.find(function (x) { return x.id == element.PairId })
+
+      var ticker = tickers.find(x => x.id === currency.pair);
+
+      if (ticker == null) // nuovo, lo inserisco
+      {
+        tickers.push({
+          id: currency.pair,
+          liqui: {
+            last: element.LastPrice,
+            bid: element.Buy,
+            ask: element.Sell,
+          },
+          livecoin: {},
+          binance: {},
+          poloniex: {},
+          cryptopia: {},
+          bittrex: {}
+        });
+
+      }
+      else {
+        ticker.liqui.last = element.LastPrice;
+        ticker.liqui.bid = element.Buy;
+        ticker.liqui.ask = element.Sell;
       }
 
     });
@@ -129,6 +183,7 @@ async function BittrexTickers() {
             bid: element.Bid,
             ask: element.Ask,
           },
+          liqui: {},
           binance: {},
           poloniex: {},
           cryptopia: {},
@@ -167,9 +222,10 @@ async function PoloniexTickers() {
           id: key.replace('_', '-'),
           poloniex: {
             last: obj[key].last,
-            ask: obj[key].lowestAsk,
-            bid: obj[key].highestBid
+            ask: parseFloat(obj[key].lowestAsk),
+            bid: parseFloat(obj[key].highestBid)
           },
+          liqui: {},
           binance: {},
           bittrex: {},
           cryptopia: {},
@@ -178,8 +234,8 @@ async function PoloniexTickers() {
       }
       else {
         ticker.poloniex.last = obj[key].last;
-        ticker.poloniex.bid = obj[key].highestBid;
-        ticker.poloniex.ask = obj[key].lowestAsk;
+        ticker.poloniex.bid = parseFloat(obj[key].highestBid);
+        ticker.poloniex.ask = parseFloat(obj[key].lowestAsk);
       }
     });
   });
@@ -216,9 +272,10 @@ function BinanceTickers() {
           id: basecurrency + '-' + currency,
           binance: {
             last: element.price,
-            ask:element.askPrice,
-            bid: element.bidPrice
+            ask: parseFloat(element.askPrice),
+            bid: parseFloat(element.bidPrice)
           },
+          liqui: {},
           bittrex: {},
           poloniex: {},
           cryptopia: {},
@@ -228,12 +285,44 @@ function BinanceTickers() {
       }
       else {
         ticker.binance.last = element.price;
-        ticker.binance.ask = element.askPrice;
-        ticker.binance.bid = element.bidPrice;
+        ticker.binance.ask = parseFloat(element.askPrice);
+        ticker.binance.bid = parseFloat(element.bidPrice);
       }
 
     });
 
+  });
+}
+
+async function MappingIdLiqui() {
+  const url =
+    "https://cacheapi.liqui.io/Market/Pairs";
+  await request.get(url, async(error, response, body) => {
+
+    if (error || response.statusCode != 200)
+      return;
+    let json;
+    try {
+      json = JSON.parse(body);
+    }
+    catch (e) {
+      return;
+    }
+
+    for (var i = 0; i < json.length; i++) {
+      var element = json[i];
+
+      var basecurrency = element.Name.split('/')[1];
+      var currency = element.Name.split('/')[0];
+      var pair = basecurrency + "-" + currency;
+
+      mappingLiqui.push({
+        id: element.Id,
+        pair: pair
+      });
+    }
+
+    await LiquiTickers();
   });
 }
 
@@ -252,8 +341,6 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
-
-
 
 async function CryptopiaTickers() {
   const url =
@@ -282,6 +369,7 @@ async function CryptopiaTickers() {
           bittrex: {},
           binance: {},
           poloniex: {},
+          liqui: {},
           cryptopia: {
             last: element.LastPrice,
             bid: element.BidPrice,
@@ -356,6 +444,7 @@ async function YobitTickers() {
             poloniex: {
               last: obj[key].last
             },
+            liqui: {},
             binance: {},
             bittrex: {},
             percentage: 0,
@@ -372,7 +461,6 @@ async function YobitTickers() {
 
   });
 }
-
 
 async function KrakenTickers() {
   var apiUrlAssetPairs = 'https://api.kraken.com/0/public/AssetPairs',

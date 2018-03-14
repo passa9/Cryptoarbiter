@@ -4,7 +4,7 @@ $(document).ready(function () {
         responsive: true,
         fixedHeader: true,
         iDisplayLength: 50,
-        "order": [[6, "desc"]],
+        "order": [[7, "desc"]],
 
         "columns": [
             {
@@ -13,8 +13,8 @@ $(document).ready(function () {
             {
                 "data": "bittrex", "orderable": true, render: function (data, type, row, meta) {
 
-                    if (data == undefined)
-                        return "-";
+                    if (data.bid == undefined)
+                    return "-";
 
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
@@ -66,15 +66,16 @@ $(document).ready(function () {
                 }
             },
             {
-                "data": "binance.last", "orderable": true, render: function (data, type, row, meta) {
+                "data": "binance", "orderable": true, render: function (data, type, row, meta) {
 
-                    if (data == undefined)
+                    if (data.bid == undefined)
                         return "-";
-                    data = Number(data);
-                    var difference = compare(meta, data);
 
-                    var min = low(row, data, "Binance");
-                    var max = high(row, data, "Binance");
+                    var differenceBid = compare(meta, data.bid, "bid");
+                    var differenceAsk = compare(meta, data.ask, "ask");
+
+                    var min = low(row, data.ask, "Binance");
+                    var max = high(row, data.bid, "Binance");
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -88,16 +89,31 @@ $(document).ready(function () {
                     else if (max) {
                         cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
                     }
+                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                    cell += '<font size="2">';
+                    if (differenceAsk == 1) {
+                        cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                    }
+                    else if (differenceAsk == 0) {
+                        cell += '<span>' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                    }
+                    else if (differenceAsk == -1) {
+                        cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                    }
+                    cell += '</font>'
+                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                    cell += '<font size="2">';
+                    if (differenceBid == 1) {
+                        cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                    }
+                    if (differenceBid == 0) {
+                        cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                    }
+                    if (differenceBid == -1) {
+                        cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                    }
+                    '</div></div></div></div>';
 
-                    if (difference == 1) {
-                        cell += '<span style="color:green">' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == 0) {
-                        cell += '<span >' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == -1) {
-                        cell += '<span style="color:red">' + data.toFixed(8) + '</span>'
-                    }
                     cell += '</div>';
 
                     return cell;
@@ -105,121 +121,222 @@ $(document).ready(function () {
                 }
             },
             {
-                "data": "poloniex.last", "orderable": true, render: function (data, type, row, meta) {
+                "data": "poloniex", "orderable": true, render: function (data, type, row, meta) {
 
-                    if (data == undefined)
-                        return "-";
-                    data = Number(data);
-                    var difference = compare(meta, data);
+                    if (data.bid == undefined)
+                    return "-";
 
-                    var min = low(row, data, "Poloniex");
-                    var max = high(row, data, "Poloniex");
+                var differenceBid = compare(meta, data.bid, "bid");
+                var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var cell = "";
-                    cell += '<div style="display:absolute;margin:0;padding:0">';
+                var min = low(row, data.ask, "Bittrex");
+                var max = high(row, data.bid, "Bittrex");
 
-                    if (min && max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (min) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                    }
+                var cell = "";
+                cell += '<div style="display:absolute;margin:0;padding:0">';
 
-                    if (difference == 1) {
-                        cell += '<span style="color:green">' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == 0) {
-                        cell += '<span >' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == -1) {
-                        cell += '<span style="color:red">' + data.toFixed(8) + '</span>'
-                    }
-                    cell += '</div>';
+                if (min && max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (min) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                }
+                cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                cell += '<font size="2">';
+                if (differenceAsk == 1) {
+                    cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == 0) {
+                    cell += '<span >' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == -1) {
+                    cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                cell += '</font>'
+                cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                cell += '<font size="2">';
+                if (differenceBid == 1) {
+                    cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == 0) {
+                    cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == -1) {
+                    cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                '</div></div></div></div>';
 
-                    return cell;
+                cell += '</div>';
+
+                return cell;
 
                 }
             },
             {
-                "data": "cryptopia.last", "orderable": true, render: function (data, type, row, meta) {
+                "data": "cryptopia", "orderable": true, render: function (data, type, row, meta) {
 
+                    if (data.bid == undefined)
+                    return "-";
 
-                    if (data == undefined)
-                        return "-";
-                    data = Number(data);
-                    var difference = compare(meta, data);
+                var differenceBid = compare(meta, data.bid, "bid");
+                var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data, "Cryptopia");
-                    var max = high(row, data, "Cryptopia");
+                var min = low(row, data.ask, "Cryptopia");
+                var max = high(row, data.bid, "Cryptopia");
 
-                    var cell = "";
-                    cell += '<div style="display:absolute;margin:0;padding:0">';
+                var cell = "";
+                cell += '<div style="display:absolute;margin:0;padding:0">';
 
-                    if (min && max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (min) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                    }
+                if (min && max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (min) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                }
+                cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                cell += '<font size="2">';
+                if (differenceAsk == 1) {
+                    cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == 0) {
+                    cell += '<span >' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == -1) {
+                    cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                cell += '</font>'
+                cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                cell += '<font size="2">';
+                if (differenceBid == 1) {
+                    cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == 0) {
+                    cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == -1) {
+                    cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                '</div></div></div></div>';
 
-                    if (difference == 1) {
-                        cell += '<span style="color:green">' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == 0) {
-                        cell += '<span >' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == -1) {
-                        cell += '<span style="color:red">' + data.toFixed(8) + '</span>'
-                    }
-                    cell += '</div>';
+                cell += '</div>';
 
-                    return cell;
+                return cell;
 
                 }
             },
             {
-                "data": "livecoin.last", "orderable": true, render: function (data, type, row, meta) {
+                "data": "livecoin", "orderable": true, render: function (data, type, row, meta) {
 
-                    if (data == undefined)
-                        return "-";
-                    data = Number(data);
-                    var difference = compare(meta, data);
+                    if (data.bid == undefined)
+                    return "-";
 
-                    var min = low(row, data, "Livecoin");
-                    var max = high(row, data, "Livecoin");
+                var differenceBid = compare(meta, data.bid, "bid");
+                var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var cell = "";
-                    cell += '<div style="display:absolute;margin:0;padding:0">';
+                var min = low(row, data.ask, "Livecoin");
+                var max = high(row, data.bid, "Livecoin");
 
+                var cell = "";
+                cell += '<div style="display:absolute;margin:0;padding:0">';
 
-                    if (min && max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (min) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                    }
+                if (min && max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (min) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                }
+                cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                cell += '<font size="2">';
+                if (differenceAsk == 1) {
+                    cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == 0) {
+                    cell += '<span >' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == -1) {
+                    cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                cell += '</font>'
+                cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                cell += '<font size="2">';
+                if (differenceBid == 1) {
+                    cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == 0) {
+                    cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == -1) {
+                    cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                '</div></div></div></div>';
 
-                    if (difference == 1) {
-                        cell += '<span style="color:green">' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == 0) {
-                        cell += '<span >' + data.toFixed(8) + '</span>'
-                    }
-                    if (difference == -1) {
-                        cell += '<span style="color:red">' + data.toFixed(8) + '</span>'
-                    }
-                    cell += '</div>';
+                cell += '</div>';
 
-                    return cell;
+                return cell;
+
+                }
+            },
+            {
+                "data": "liqui", "orderable": true, render: function (data, type, row, meta) {
+
+                    if (data.bid == undefined)
+                    return "-";
+
+                var differenceBid = compare(meta, data.bid, "bid");
+                var differenceAsk = compare(meta, data.ask, "ask");
+
+                var min = low(row, data.ask, "Liqui");
+                var max = high(row, data.bid, "Liqui");
+
+                var cell = "";
+                cell += '<div style="display:absolute;margin:0;padding:0">';
+
+                if (min && max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (min) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                }
+                else if (max) {
+                    cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                }
+                cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                cell += '<font size="2">';
+                if (differenceAsk == 1) {
+                    cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == 0) {
+                    cell += '<span >' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                else if (differenceAsk == -1) {
+                    cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                }
+                cell += '</font>'
+                cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                cell += '<font size="2">';
+                if (differenceBid == 1) {
+                    cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == 0) {
+                    cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                if (differenceBid == -1) {
+                    cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                }
+                '</div></div></div></div>';
+
+                cell += '</div>';
+
+                return cell;
 
                 }
             },
@@ -258,47 +375,13 @@ $(document).ready(function () {
     var prevTable;
     var prevPercentage = [];
 
-    function compare(meta, value) {
 
-        if (prevTable !== undefined) {
-            var prev_data;
-            if (meta.col == 1) {
-                prev_data = prevTable[meta.row].bittrex;
-            }
-            else if (meta.col == 2) {
-                prev_data = prevTable[meta.row].binance;
-            }
-            else if (meta.col == 3) {
-                prev_data = prevTable[meta.row].poloniex;
-            }
-            else if (meta.col == 4) {
-                prev_data = prevTable[meta.row].cryptopia;
-            }
-            else if (meta.col == 5) {
-                prev_data = prevTable[meta.row].livecoin;
-            }
-
-            if (prev_data == undefined)
-                return 0;
-
-            if (prev_data.last < value)
-                return 1;
-            else if (prev_data.last == value)
-                return 0;
-            else return -1;
-
-        }
-        else
-            return 0;
-
-    }
 
     function compare(meta, value, type) {
 
         if (prevTable !== undefined) {
             var prev_data;
 
-
             if (meta.col == 1) {
                 prev_data = prevTable[meta.row].bittrex;
             }
@@ -313,6 +396,9 @@ $(document).ready(function () {
             }
             else if (meta.col == 5) {
                 prev_data = prevTable[meta.row].livecoin;
+            }
+            else if (meta.col == 6) {
+                prev_data = prevTable[meta.row].liqui;
             }
 
             if (prev_data == undefined)
@@ -401,6 +487,8 @@ function low(row, value, exchange) {
         arr.push(row.binance.ask);
     if (row.livecoin.ask != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
         arr.push(row.livecoin.ask);
+        if (row.liqui.ask != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square"))
+        arr.push(row.liqui.ask);
 
     var min = Math.min(...arr);
 
@@ -423,6 +511,8 @@ function high(row, value, exchange) {
         arr.push(row.binance.bid);
     if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
         arr.push(row.livecoin.bid);
+    if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square"))
+        arr.push(row.liqui.bid);
 
     var max = Math.max(...arr);
 
@@ -445,6 +535,8 @@ function getMin(row) {
         arr.push(row.binance.ask);
     if (row.livecoin.ask != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
         arr.push(row.livecoin.ask);
+    if (row.liqui.ask != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square"))
+        arr.push(row.liqui.ask);
 
     if (arr.length == 0)
         return 0;
@@ -465,6 +557,8 @@ function getMax(row) {
         arr.push(row.binance.bid);
     if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square"))
         arr.push(row.livecoin.bid);
+        if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square"))
+        arr.push(row.liqui.bid);
 
     if (arr.length == 0)
         return 0;
