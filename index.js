@@ -108,6 +108,54 @@ async function LivecoinTickers() {
   });
 }
 
+async function LivecoinTickers() {
+  const url =
+    "https://api.livecoin.net/exchange/ticker";
+  request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200)
+      return;
+    let json;
+    try {
+      json = JSON.parse(body);
+    }
+    catch (e) {
+      return;
+    }
+
+    json.forEach(element => {
+
+      var basecurrency = element.symbol.split('/')[1];
+      var currency = element.symbol.split('/')[0];
+
+      var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
+
+      if (ticker == null) // nuovo, lo inserisco
+      {
+        tickers.push({
+          id: basecurrency + "-" + currency,
+          livecoin: {
+            last: element.last,
+            bid: element.best_bid,
+            ask: element.best_ask,
+          },
+          liqui: {},
+          binance: {},
+          poloniex: {},
+          cryptopia: {},
+          bittrex: {}
+        });
+
+      }
+      else {
+        ticker.livecoin.last = element.last;
+        ticker.livecoin.bid = element.best_bid;
+        ticker.livecoin.ask = element.best_ask;
+      }
+    });
+  });
+}
+
 async function LiquiTickers() {
   const url =
     "https://cacheapi.liqui.io/Market/Tickers";
