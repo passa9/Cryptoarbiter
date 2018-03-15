@@ -124,6 +124,11 @@ async function HitBTCTickers(inizializza) {
         basecurrency = "USDT";
         currency = element.symbol.substring(0, element.symbol.length - 4);
       }
+      else if(element.symbol.endsWith("USD"))
+      {
+        basecurrency = "USDT"
+        currency = element.symbol.substring(0, element.symbol.length - 3);
+      }
       else {
         basecurrency = element.symbol.substring(element.symbol.length - 3, element.symbol.length);
         currency = element.symbol.substring(0, element.symbol.length - 3);
