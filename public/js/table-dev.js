@@ -490,7 +490,7 @@ $(document).ready(function () {
         else {
             var percentage = prevPercentage[index];
 
-            if (percentage.value > value) {
+            if (percentage.value < value) {
                 prevPercentage[index].value = value;
                 return 1;
             }
