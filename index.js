@@ -2,7 +2,7 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const https = require('https');
-const request = require("request");
+const request = require("request-promise");
 
 const app = express();
 
@@ -27,19 +27,27 @@ app.get('/', (req, res) => {
   });
 });
 
-async function init() {
-  await BittrexTickers();
-  await BinanceTickers();
-  await PoloniexTickers();
-  // await YobitTickers();
-  await CryptopiaTickers();
-  await LivecoinTickers();
+function init() {
+  BittrexTickers(true).then(() => {
+    BinanceTickers(true).then(() => {
+      PoloniexTickers(true).then(() => {
+        CryptopiaTickers(true).then(() => {
+          LivecoinTickers(true).then(() => {
+            HitBTCTickers(true).then(() => {
+              MappingIdLiqui().then(() => {
+                LiquiTickers(true).then(() => {
+                  RemoveAloneMarkets().then(() => {
+                    update();
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
 
-  await MappingIdLiqui();
- 
-  // await YobitTickers();
-  //  await KrakenTickers();
-  update();
 }
 init();
 
@@ -48,23 +56,58 @@ var mappingLiqui = [];
 
 function update() {
   setInterval(function () {
-    BittrexTickers();
-    BinanceTickers();
-    PoloniexTickers();
-    CryptopiaTickers();
-    LivecoinTickers();
-    LiquiTickers();
+
+    BittrexTickers(false);
+    BinanceTickers(false);
+    PoloniexTickers(false);
+    CryptopiaTickers(false);
+    LivecoinTickers(false);
+    LiquiTickers(false);
+    HitBTCTickers(false);
 
   }, 3000);
 }
 
-async function LivecoinTickers() {
-  const url =
-    "https://api.livecoin.net/exchange/ticker";
-  request.get(url, (error, response, body) => {
+async function RemoveAloneMarkets() {
 
-    if (error || response.statusCode != 200)
+  var arr = [];
+
+  for (var i = 0; i < tickers.length; i++) {
+
+    var arr = [];
+
+    if (tickers[i].poloniex.ask != undefined)
+      arr.push(tickers[i].poloniex.ask);
+    if (tickers[i].bittrex.ask != undefined)
+      arr.push(tickers[i].bittrex.ask);
+    if (tickers[i].cryptopia.ask != undefined)
+      arr.push(tickers[i].cryptopia.ask);
+    if (tickers[i].binance.ask != undefined)
+      arr.push(tickers[i].binance.ask);
+    if (tickers[i].livecoin.ask != undefined)
+      arr.push(tickers[i].livecoin.ask);
+    if (tickers[i].liqui.ask != undefined)
+      arr.push(tickers[i].liqui.ask);
+    if (tickers[i].hitbtc.ask != undefined)
+      arr.push(tickers[i].hitbtc.ask);
+
+    if (arr.length < 2) {
+      tickers.splice(i, 1);
+      i = i - 1;
+    }
+  }
+
+}
+
+async function HitBTCTickers(inizializza) {
+  const url =
+    "https://api.hitbtc.com/api/2/public/ticker";
+  return request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore hitbtc");
       return;
+    }
     let json;
     try {
       json = JSON.parse(body);
@@ -72,7 +115,75 @@ async function LivecoinTickers() {
     catch (e) {
       return;
     }
+    var count = 0;
+    json.forEach(element => {
+      var basecurrency;
+      var currency;
 
+      if (element.symbol.endsWith("USDT")) {
+        basecurrency = "USDT";
+        currency = element.symbol.substring(0, element.symbol.length - 4);
+      }
+      else {
+        basecurrency = element.symbol.substring(element.symbol.length - 3, element.symbol.length);
+        currency = element.symbol.substring(0, element.symbol.length - 3);
+      }
+
+      var ticker = tickers.find(x => x.id === basecurrency + '-' + currency);
+
+      if (ticker == null && inizializza) // nuovo, lo inserisco
+      {
+        tickers.push({
+          id: basecurrency + '-' + currency,
+          binance: {},
+          hitbtc: {
+            last: element.last,
+            ask: parseFloat(element.ask),
+            bid: parseFloat(element.bid)
+          },
+          liqui: {},
+          bittrex: {},
+          poloniex: {},
+          cryptopia: {},
+          livecoin: {}
+        });
+      }
+      else if (ticker == null) {
+        return;
+      }
+      else {
+        ticker.hitbtc.last = element.last;
+        ticker.hitbtc.ask = parseFloat(element.ask);
+        ticker.hitbtc.bid = parseFloat(element.bid);
+      }
+      count++;
+    });
+
+    if (inizializza) {
+      while (count != json.length) { }
+    }
+    return;
+
+  });
+}
+
+async function LivecoinTickers(inizializza) {
+  const url =
+    "https://api.livecoin.net/exchange/ticker";
+  return request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore livecoin");
+      return;
+    }
+    let json;
+    try {
+      json = JSON.parse(body);
+    }
+    catch (e) {
+      return;
+    }
+    var count = 0;
     json.forEach(element => {
 
       var basecurrency = element.symbol.split('/')[1];
@@ -80,7 +191,7 @@ async function LivecoinTickers() {
 
       var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
 
-      if (ticker == null) // nuovo, lo inserisco
+      if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
           id: basecurrency + "-" + currency,
@@ -93,76 +204,38 @@ async function LivecoinTickers() {
           binance: {},
           poloniex: {},
           cryptopia: {},
+          hitbtc: {},
           bittrex: {}
         });
 
+      }
+      else if (ticker == null) {
+        return;
       }
       else {
         ticker.livecoin.last = element.last;
         ticker.livecoin.bid = element.best_bid;
         ticker.livecoin.ask = element.best_ask;
       }
-
+      count++;
     });
 
+    if (inizializza) {
+      while (count != json.length) { }
+    }
+    return;
   });
 }
 
-async function LivecoinTickers() {
-  const url =
-    "https://api.livecoin.net/exchange/ticker";
-  request.get(url, (error, response, body) => {
-
-    if (error || response.statusCode != 200)
-      return;
-    let json;
-    try {
-      json = JSON.parse(body);
-    }
-    catch (e) {
-      return;
-    }
-
-    json.forEach(element => {
-
-      var basecurrency = element.symbol.split('/')[1];
-      var currency = element.symbol.split('/')[0];
-
-      var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
-
-      if (ticker == null) // nuovo, lo inserisco
-      {
-        tickers.push({
-          id: basecurrency + "-" + currency,
-          livecoin: {
-            last: element.last,
-            bid: element.best_bid,
-            ask: element.best_ask,
-          },
-          liqui: {},
-          binance: {},
-          poloniex: {},
-          cryptopia: {},
-          bittrex: {}
-        });
-
-      }
-      else {
-        ticker.livecoin.last = element.last;
-        ticker.livecoin.bid = element.best_bid;
-        ticker.livecoin.ask = element.best_ask;
-      }
-    });
-  });
-}
-
-async function LiquiTickers() {
+async function LiquiTickers(inizializza) {
   const url =
     "https://cacheapi.liqui.io/Market/Tickers";
-  request.get(url, (error, response, body) => {
+  return request.get(url, (error, response, body) => {
 
-    if (error || response.statusCode != 200)
+    if (error || response.statusCode != 200) {
+      console.log("Errore liqui");
       return;
+    }
     let json;
     try {
       json = JSON.parse(body);
@@ -170,14 +243,13 @@ async function LiquiTickers() {
     catch (e) {
       return;
     }
-
+    var count = 0;
     json.forEach(element => {
 
       var currency = mappingLiqui.find(function (x) { return x.id == element.PairId })
-
       var ticker = tickers.find(x => x.id === currency.pair);
 
-      if (ticker == null) // nuovo, lo inserisco
+      if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
           id: currency.pair,
@@ -190,28 +262,39 @@ async function LiquiTickers() {
           binance: {},
           poloniex: {},
           cryptopia: {},
+          hitbtc: {},
           bittrex: {}
         });
 
+      }
+      else if (ticker == null) {
+        return;
       }
       else {
         ticker.liqui.last = element.LastPrice;
         ticker.liqui.bid = element.Buy;
         ticker.liqui.ask = element.Sell;
       }
-
+      count++;
     });
+
+    if (inizializza) {
+      while (count != json.length) { }
+    }
+    return;
 
   });
 }
 
-async function BittrexTickers() {
+async function BittrexTickers(inizializza) {
   const url =
     "https://bittrex.com/api/v1.1/public/getmarketsummaries";
-  request.get(url, (error, response, body) => {
+  return request.get(url, (error, response, body) => {
 
-    if (error || response.statusCode != 200)
+    if (error || response.statusCode != 200) {
+      console.log("Errore bittrex");
       return;
+    }
 
     let json = JSON.parse(body);
 
@@ -219,10 +302,11 @@ async function BittrexTickers() {
       console.log(json.message);
       return;
     }
+    var count = 0;
     json.result.forEach(element => {
       var ticker = tickers.find(x => x.id === element.MarketName);
 
-      if (ticker == null) // nuovo, lo inserisco
+      if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
           id: element.MarketName,
@@ -235,9 +319,13 @@ async function BittrexTickers() {
           binance: {},
           poloniex: {},
           cryptopia: {},
+          hitbtc: {},
           livecoin: {},
         });
 
+      }
+      else if (ticker == null) {
+        return;
       }
       else {
         ticker.bittrex.last = element.Last;
@@ -245,26 +333,34 @@ async function BittrexTickers() {
         ticker.bittrex.ask = element.Ask;
       }
 
+      count++;
     });
+
+    if (inizializza) {
+      while (count != json.result.length) { }
+    }
+    return;
 
   });
 }
 
-async function PoloniexTickers() {
+async function PoloniexTickers(inizializza) {
   const url =
     "https://poloniex.com/public?command=returnTicker";
-  request.get(url, (error, response, body) => {
+  return request.get(url, (error, response, body) => {
 
-    if (error || response.statusCode != 200)
+    if (error || response.statusCode != 200) {
+      console.log("Errore poloniex");
       return;
+    }
 
     let obj = JSON.parse(body);
-
-    Object.keys(obj).forEach(function (key) {
+    var count = 0;
+    Object.keys(obj).forEach(key => {
 
       var ticker = tickers.find(x => x.id === key.replace('_', '-'));
 
-      if (ticker == null) // nuovo, lo inserisco
+      if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
           id: key.replace('_', '-'),
@@ -276,28 +372,40 @@ async function PoloniexTickers() {
           liqui: {},
           binance: {},
           bittrex: {},
+          hitbtc: {},
           cryptopia: {},
           livecoin: {},
         });
+      }
+      else if (ticker == null) {
+        return;
       }
       else {
         ticker.poloniex.last = obj[key].last;
         ticker.poloniex.bid = parseFloat(obj[key].highestBid);
         ticker.poloniex.ask = parseFloat(obj[key].lowestAsk);
       }
+      count++;
     });
+
+    if (inizializza) {
+      while (count != Object.keys(obj).length) { }
+    }
+    return;
   });
 }
 
-function BinanceTickers() {
+async function BinanceTickers(inizializza) {
   const url =
     "https://api.binance.com/api/v3/ticker/bookTicker";
-  request.get(url, (error, response, body) => {
-    if (error)
+  return request.get(url, (error, response, body) => {
+    if (error || response.statusCode != 200) {
+      console.log("Errore binance");
       return;
+    }
 
     let json = JSON.parse(body);
-
+    var count = 0;
     json.forEach(element => {
 
       var basecurrency;
@@ -314,7 +422,7 @@ function BinanceTickers() {
 
       var ticker = tickers.find(x => x.id === basecurrency + '-' + currency);
 
-      if (ticker == null) // nuovo, lo inserisco
+      if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
           id: basecurrency + '-' + currency,
@@ -327,9 +435,13 @@ function BinanceTickers() {
           bittrex: {},
           poloniex: {},
           cryptopia: {},
+          hitbtc: {},
           livecoin: {}
         });
 
+      }
+      else if (ticker == null) {
+        return;
       }
       else {
         ticker.binance.last = element.price;
@@ -337,7 +449,13 @@ function BinanceTickers() {
         ticker.binance.bid = parseFloat(element.bidPrice);
       }
 
+      count++;
     });
+
+    if (inizializza) {
+      while (count != json.length) { }
+    }
+    return;
 
   });
 }
@@ -345,10 +463,12 @@ function BinanceTickers() {
 async function MappingIdLiqui() {
   const url =
     "https://cacheapi.liqui.io/Market/Pairs";
-  await request.get(url, async(error, response, body) => {
+  return request.get(url, async (error, response, body) => {
 
-    if (error || response.statusCode != 200)
+    if (error || response.statusCode != 200) {
+      console.log("Errore Liquimapping");
       return;
+    }
     let json;
     try {
       json = JSON.parse(body);
@@ -370,12 +490,11 @@ async function MappingIdLiqui() {
       });
     }
 
-    await LiquiTickers();
   });
 }
 
 app.get('/tickers', (req, res) => {
-  BittrexTickers();
+
   var json = {
     data: tickers
   };
@@ -390,19 +509,21 @@ app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
 
-async function CryptopiaTickers() {
+async function CryptopiaTickers(inizializza) {
   const url =
     "https://www.cryptopia.co.nz/api/GetMarkets/";
-  request.get(url, (error, response, body) => {
+  return request.get(url, (error, response, body) => {
 
-    if (error || response.statusCode != 200)
+    if (error || response.statusCode != 200) {
+      console.log("Errore Cryptopia");
       return;
+    }
 
     let json = JSON.parse(body);
 
     if (json == null)
       return;
-
+      var count = 0;
     json.Data.forEach(element => {
 
       var basecurrency = element.Label.split("/")[1];
@@ -410,7 +531,7 @@ async function CryptopiaTickers() {
 
       var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
 
-      if (ticker == null) // nuovo, lo inserisco
+      if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
           id: basecurrency + "-" + currency,
@@ -423,9 +544,12 @@ async function CryptopiaTickers() {
             bid: element.BidPrice,
             ask: element.AskPrice
           },
-          livecoin: {}
+          livecoin: {},
+          hitbtc: {}
         });
-
+      }
+      else if (ticker == null) {
+        return;
       }
       else {
         ticker.cryptopia.last = element.LastPrice;
@@ -433,7 +557,13 @@ async function CryptopiaTickers() {
         ticker.cryptopia.ask = element.AskPrice;
       }
 
+      count++;
     });
+
+    if (inizializza) {
+      while (count != json.Data.length) { }
+    }
+    return;
 
   });
 }
@@ -461,7 +591,7 @@ async function YobitTickers() {
     apiUrlTicker = 'https://yobit.net/api/3/ticker/'
 
 
-  request.get(apiUrlAssetPairs, (error, response, body) => {
+  await request.get(apiUrlAssetPairs, (error, response, body) => {
 
     if (error || response.statusCode != 200)
       return;
@@ -554,10 +684,7 @@ async function KrakenTickers() {
           ticker.poloniex.last = obj[key].last;
         }
       });
-
-
     });
-
   });
 
 }

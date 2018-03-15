@@ -1,7 +1,7 @@
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
         <tr>
-            <td colspan="7">
+            <td colspan="9">
                 Exchange: &nbsp;
                 <button id="btnBittrex" class="btn btn-sm btn-secondary toggle-vis" data-column="1" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
@@ -23,9 +23,13 @@
                     <i class="far fa-check-square"></i>
                     Livecoin
                 </button>
-                                <button id="btnLiqui" class="btn btn-sm btn-secondary toggle-vis" data-column="5" onclick="exchange(this)">
+                <button id="btnLiqui" class="btn btn-sm btn-secondary toggle-vis" data-column="6" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     Liqui
+                </button>
+                  <button id="btnHitBTC" class="btn btn-sm btn-secondary toggle-vis" data-column="7" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    HitBTC
                 </button>
             </td>
         </tr>
@@ -38,6 +42,7 @@
             <th>Cryptopia</th>
             <th>Livecoin</th>
             <th>Liqui</th>
+             <th>HitBTC</th>
             <th>Percentage</th>
         </tr>
     </thead>
@@ -48,7 +53,8 @@
     td {
         position: relative !important;
     }
-    tbody{
+
+    tbody {
         line-height: 1;
     }
 

@@ -22,6 +22,7 @@
     "handlebars": "^4.0.11",
     "parser": "^0.1.4",
     "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "telegram-mtproto": "^2.2.2",
     "tg-cli-node": "0.0.8"
   }
