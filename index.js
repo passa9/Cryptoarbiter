@@ -8,8 +8,10 @@ const app = express();
 
 // Application insights
 const appInsights = require("applicationinsights");
-appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b");
-appInsights.start();
+appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
+.setAutoCollectDependencies(false)
+.start();
+
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
