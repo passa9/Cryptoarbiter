@@ -1,3 +1,4 @@
+
 const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
@@ -201,6 +202,11 @@ async function LivecoinTickers(inizializza) {
       var basecurrency = element.symbol.split('/')[1];
       var currency = element.symbol.split('/')[0];
 
+      if(currency == "CRC")
+      {
+        currency = "CRC2";
+      }
+
       var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
@@ -260,6 +266,8 @@ async function LiquiTickers(inizializza) {
 
       var currency = mappingLiqui.find(function (x) { return x.id == element.PairId })
       var ticker = tickers.find(x => x.id === currency.pair);
+
+
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
       {
@@ -370,12 +378,19 @@ async function PoloniexTickers(inizializza) {
     var count = 0;
     Object.keys(obj).forEach(key => {
 
-      var ticker = tickers.find(x => x.id === key.replace('_', '-'));
+      var basecurrency = key.split('_')[0];
+      var currency = key.split('_')[1];
+      if(currency == "BTM")
+      {
+       currency = "Bitmark";
+      }
+
+      var ticker = tickers.find(x => x.id === (basecurrency + "-" + currency));
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
       {
         tickers.push({
-          id: key.replace('_', '-'),
+          id: (basecurrency + "-" + currency),
           poloniex: {
             last: obj[key].last,
             ask: parseFloat(obj[key].lowestAsk),
@@ -494,6 +509,12 @@ async function MappingIdLiqui() {
 
       var basecurrency = element.Name.split('/')[1];
       var currency = element.Name.split('/')[0];
+
+      if(currency == "LDC")
+      {
+        currency = "Leadcoin";
+      }
+
       var pair = basecurrency + "-" + currency;
 
       mappingLiqui.push({
@@ -540,6 +561,31 @@ async function CryptopiaTickers(inizializza) {
 
       var basecurrency = element.Label.split("/")[1];
       var currency = element.Label.split("/")[0];
+
+      if(currency == "BAT")
+      {
+        currency = "BATCoin"
+      }
+      else if(currency == "NET")
+      {
+        currency = "NetCoin"
+      }
+      else if(currency == "BLZ")
+      {
+        currency = "BlazeCoin"
+      }
+      else if(currency == "FCN")
+      {
+        currency = "FacileCoin"
+      }
+      else if(currency == "BTG")
+      {
+        currency = "Bitgem"
+      }
+      else if(currency == "WRC")
+      {
+        currency = "Warcoin"
+      }
 
       var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
 
