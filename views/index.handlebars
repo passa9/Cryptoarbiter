@@ -1,3 +1,6 @@
+<a href="#" onclick="amountDetails(this)" class="btn btn-link">
+    Click</a>
+
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
         <tr>
@@ -27,7 +30,7 @@
                     <i class="far fa-check-square"></i>
                     Liqui
                 </button>
-                  <button id="btnHitBTC" class="btn btn-sm btn-secondary toggle-vis" data-column="7" onclick="exchange(this)">
+                <button id="btnHitBTC" class="btn btn-sm btn-secondary toggle-vis" data-column="7" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     HitBTC
                 </button>
@@ -42,14 +45,33 @@
             <th>Cryptopia</th>
             <th>Livecoin</th>
             <th>Liqui</th>
-             <th>HitBTC</th>
+            <th>HitBTC</th>
             <th>Percentage</th>
         </tr>
     </thead>
 
 </table>
+<script>
+
+function amountDetails(element)
+{
+$(element).popover({
+        trigger: 'focus',
+        title: "ciao",
+        content: "s",
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+    }).show();
+}
+
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+
+</script>
 
 <style>
+    
     td {
         position: relative !important;
     }
@@ -57,7 +79,9 @@
     tbody {
         line-height: 1;
     }
-
+.hand {
+    cursor: pointer;    
+}
     .divTable {
         display: table;
         width: 100%;
