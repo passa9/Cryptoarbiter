@@ -37,13 +37,13 @@ $(document).ready(function () {
                     cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
                     cell += '<font size="2">';
                     if (differenceAsk == 1) {
-                        cell +=  '<a nohref  onclick="amountDetails(this)" class="hand" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                        cell +=  '<a href="javascript:void(0)" id="' + row.id + 'bittrex' + 'ask' +'"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     else if (differenceAsk == 0) {
-                        cell += '<a nohref onclick="amountDetails(this)"  class="hand" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" id="' + row.id + 'bittrex' + 'ask' +'" onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     else if (differenceAsk == -1) {
-                        cell += '<a nohref onclick="amountDetails(this)"  class="hand" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" id="' + row.id + 'bittrex' + 'ask' +'" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     cell += '</font>'
                     cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
