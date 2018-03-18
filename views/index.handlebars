@@ -1,5 +1,5 @@
-<a id="asd" href="javascript:void(0)" onclick="amountDetails(this)" class="btn btn-link">
-    Click</a>
+{{!-- <a id="asd" href="javascript:void(0)" onclick="amountDetails(this)" class="btn btn-link">
+    Click</a> --}}
 
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
@@ -53,16 +53,14 @@
 </table>
 <script>
 
-    function amountDetails(element) {
-        
-        var elem = '<div class="well"><a href="google.com">Message one, From someone.</a></div>' +
-            '<div class="well"><a href="google.com">Message one, From someone.</a></div>' +
-            '<button id="close-popover" data-toggle="clickover" class="btn btn-small btn-primary pull-right" onclick="$(&quot;#' + element.id +'&quot;).popover(&quot;hide&quot;);">Close please!</button>';
-       
+    function amountDetailss(element) {
+
+        var elem = 'sd';
+
         $(element).popover({
             html: true,
             trigger: 'manual',
-            title: "ciao",
+            title: 'daaaaaai <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
             content: elem,
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
         });
