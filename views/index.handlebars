@@ -1,4 +1,5 @@
-{{!-- <a id="asd" href="javascript:void(0)" onclick="amountDetails(this)" class="btn btn-link">
+{{!--
+<a id="asd" href="javascript:void(0)" onclick="amountDetails(this)" class="btn btn-link">
     Click</a> --}}
 
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
@@ -57,16 +58,24 @@
 
         var exchange = element.dataset.exchange;
         var type = element.dataset.type;
-        var pair = element.dataset.pair;
+        var market = element.dataset.pair;
+        var content;
 
-        $(element).popover({
+        var jqxhr = $.get("/getorderbook?exchange=" + exchange + "&market=" + market + "&type=" + type, function (data,status) {
+           content = data;
+           $(element).popover({
             html: true,
             trigger: 'manual',
-            title: pair + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
-            content: "oooookkk",
+            title: market + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
+            content: content,
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
         });
-        $(element).popover('toggle');
+           $(element).popover('toggle');
+        });
+
+
+        
+     
     }
 
 

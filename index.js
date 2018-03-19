@@ -10,9 +10,55 @@ const app = express();
 // Application insights
 const appInsights = require("applicationinsights");
 appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
-.setAutoCollectDependencies(false)
-.start();
+  .setAutoCollectDependencies(false)
+  .start();
 
+
+
+ function getOrderBook(exchange,type, market) {
+  if (exchange == "Bittrex") {
+    return  getOrderBookBittrex(market, type);
+  }
+  else if (exchange == "Poloniex") {
+
+  }
+  else if (exchange == "Binance") {
+
+  }
+}
+
+async function getOrderBookBittrex(market, type) {
+
+
+  if (type == "bid") {
+    type = "buy"
+  }
+  else if (type == "ask") {
+    type = "sell";
+  }
+ var data;
+  const url =
+    "https://bittrex.com/api/v1.1/public/getorderbook?market=" + market + "&type=" + type;
+  await request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore bittrex");
+      return;
+    }
+
+    let json = JSON.parse(body);
+
+    if (!json.success) {
+      console.log(json.message);
+      return;
+    }
+   
+    data = json.result;
+
+  });
+
+  return data;
+}
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
@@ -33,6 +79,27 @@ app.get('/', (req, res) => {
   res.render('index', {
     title: title
   });
+});
+
+app.get('/getorderbook',async (req, res) => {
+
+  var exchange = req.query.exchange;
+  var type = req.query.type;
+  var pair = req.query.market;
+
+  var json =await getOrderBook(exchange,type,pair);
+
+  res.contentType('application/json');
+  res.send(JSON.stringify(json));
+});
+app.get('/tickers', (req, res) => {
+
+  var json = {
+    data: tickers
+  };
+
+  res.contentType('application/json');
+  res.send(JSON.stringify(json));
 });
 
 function init() {
@@ -132,8 +199,7 @@ async function HitBTCTickers(inizializza) {
         basecurrency = "USDT";
         currency = element.symbol.substring(0, element.symbol.length - 4);
       }
-      else if(element.symbol.endsWith("USD"))
-      {
+      else if (element.symbol.endsWith("USD")) {
         basecurrency = "USDT"
         currency = element.symbol.substring(0, element.symbol.length - 3);
       }
@@ -202,8 +268,7 @@ async function LivecoinTickers(inizializza) {
       var basecurrency = element.symbol.split('/')[1];
       var currency = element.symbol.split('/')[0];
 
-      if(currency == "CRC")
-      {
+      if (currency == "CRC") {
         currency = "CRC2";
       }
 
@@ -266,8 +331,6 @@ async function LiquiTickers(inizializza) {
 
       var currency = mappingLiqui.find(function (x) { return x.id == element.PairId })
       var ticker = tickers.find(x => x.id === currency.pair);
-
-
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
       {
@@ -380,9 +443,8 @@ async function PoloniexTickers(inizializza) {
 
       var basecurrency = key.split('_')[0];
       var currency = key.split('_')[1];
-      if(currency == "BTM")
-      {
-       currency = "Bitmark";
+      if (currency == "BTM") {
+        currency = "Bitmark";
       }
 
       var ticker = tickers.find(x => x.id === (basecurrency + "-" + currency));
@@ -510,8 +572,7 @@ async function MappingIdLiqui() {
       var basecurrency = element.Name.split('/')[1];
       var currency = element.Name.split('/')[0];
 
-      if(currency == "LDC")
-      {
+      if (currency == "LDC") {
         currency = "Leadcoin";
       }
 
@@ -526,15 +587,6 @@ async function MappingIdLiqui() {
   });
 }
 
-app.get('/tickers', (req, res) => {
-
-  var json = {
-    data: tickers
-  };
-
-  res.contentType('application/json');
-  res.send(JSON.stringify(json));
-});
 
 
 const port = process.env.PORT || 5000;
@@ -556,34 +608,28 @@ async function CryptopiaTickers(inizializza) {
 
     if (json == null)
       return;
-      var count = 0;
+    var count = 0;
     json.Data.forEach(element => {
 
       var basecurrency = element.Label.split("/")[1];
       var currency = element.Label.split("/")[0];
 
-      if(currency == "BAT")
-      {
+      if (currency == "BAT") {
         currency = "BATCoin"
       }
-      else if(currency == "NET")
-      {
+      else if (currency == "NET") {
         currency = "NetCoin"
       }
-      else if(currency == "BLZ")
-      {
+      else if (currency == "BLZ") {
         currency = "BlazeCoin"
       }
-      else if(currency == "FCN")
-      {
+      else if (currency == "FCN") {
         currency = "FacileCoin"
       }
-      else if(currency == "BTG")
-      {
+      else if (currency == "BTG") {
         currency = "Bitgem"
       }
-      else if(currency == "WRC")
-      {
+      else if (currency == "WRC") {
         currency = "Warcoin"
       }
 
