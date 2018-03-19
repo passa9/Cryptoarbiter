@@ -53,15 +53,17 @@
 </table>
 <script>
 
-    function amountDetailss(element) {
+    function amountDetails(element) {
 
-        var elem = 'sd';
+        var exchange = element.dataset.exchange;
+        var type = element.dataset.type;
+        var pair = element.dataset.pair;
 
         $(element).popover({
             html: true,
             trigger: 'manual',
-            title: 'daaaaaai <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
-            content: elem,
+            title: pair + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
+            content: "oooookkk",
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
         });
         $(element).popover('toggle');
