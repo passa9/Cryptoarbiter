@@ -61,23 +61,41 @@
         var market = element.dataset.pair;
         var content;
 
-        var jqxhr = $.get("/getorderbook?exchange=" + exchange + "&market=" + market + "&type=" + type, function (data,status) {
-           content = data;
-           $(element).popover({
-            html: true,
-            trigger: 'manual',
-            title: market + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
-            content: content,
-            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
-        });
-           $(element).popover('toggle');
+        var jqxhr = $.get("/getorderbook?exchange=" + exchange + "&market=" + market + "&type=" + type, function (data, status) {
+
+            content = '<table class="table table bordered table-sm">';
+            content += '<thead><tr><th>PRICE</th><th>AMOUNT</th></thead>';
+            content += '<tbody>';
+
+            for (var i = 0; i < data.arr.length; i++) {
+                content += '<tr>';
+                content += '<td>' + data.arr[i].Rate;
+                content += '</td>';
+                content += '<td>' + data.arr[i].Quantity;
+                content += '</td>';
+                content += '</tr>';
+            }
+            content += '</tbody></table>';
+            content += '<div class="row">';
+            content += '<div class="col-sm-6>"';
+            content += type
+            content += '</div>';
+            content += '<div class="col-sm-6>"';
+            content += '<a class="btn btn-primary" href="'+ data.link +'">Vai</a>'
+            content += '</div>';
+            content += '</div>';
+
+            $(element).popover({
+                html: true,
+                trigger: 'manual',
+                title: market + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>',
+                content: content,
+                template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+            });
+            $(element).popover('toggle');
         });
 
-
-        
-     
     }
-
 
     $(function () {
         $('[data-toggle="popover"]').popover()
@@ -86,6 +104,10 @@
 </script>
 
 <style>
+    .popover {
+        width: 350px;
+    }
+
     td {
         position: relative !important;
     }

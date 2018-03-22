@@ -13,11 +13,13 @@ appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
   .setAutoCollectDependencies(false)
   .start();
 
-
-
- function getOrderBook(exchange,type, market) {
+function getOrderBook(exchange, type, market) {
   if (exchange == "Bittrex") {
-    return  getOrderBookBittrex(market, type);
+    return {
+      link: "https://bittrex.com/Market/Index?MarketName=" + market,
+      arr: getOrderBookBittrex(market, type),
+    };
+     
   }
   else if (exchange == "Poloniex") {
 
@@ -36,7 +38,7 @@ async function getOrderBookBittrex(market, type) {
   else if (type == "ask") {
     type = "sell";
   }
- var data;
+  var data;
   const url =
     "https://bittrex.com/api/v1.1/public/getorderbook?market=" + market + "&type=" + type;
   await request.get(url, (error, response, body) => {
@@ -52,8 +54,8 @@ async function getOrderBookBittrex(market, type) {
       console.log(json.message);
       return;
     }
-   
-    data = json.result;
+   var dim = (json.result.length -1 < 10 ? json.result.length -1 : 10);
+    data = json.result.splice(0,dim);
 
   });
 
@@ -81,17 +83,18 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/getorderbook',async (req, res) => {
+app.get('/getorderbook', async (req, res) => {
 
   var exchange = req.query.exchange;
   var type = req.query.type;
   var pair = req.query.market;
 
-  var json =await getOrderBook(exchange,type,pair);
+  var json = await getOrderBook(exchange, type, pair);
 
   res.contentType('application/json');
   res.send(JSON.stringify(json));
 });
+
 app.get('/tickers', (req, res) => {
 
   var json = {
@@ -102,26 +105,43 @@ app.get('/tickers', (req, res) => {
   res.send(JSON.stringify(json));
 });
 
-function init() {
-  BittrexTickers(true).then(() => {
-    BinanceTickers(true).then(() => {
-      PoloniexTickers(true).then(() => {
-        CryptopiaTickers(true).then(() => {
-          LivecoinTickers(true).then(() => {
-            HitBTCTickers(true).then(() => {
-              MappingIdLiqui().then(() => {
-                LiquiTickers(true).then(() => {
-                  RemoveAloneMarkets().then(() => {
-                    update();
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
+async function init() {
+
+  try {
+    await BittrexTickers(true);
+  }
+  catch (e) { }
+  try {
+    await BinanceTickers(true);
+  }
+  catch (e) { }
+  try {
+    await PoloniexTickers(true);
+  }
+  catch (e) { }
+  try {
+    await CryptopiaTickers(true);
+  }
+  catch (e) { }
+  try {
+    await LivecoinTickers(true);
+  }
+  catch (e) { }
+  try {
+    await HitBTCTickers(true);
+  }
+  catch (e) { }
+  try {
+    await MappingIdLiqui();
+    await LiquiTickers(true);
+  }
+  catch (e) { }
+  try {
+    await RemoveAloneMarkets();
+  }
+  catch (e) { }
+  update();
+
 
 }
 init();
