@@ -77,13 +77,13 @@
             }
             content += '</tbody></table>';
             content += '<div class="row">';
-            content += '<div class="col-sm-6>"';
-            content += type
+            content += '<div class="col"  align="left">';
+            content += '<h4>' + type + '</h4>';
             content += '</div>';
-            content += '<div class="col-sm-6>"';
-            content += '<a class="btn btn-primary" href="'+ data.link +'">Vai</a>'
+            content += '<div class="col" align="right">';
+            content += '<a target="_blank" class="btn btn-primary btn-sm" href="'+ data.link +'">Vai <i class="fa fa-arrow-right" aria-hidden="true"></i></a>'
             content += '</div>';
-            content += '</div>';
+            content += '</div>'; 
 
             $(element).popover({
                 html: true,

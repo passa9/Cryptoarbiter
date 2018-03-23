@@ -13,11 +13,11 @@ appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
   .setAutoCollectDependencies(false)
   .start();
 
-function getOrderBook(exchange, type, market) {
+async function getOrderBook(exchange, type, market) {
   if (exchange == "Bittrex") {
     return {
       link: "https://bittrex.com/Market/Index?MarketName=" + market,
-      arr: getOrderBookBittrex(market, type),
+      arr: await getOrderBookBittrex(market, type),
     };
      
   }
