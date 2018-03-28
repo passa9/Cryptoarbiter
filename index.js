@@ -15,6 +15,12 @@ appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
 
 var queueBittrex = [];
 var queuePoloniex = [];
+var queueBinance = [];
+var queueCryptopia = [];
+var queueLivecoin = [];
+var queueLiqui = [];
+var queueHitBTC = [];
+
 async function getOrderBook(exchange, type, market,res) {
 
   var params =  {
@@ -32,7 +38,19 @@ async function getOrderBook(exchange, type, market,res) {
     queuePoloniex.push(params);
   }
   else if (exchange == "Binance") {
-
+    queueBinance.push(params);
+  }
+  else if (exchange == "Cryptopia") {
+    queueCryptopia.push(params);
+  }
+  else if (exchange == "Livecoin") {
+    queueLivecoin.push(params);
+  }
+  else if (exchange == "Liqui") {
+    queueLiqui.push(params);
+  }
+  else if (exchange == "HitBTC") {
+    queueHitBTC.push(params);
   }
 }
 // Bittrex
@@ -47,7 +65,7 @@ setInterval(async function () {
       arr: json,
     }));
   }
-}, 5000);
+}, 1000);
 
 // Poloniex
 setInterval(async function () {
@@ -61,7 +79,77 @@ setInterval(async function () {
       arr: json,
     }));
   }
-}, 5000);
+}, 1000);
+
+// Binance
+setInterval(async function () {
+  if (queueBinance.length > 0) {
+    var data = queueBinance.shift();
+    var res = data.res;
+    var json = await getOrderBookBinance(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://www.binance.com/trade.html?symbol=" + data.funct.market.split("-")[1] + "_" + data.funct.market.split("-")[0],
+      arr: json,
+    }));
+  }
+}, 1000);
+
+// Cryptopia
+setInterval(async function () {
+  if (queueCryptopia.length > 0) {
+    var data = queueCryptopia.shift();
+    var res = data.res;
+    var json = await getOrderBookCryptopia(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://www.cryptopia.co.nz/Exchange/?market=" + data.funct.market.split("-")[1] + "_" + data.funct.market.split("-")[0],
+      arr: json,
+    }));
+  }
+}, 1000);
+
+// Livecoin
+setInterval(async function () {
+  if (queueLivecoin.length > 0) {
+    var data = queueLivecoin.shift();
+    var res = data.res;
+    var json = await getOrderBookLivecoin(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://www.livecoin.net/it/trade/index?currencyPair=" + data.funct.market.split("-")[1] + "%2F" + data.funct.market.split("-")[0],
+      arr: json,
+    }));
+  }
+}, 1000);
+
+// Liqui
+setInterval(async function () {
+  if (queueLiqui.length > 0) {
+    var data = queueLiqui.shift();
+    var res = data.res;
+    var json = await getOrderBookLiqui(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://liqui.io/#/exchange/" + data.funct.market.split("-")[1] + "_" + data.funct.market.split("-")[0],
+      arr: json,
+    }));
+  }
+}, 1000);
+
+// HitBTC
+setInterval(async function () {
+  if (queueHitBTC.length > 0) {
+    var data = queueHitBTC.shift();
+    var res = data.res;
+    var json = await getOrderBookHitBTC(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://hitbtc.com/exchange/" + data.funct.market.split("-")[1] + "-to-" + data.funct.market.split("-")[0],
+      arr: json,
+    }));
+  }
+}, 1000);
 
 async function getOrderBookBittrex(market, type) {
 
@@ -100,6 +188,53 @@ async function getOrderBookBittrex(market, type) {
 
   return data;
 }
+
+async function getOrderBookCryptopia(market, type) {
+  
+    var data;
+
+    const url = "https://www.cryptopia.co.nz/api/GetMarketOrders/"+ market.split("-")[1] + "_" + market.split("-")[0] +"/10";
+   
+      var a = "asdasdasdasd";
+    await request.get(url, (error, response, body) => {
+  
+      if (error || response.statusCode != 200) {
+        console.log("Errore Cryptopia");
+        return [];
+      }
+  
+      let json = JSON.parse(body);
+  
+      if (!json.Success) {
+        console.log(json.message);
+        data = [];
+        return data;
+      }
+      if (json.Data == null) {
+        data = [];
+        return data;
+      }
+     
+      if (type == "bid") {
+        data = json.Data.Buy;
+      }
+      else {
+        data = json.Data.Sell;
+      }
+
+      var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+      data = data.splice(0, dim).map(function(i){
+        return {
+          Rate: i.Price.toString(),
+          Quantity: i.Volume
+        }
+      });
+  
+    });
+  
+    return data;
+  }
+
 async function getOrderBookPoloniex(market, type) {
 
   var data;
@@ -114,7 +249,7 @@ async function getOrderBookPoloniex(market, type) {
 
     let json = JSON.parse(body);
 
-    if (type == "bids") {
+    if (type == "bid") {
       data = json.bids;
     }
     else {
@@ -122,8 +257,6 @@ async function getOrderBookPoloniex(market, type) {
     }
     var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
     data = data.splice(0, dim);
-    
-
   });
 
   return data.map(function(i){
@@ -133,6 +266,134 @@ async function getOrderBookPoloniex(market, type) {
     }
   });
 }
+
+async function getOrderBookHitBTC(market, type) {
+  
+    var data;
+    const url =
+      "https://api.hitbtc.com/api/2/public/orderbook/"+ market.split("-",)[1] + market.split("-",)[0]+"?limit=10" ;
+    await request.get(url, (error, response, body) => {
+  
+      if (error || response.statusCode != 200) {
+        console.log("Errore HitBTC");
+        return [];
+      }
+  
+      let json = JSON.parse(body);
+  
+      if (type == "bid") {
+        data = json.bid;
+      }
+      else {
+        data = json.ask;
+      }
+      var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+      data = data.splice(0, dim);
+    });
+  
+    return data.map(function(i){
+      return {
+        Rate: i.price,
+        Quantity: i.size
+      }
+    });
+  }
+
+async function getOrderBookLiqui(market, type) {
+  
+    var data;
+    var setUpMarket = market.split("-")[1].toLowerCase() + "_" + market.split("-")[0].toLowerCase();
+    const url =
+      "https://api.liqui.io/api/3/depth/" + setUpMarket ;
+    await request.get(url, (error, response, body) => {
+  
+      if (error || response.statusCode != 200) {
+        console.log("Errore poloniex");
+        return [];
+      }
+  
+      let json = JSON.parse(body);
+  
+      if (type == "bid") {
+        data = json[setUpMarket].bids;
+      }
+      else {
+        data = json[setUpMarket].asks;
+      }
+      var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+      data = data.splice(0, dim);
+    });
+  
+    return data.map(function(i){
+      return {
+        Rate: i[0],
+        Quantity: i[1]
+      }
+    });
+  }
+
+async function getOrderBookLivecoin(market, type) {
+  
+    var data;
+    const url =
+      "https://api.livecoin.net/exchange/order_book?depth=10&groupByPrice=true&currencyPair=" +market.split("-")[1] + "/" + market.split("-")[0];
+    await request.get(url, (error, response, body) => {
+  
+      if (error || response.statusCode != 200) {
+        console.log("Errore Livecoin");
+        return [];
+      }
+  
+      let json = JSON.parse(body);
+  
+      if (type == "bid") {
+        data = json.bids;
+      }
+      else {
+        data = json.asks;
+      }
+      var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+      data = data.splice(0, dim);
+    });
+  
+    return data.map(function(i){
+      return {
+        Rate: i[0].toString(),
+        Quantity: i[1]
+      }
+    });
+  }
+
+async function getOrderBookBinance(market, type) {
+  
+    var data;
+    const url = "https://api.binance.com/api/v1/depth?limit=10&symbol="+ market.split("-")[1] +  market.split("-")[0];
+    await request.get(url, (error, response, body) => {
+  
+      if (error || response.statusCode != 200) {
+        console.log("Errore Binance");
+        return [];
+      }
+  
+      let json = JSON.parse(body);
+  
+      if (type == "bid") {
+        data = json.bids;
+      }
+      else {
+        data = json.asks;
+      }
+      var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+      data = data.splice(0, dim);
+    });
+  
+    return data.map(function(i){
+      return {
+        Rate: i[0],
+        Quantity: i[1]
+      }
+    });
+  }
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
