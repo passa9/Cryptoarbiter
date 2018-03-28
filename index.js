@@ -271,7 +271,7 @@ async function getOrderBookHitBTC(market, type) {
   
     var data;
     const url =
-      "https://api.hitbtc.com/api/2/public/orderbook/"+ market.split("-",)[1] + market.split("-",)[0]+"?limit=10" ;
+      "https://api.hitbtc.com/api/2/public/orderbook/"+ market.split("-",)[1] + market.split("-",)[0].replace("USDT","USD")+"?limit=10" ;
     await request.get(url, (error, response, body) => {
   
       if (error || response.statusCode != 200) {
