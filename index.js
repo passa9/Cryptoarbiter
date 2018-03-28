@@ -13,27 +13,60 @@ appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
   .setAutoCollectDependencies(false)
   .start();
 
-async function getOrderBook(exchange, type, market) {
+var queueBittrex = [];
+var queuePoloniex = [];
+async function getOrderBook(exchange, type, market,res) {
+
+  var params =  {
+    funct: {
+      type: type,
+      market: market
+    },
+    res: res
+  };
   if (exchange == "Bittrex") {
-    return {
-      link: "https://bittrex.com/Market/Index?MarketName=" + market,
-      arr: await getOrderBookBittrex(market, type),
-    };
-     
+    queueBittrex.push(params);
+  
   }
   else if (exchange == "Poloniex") {
-
+    queuePoloniex.push(params);
   }
   else if (exchange == "Binance") {
 
   }
 }
+// Bittrex
+setInterval(async function () {
+  if (queueBittrex.length > 0) {
+    var data = queueBittrex.shift();
+    var res = data.res;
+    var json = await getOrderBookBittrex(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://bittrex.com/Market/Index?MarketName=" + data.funct.market,
+      arr: json,
+    }));
+  }
+}, 5000);
+
+// Poloniex
+setInterval(async function () {
+  if (queuePoloniex.length > 0) {
+    var data = queuePoloniex.shift();
+    var res = data.res;
+    var json = await getOrderBookPoloniex(data.funct.market,data.funct.type);
+    res.contentType('application/json');
+    res.send(JSON.stringify({
+      link: "https://poloniex.com/exchange/#" + data.funct.market.replace("-","_"),
+      arr: json,
+    }));
+  }
+}, 5000);
 
 async function getOrderBookBittrex(market, type) {
 
-
   if (type == "bid") {
-    type = "buy"
+    type = "buy";
   }
   else if (type == "ask") {
     type = "sell";
@@ -45,21 +78,60 @@ async function getOrderBookBittrex(market, type) {
 
     if (error || response.statusCode != 200) {
       console.log("Errore bittrex");
-      return;
+      return [];
     }
 
     let json = JSON.parse(body);
 
     if (!json.success) {
       console.log(json.message);
-      return;
+      data = [];
+      return data;
     }
-   var dim = (json.result.length -1 < 10 ? json.result.length -1 : 10);
-    data = json.result.splice(0,dim);
+    if (json.result == null) {
+      data = [];
+      return data;
+    }
+
+    var dim = (json.result.length - 1 < 10 ? json.result.length - 1 : 10);
+    data = json.result.splice(0, dim);
 
   });
 
   return data;
+}
+async function getOrderBookPoloniex(market, type) {
+
+  var data;
+  const url =
+    "https://poloniex.com/public?command=returnOrderBook&currencyPair=" + market.replace("-","_") + "&depth=10";
+  await request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore poloniex");
+      return [];
+    }
+
+    let json = JSON.parse(body);
+
+    if (type == "bids") {
+      data = json.bids;
+    }
+    else {
+      data = json.asks;
+    }
+    var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+    data = data.splice(0, dim);
+    
+
+  });
+
+  return data.map(function(i){
+    return {
+      Rate: i[0],
+      Quantity: i[1]
+    }
+  });
 }
 
 // Handlebars Middleware
@@ -88,11 +160,7 @@ app.get('/getorderbook', async (req, res) => {
   var exchange = req.query.exchange;
   var type = req.query.type;
   var pair = req.query.market;
-
-  var json = await getOrderBook(exchange, type, pair);
-
-  res.contentType('application/json');
-  res.send(JSON.stringify(json));
+  getOrderBook(exchange, type, pair,res);
 });
 
 app.get('/tickers', (req, res) => {

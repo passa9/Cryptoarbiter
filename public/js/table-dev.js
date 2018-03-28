@@ -147,25 +147,25 @@ $(document).ready(function () {
                     cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
                     cell += '<font size="2">';
                     if (differenceAsk == 1) {
-                        cell += '<span style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                        cell +=  '<a href="javascript:void(0)" data-exchange="Poloniex" data-type="ask" data-pair="'+ row.id +'"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     else if (differenceAsk == 0) {
-                        cell += '<span >' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Poloniex" data-type="ask" data-pair="'+ row.id +'"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     else if (differenceAsk == -1) {
-                        cell += '<span style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</span>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Poloniex" data-type="ask" data-pair="'+ row.id +'" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     cell += '</font>'
                     cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
                     cell += '<font size="2">';
                     if (differenceBid == 1) {
-                        cell += '<span style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Poloniex" data-type="bid" data-pair="'+ row.id +'"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     if (differenceBid == 0) {
-                        cell += '<span >' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Poloniex" data-type="bid" data-pair="'+ row.id +'"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     if (differenceBid == -1) {
-                        cell += '<span style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</span>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Poloniex" data-type="bid" data-pair="'+ row.id +'"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     '</div></div></div></div>';
 
