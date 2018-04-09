@@ -1,14 +1,62 @@
+//This is not production quality, its just demo code.
+var cookieList = function (cookieName) {
+    //When the cookie is saved the items will be a comma seperated string
+    //So we will split the cookie by comma to get the original array
+    var cookie = $.cookie(cookieName);
+    //Load the items or a new array if null.
+    var items = cookie ? cookie.split(/,/) : new Array();
+
+    //Return a object that we can use to access the array.
+    //while hiding direct access to the declared items array
+    //this is called closures see http://www.jibbering.com/faq/faq_notes/closures.html
+    return {
+        "add": function (val) {
+            //Add to the items.
+            items.push(val);
+            //Save the items to a cookie.
+            //EDIT: Modified from linked answer by Nick see 
+            //      http://stackoverflow.com/questions/3387251/how-to-store-array-in-jquery-cookie
+            $.cookie(cookieName, items.join(','));
+        },
+        "remove": function (val) {
+            //EDIT: Thx to Assef and luke for remove.
+            indx = items.indexOf(val);
+            if (indx != -1) items.splice(indx, 1);
+            $.cookie(cookieName, items.join(','));
+        },
+        "clear": function () {
+            items = null;
+            //clear the cookie.
+            $.cookie(cookieName, null);
+        },
+        "items": function () {
+            //Get all the items.
+            return items;
+        }
+    }
+} 
+
+
+var table;
+var cHiddenPair = cookieList("hiddenPair");
 $(document).ready(function () {
-    var table = $('#table').DataTable({
+
+    cHiddenPair.items().forEach(element => {
+       document.getElementById("dvPairRemoved").innerHTML += ' <button class="btn btn-danger btn-sm">' + element +'<i class="fa fa-times" aria-hidden="true"></i></button>';
+    });
+
+    table = $('#table').DataTable({
         "ajax": location.protocol + '//' + location.host + '/tickers',
         responsive: true,
         fixedHeader: true,
         iDisplayLength: 50,
-        "order": [[10, "desc"]],
+        "order": [[8, "desc"]],
 
         "columns": [
             {
-                "data": "id", "orderable": true,
+                "data": "id", "orderable": true, render: function (data, type, row, meta) {
+                    return data + '<button style="opacity:0.8" data-name="Tiger Nixon" data-pair="' + data + '" onclick="hidePair(this)" class="btn btn-danger btn-sm m-0 pl-1 pr-1 pb-0 pt-0 float-right"><div style="font-size:8px"><i class="fa fa-times" aria-hidden="true"></i></div></button>';
+                }
             },
             {
                 "data": "bittrex", "orderable": true, render: function (data, type, row, meta) {
@@ -395,119 +443,118 @@ $(document).ready(function () {
 
                 }
             },
-            {
-                "data": "bitfinex", "orderable": true, render: function (data, type, row, meta) {
-
-                    if (data.bid == undefined)
-                        return "-";
-
-                    var differenceBid = compare(meta, data.bid, "bid");
-                    var differenceAsk = compare(meta, data.ask, "ask");
-
-                    var min = low(row, data.ask, "Bitfinex");
-                    var max = high(row, data.bid, "Bitfinex");
-
-                    var cell = "";
-                    cell += '<div style="display:absolute;margin:0;padding:0">';
-
-                    if (min && max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (min) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                    }
-                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
-                    cell += '<font size="2">';
-                    if (differenceAsk == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    else if (differenceAsk == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    else if (differenceAsk == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    cell += '</font>'
-                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
-                    cell += '<font size="2">';
-                    if (differenceBid == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    if (differenceBid == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    if (differenceBid == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    '</div></div></div></div>';
-
-                    cell += '</div>';
-
-                    return cell;
-
-                }
-            },
-            {
-                "data": "exmo", "orderable": true, render: function (data, type, row, meta) {
-
-                    if (data.bid == undefined)
-                        return "-";
-
-                    var differenceBid = compare(meta, data.bid, "bid");
-                    var differenceAsk = compare(meta, data.ask, "ask");
-
-                    var min = low(row, data.ask, "Exmo");
-                    var max = high(row, data.bid, "Exmo");
-
-                    var cell = "";
-                    cell += '<div style="display:absolute;margin:0;padding:0">';
-
-                    if (min && max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (min) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                    }
-                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
-                    cell += '<font size="2">';
-                    if (differenceAsk == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    else if (differenceAsk == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    else if (differenceAsk == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    cell += '</font>'
-                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
-                    cell += '<font size="2">';
-                    if (differenceBid == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    if (differenceBid == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    if (differenceBid == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    '</div></div></div></div>';
-
-                    cell += '</div>';
-
-                    return cell;
-
-                }
-            },
+            /*     {
+                     "data": "bitfinex", "orderable": true, render: function (data, type, row, meta) {
+     
+                         if (data.bid == undefined)
+                             return "-";
+     
+                         var differenceBid = compare(meta, data.bid, "bid");
+                         var differenceAsk = compare(meta, data.ask, "ask");
+     
+                         var min = low(row, data.ask, "Bitfinex");
+                         var max = high(row, data.bid, "Bitfinex");
+     
+                         var cell = "";
+                         cell += '<div style="display:absolute;margin:0;padding:0">';
+     
+                         if (min && max) {
+                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                         }
+                         else if (min) {
+                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                         }
+                         else if (max) {
+                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                         }
+                         cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                         cell += '<font size="2">';
+                         if (differenceAsk == 1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                         }
+                         else if (differenceAsk == 0) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                         }
+                         else if (differenceAsk == -1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                         }
+                         cell += '</font>'
+                         cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                         cell += '<font size="2">';
+                         if (differenceBid == 1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                         }
+                         if (differenceBid == 0) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                         }
+                         if (differenceBid == -1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                         }
+                         '</div></div></div></div>';
+     
+                         cell += '</div>';
+     
+                         return cell;
+     
+                     }
+                 },
+                 {
+                     "data": "exmo", "orderable": true, render: function (data, type, row, meta) {
+     
+                         if (data.bid == undefined)
+                             return "-";
+     
+                         var differenceBid = compare(meta, data.bid, "bid");
+                         var differenceAsk = compare(meta, data.ask, "ask");
+     
+                         var min = low(row, data.ask, "Exmo");
+                         var max = high(row, data.bid, "Exmo");
+     
+                         var cell = "";
+                         cell += '<div style="display:absolute;margin:0;padding:0">';
+     
+                         if (min && max) {
+                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                         }
+                         else if (min) {
+                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                         }
+                         else if (max) {
+                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                         }
+                         cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                         cell += '<font size="2">';
+                         if (differenceAsk == 1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                         }
+                         else if (differenceAsk == 0) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                         }
+                         else if (differenceAsk == -1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                         }
+                         cell += '</font>'
+                         cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                         cell += '<font size="2">';
+                         if (differenceBid == 1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                         }
+                         if (differenceBid == 0) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                         }
+                         if (differenceBid == -1) {
+                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                         }
+                         '</div></div></div></div>';
+     
+                         cell += '</div>';
+     
+                         return cell;
+     
+                     }
+                 }, */
             {
                 "data": "null", "orderable": true, render: function (data, type, row, meta) {
-
 
                     var min = getMin(row);
                     var max = getMax(row);
@@ -531,15 +578,12 @@ $(document).ready(function () {
                     if (difference == -1) {
                         return '<span style="color:red">' + percentage.toFixed(2) + '</span>'
                     }
-
                 }
             },
-
         ],
     });
     var prevTable;
     var prevPercentage = [];
-
 
     function compare(meta, value, type) {
 
@@ -567,12 +611,12 @@ $(document).ready(function () {
             else if (meta.col == 7) {
                 prev_data = prevTable[meta.row].hitbtc;
             }
-            else if (meta.col == 8) {
-                prev_data = prevTable[meta.row].bitfinex;
-            }
-            else if (meta.col == 9) {
-                prev_data = prevTable[meta.row].exmo;
-            }
+            /*    else if (meta.col == 8) {
+                    prev_data = prevTable[meta.row].bitfinex;
+                }
+                else if (meta.col == 9) {
+                    prev_data = prevTable[meta.row].exmo;
+                } */
 
             if (prev_data == undefined)
                 return 0;
@@ -664,10 +708,10 @@ function low(row, value, exchange) {
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square"))
         arr.push(row.hitbtc.ask);
-    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bitfinex.ask);
-    if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-        arr.push(row.exmo.ask);
+    /* if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+         arr.push(row.bitfinex.ask);
+     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+         arr.push(row.exmo.ask); */
 
     var min = Math.min(...arr);
 
@@ -694,10 +738,10 @@ function high(row, value, exchange) {
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square"))
         arr.push(row.hitbtc.bid);
-    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bitfinex.bid);
-    if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-        arr.push(row.exmo.bid);
+    /* if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+         arr.push(row.bitfinex.bid);
+     if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+         arr.push(row.exmo.bid); */
 
     var max = Math.max(...arr);
 
@@ -724,10 +768,10 @@ function getMin(row) {
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square"))
         arr.push(row.hitbtc.ask);
-    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bitfinex.ask);
-    if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-        arr.push(row.exmo.ask);
+    /* if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+         arr.push(row.bitfinex.ask);
+     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+         arr.push(row.exmo.ask); */
 
     if (arr.length == 0)
         return 0;
@@ -752,14 +796,37 @@ function getMax(row) {
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square"))
         arr.push(row.hitbtc.bid);
-    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
-        arr.push(row.bitfinex.bid);
-    if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-        arr.push(row.exmo.bid);
+    /*   if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+         arr.push(row.bitfinex.bid);
+   if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+         arr.push(row.exmo.bid); */
 
     if (arr.length == 0)
         return 0;
 
     return Math.max(...arr);
-
 }
+
+
+
+
+$.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        var name = data[0]; // use data for the age column
+
+        if (cHiddenPair.items().some(function (l) {
+            return l.trim().toUpperCase() == name.trim().toUpperCase()
+        })) {
+            return false;
+        }
+        return true;
+    }
+);
+
+function hidePair(e) {
+    cHiddenPair.add(e.dataset.pair);
+    document.getElementById("dvPairRemoved").innerHTML += ' <button class="btn btn-danger btn-sm">' + e.dataset.pair +'<i class="fa fa-times" aria-hidden="true"></i></button>';
+    table.draw();
+}
+
+

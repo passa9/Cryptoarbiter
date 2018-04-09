@@ -1,6 +1,16 @@
-{{!--
-<a id="asd" href="javascript:void(0)" onclick="amountDetails(this)" class="btn btn-link">
-    Click</a> --}}
+<div class="card mb-5">
+  <div class="card-body">
+    <h6>
+      Removed:
+    </h6>
+    <div id="dvPairRemoved">
+      <button class="btn btn-danger btn-sm">
+          uno
+          <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
 
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
@@ -35,14 +45,14 @@
                     <i class="far fa-check-square"></i>
                     HitBTC
                 </button>
-              <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
+          <!--    <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     Bitfinex
                 </button>
                      <button id="btnExmo" class="btn btn-sm btn-secondary toggle-vis" data-column="9" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     Exmo
-                </button>
+                </button> -->
             </td>
         </tr>
         <tr>
@@ -55,8 +65,8 @@
             <th>Livecoin</th>
             <th>Liqui</th>
             <th>HitBTC</th>
-            <th>Bitfinex</th>
-            <th>Exmo</th>
+        <!--    <th>Bitfinex</th>
+            <th>Exmo</th> -->
             <th>Percentage</th>
         </tr>
     </thead>
