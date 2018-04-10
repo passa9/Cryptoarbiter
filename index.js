@@ -269,7 +269,6 @@ async function getOrderBookPoloniex(market, type) {
   });
 }
 
-
 async function getOrderBookHitBTC(market, type) {
 
   var data;
@@ -643,6 +642,9 @@ async function LivecoinTickers(inizializza) {
       if (currency == "CRC") {
         currency = "CRC2";
       }
+      else if (currency == "LDC") {
+        currency = "Ladacoin";
+      }
 
       var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
 
@@ -881,7 +883,6 @@ async function ExmoTickers(inizializza) {
       var basecurrency = key.split('_')[1];
       var currency = key.split('_')[0];
 
-
       var ticker = tickers.find(x => x.id === (basecurrency + "-" + currency));
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
@@ -1072,10 +1073,6 @@ async function MappingIdLiqui() {
       var basecurrency = element.Name.split('/')[1];
       var currency = element.Name.split('/')[0];
 
-      if (currency == "LDC") {
-        currency = "Leadcoin";
-      }
-
       var pair = basecurrency + "-" + currency;
 
       mappingLiqui.push({
@@ -1132,7 +1129,12 @@ async function CryptopiaTickers(inizializza) {
       else if (currency == "WRC") {
         currency = "Warcoin"
       }
-
+     else if (currency == "LDC") {
+        currency = "Ladacoin";
+      }
+      else if (currency == "CMT") {
+        currency = "CometCoin";
+      }
       var ticker = tickers.find(x => x.id === basecurrency + "-" + currency);
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
@@ -1249,7 +1251,6 @@ async function YobitTickers() {
 async function KrakenTickers() {
   var apiUrlAssetPairs = 'https://api.kraken.com/0/public/AssetPairs',
     apiUrlTicker = 'https://api.kraken.com/0/public/Ticker?pair='
-
 
   request.get(apiUrlAssetPairs, (error, response, body) => {
 

@@ -1,13 +1,9 @@
-<div class="card mb-5">
+<div class="card m-2">
   <div class="card-body">
     <h6>
       Removed:
     </h6>
-    <div id="dvPairRemoved">
-      <button class="btn btn-danger btn-sm">
-          uno
-          <i class="fa fa-times" aria-hidden="true"></i>
-      </button>
+    <div id="dvPairRemoved" >
     </div>
   </div>
 </div>
@@ -16,6 +12,8 @@
     <thead>
         <tr>
             <td colspan="9">
+                <div class="row">
+                <div class="col-md-8">
                 Exchange: &nbsp;
                 <button id="btnBittrex" class="btn btn-sm btn-secondary toggle-vis" data-column="1" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
@@ -45,6 +43,26 @@
                     <i class="far fa-check-square"></i>
                     HitBTC
                 </button>
+                </div>
+                <div align="right" class="col-md-4">
+                   <span> da:</span>
+                    <select id="minPerc" onchange="refreshDatatable()" style="width:110px" class="form-control form-control-sm d-inline">
+                        <option value="-9999999">- &infin; %</option>
+                        <option selected value="0">0 %</option>
+                        <option value="2">2 %</option>
+                        <option value="5">5 %</option>
+                        <option value="10">10 %</option>
+                    </select> 
+                   <span>a:</span>
+                     <select onchange="refreshDatatable()" id="maxPerc" style="width:110px" class="form-control form-control-sm d-inline">
+                        <option value="10">10 %</option>
+                        <option value="15">15 %</option>
+                        <option value="25">25 %</option>
+                        <option  value="50">50 %</option>
+                        <option selected value="9999999">&infin; %</option>
+                    </select> 
+                </div>
+                </div>
           <!--    <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     Bitfinex

@@ -13,10 +13,12 @@ var cookieList = function (cookieName) {
         "add": function (val) {
             //Add to the items.
             items.push(val);
+
+
             //Save the items to a cookie.
             //EDIT: Modified from linked answer by Nick see 
             //      http://stackoverflow.com/questions/3387251/how-to-store-array-in-jquery-cookie
-            $.cookie(cookieName, items.join(','));
+            $.cookie(cookieName, items.join(','), { expires: new Date(Date.now() + 2592000000) });
         },
         "remove": function (val) {
             //EDIT: Thx to Assef and luke for remove.
@@ -34,7 +36,7 @@ var cookieList = function (cookieName) {
             return items;
         }
     }
-} 
+}
 
 
 var table;
@@ -42,7 +44,7 @@ var cHiddenPair = cookieList("hiddenPair");
 $(document).ready(function () {
 
     cHiddenPair.items().forEach(element => {
-       document.getElementById("dvPairRemoved").innerHTML += ' <button class="btn btn-danger btn-sm">' + element +'<i class="fa fa-times" aria-hidden="true"></i></button>';
+        document.getElementById("dvPairRemoved").innerHTML += ' <button style="margin:2px;" class="btn btn-danger btn-sm" data-pair="' + element + '" onclick="delistHiddenPair(this)">' + element + '<i style="margin-left:10px" class="fa fa-times" aria-hidden="true"></i></button>';
     });
 
     table = $('#table').DataTable({
@@ -689,6 +691,7 @@ function exchange(element) {
 
     element.children[0].classList.toggle('fa-square');
     element.children[0].classList.toggle('fa-check-square');
+    refreshDatatable();
 }
 
 function low(row, value, exchange) {
@@ -813,6 +816,11 @@ function getMax(row) {
 $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
         var name = data[0]; // use data for the age column
+        var minPerc = parseFloat(document.getElementById("minPerc").value);
+        var maxPerc = parseFloat(document.getElementById("maxPerc").value);
+        var val = parseFloat(data[8]);
+        if(val < minPerc || val > maxPerc)
+        return false;
 
         if (cHiddenPair.items().some(function (l) {
             return l.trim().toUpperCase() == name.trim().toUpperCase()
@@ -823,9 +831,20 @@ $.fn.dataTable.ext.search.push(
     }
 );
 
+function refreshDatatable()
+{
+    table.draw();
+}
+
 function hidePair(e) {
     cHiddenPair.add(e.dataset.pair);
-    document.getElementById("dvPairRemoved").innerHTML += ' <button class="btn btn-danger btn-sm">' + e.dataset.pair +'<i class="fa fa-times" aria-hidden="true"></i></button>';
+    document.getElementById("dvPairRemoved").innerHTML += '<button style="margin:2px;"  class="btn btn-danger btn-sm  ml-1" data-pair="' + e.dataset.pair + '" onclick="delistHiddenPair(this)">' + e.dataset.pair + '<i style="margin-left:10px" class="fa fa-times" aria-hidden="true"></i></button>';
+    table.draw();
+}
+
+function delistHiddenPair(e) {
+    cHiddenPair.remove(e.dataset.pair);
+    e.parentNode.removeChild(e)
     table.draw();
 }
 
