@@ -418,6 +418,14 @@ app.get('/', (req, res) => {
   });
 });
 
+// Notifications Route
+app.get('/Notifications', (req, res) => {
+  const title = 'Notifications';
+  res.render('notifications', {
+    title: title
+  });
+});
+
 app.get('/getorderbook', async (req, res) => {
 
   var exchange = req.query.exchange;
