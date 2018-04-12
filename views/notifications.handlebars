@@ -9,58 +9,83 @@
     <div class="card-body">
         <div class="row mb-2">
             <div class="col text-right">
-                <h6>Exchanges:</h6>
+                <h6 class="d-inline align-middle">Exchanges:</h6>
             </div>
-            <div class="col">
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> Bittrex</button>
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> Binance</button>
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> Poloniex</button>
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> Cryptopia</button>
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> Livecoin</button>
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> Liqui</button>
-                <button class="btn btn-light btn-sm active" type="button" data-toggle="button" aria-pressed="true"> HitBTC</button>
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col text-right">
-                <h6> Base currencies:</h6>
-            </div>
-            <div class="col">
-
+            <div align="left" class="col">
+                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> Bittrex</button>
+                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Binance</button>
+                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Poloniex</button>
+                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Cryptopia</button>
+                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Livecoin</button>
+                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Liqui</button>
+                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> HitBTC</button>
             </div>
         </div>
         <div class="row mb-2">
             <div class="col text-right">
-                <h6> Min %: </h6>
+                <h6 class="d-inline align-middle"> Base currencies:</h6>
             </div>
-            <div class="col">
-
-            </div>
-        </div>
-        <div class="row mb-2">
-            <div class="col text-right">
-                <h6> Max %:</h6>
-            </div>
-            <div class="col">
-
+            <div align="left" class="col">
+                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> BTC</button>
+                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> ETH</button>
+                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> USDT</button>
             </div>
         </div>
         <div class="row mb-2">
             <div class="col text-right">
-                <h6> Min Volume:</h6>
+                <h6 class="d-inline align-middle"> Min %: </h6>
             </div>
-            <div class="col">
-
+            <div align="left" class="col">
+                <select style="width:110px" class="form-control form-control-sm">
+                    <option value="2">2 %</option>
+                    <option value="3">3 %</option>
+                    <option value="4">4 %</option>
+                    <option value="5">5 %</option>
+                    <option value="6">6 %</option>
+                    <option value="7">7 %</option>
+                    <option value="8">8 %</option>
+                    <option value="9">9 %</option>
+                </select>
             </div>
         </div>
         <div class="row mb-2">
             <div class="col text-right">
-                <h6> Excluded pairs: </h6>
+                <h6 class="d-inline align-middle"> Max %:</h6>
             </div>
-            <div class="col">
-
+            <div align="left" class="col">
+                    <select style="width:110px" class="form-control form-control-sm">
+                    <option value="10">10 %</option>
+                    <option value="15">15 %</option>
+                    <option value="20">20 %</option>
+                    <option value="25">25 %</option>
+                    <option value="50">50 %</option>
+                    <option value="10">100 %</option>
+                </select>
             </div>
         </div>
+        <div class="row mb-2">
+            <div class="col text-right">
+                <h6 class="d-inline align-middle"> Min Volume:</h6>
+            </div>
+            <div class="col" align="left">
+<div class="input-group" style="width:150px">
+  <input type="text" class="form-control form-control-sm" placeholder="es: 0.05" aria-label="es: 0.05" aria-describedby="basic-addon2">
+  <div class="input-group-append">
+    <span class="input-group-text" id="basic-addon2">BTC</span>
+  </div>
+</div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col text-right">
+                <h6 class="d-inline align-middle"> Excluded pairs: </h6>
+            </div>
+            <div class="col" align="left">
+               <textarea placeholder="es: BTC-ADA
+     ETH-ARK    
+     BTC-STEEM" class="form-control form-control-sm" style="width:200px" rows="5"></textarea>
+            </div>
+        </div>  
         <div align="center" class="row mt-5">
             <div class="col">
                 <button class="btn btn-primary">
