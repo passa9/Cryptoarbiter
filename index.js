@@ -418,6 +418,25 @@ app.get('/', (req, res) => {
   });
 });
 
+// Index Route
+app.post('/setAlert', (req, res) => {
+
+
+var options = {
+    method: 'POST',
+    uri: 'http://bot-crypto-arbitrage.herokuapp.com/setAlert',
+    body: JSON.stringify(req.body),   
+    json: true // Automatically stringifies the body to JSON
+};
+ 
+request(options)
+    .then(function (parsedBody) {
+        // POST succeeded...
+    })
+    .catch(function (err) {
+        // POST failed...
+    });
+
 // Notifications Route
 app.get('/Notifications', (req, res) => {
   const title = 'Notifications';
