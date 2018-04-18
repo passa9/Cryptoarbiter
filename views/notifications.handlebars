@@ -96,16 +96,72 @@
 </div>
 
 <script>
-  $( "#btnGetCode" ).click(function( event ) {
-  event.stopPropagation();
+    $("#btnGetCode").click(function (event) {
+        event.stopPropagation();
 
-  $.ajax({
-  type: "POST",
-  url: "setAlert",
-  data: data,
-  success: success,
-  dataType: "json"
-});
-  // Do something
-});
+        var exchanges = [];
+
+        if ($('#chkBittrex').hasClass('active')) {
+            exchanges.push('bittrex');
+        }
+        if ($('#chkBinance').hasClass('active')) {
+            exchanges.push('binance');
+        }
+        if ($('#chkPoloniex').hasClass('active')) {
+            exchanges.push('poloniex');
+        }
+        if ($('#chkCryptopia').hasClass('active')) {
+            exchanges.push('cryptopia');
+        }
+        if ($('#chkLivecoin').hasClass('active')) {
+            exchanges.push('livecoin');
+        }
+        if ($('#chkLiqui').hasClass('active')) {
+            exchanges.push('liqui');
+        }
+        if ($('#chkHitBTC').hasClass('active')) {
+            exchanges.push('hitbtc');
+        }
+
+        var basecurrencies = [];
+        // Basecurrency
+        if ($('#chkBTC').hasClass('active')) {
+            basecurrencies.push('BTC');
+        }
+        if ($('#chkETH').hasClass('active')) {
+            basecurrencies.push('ETH');
+        }
+        if ($('#chkUSDT').hasClass('active')) {
+            basecurrencies.push('USDT');
+        }
+
+        var minPerc = $("#slcMinPerc").val();
+        var maxPerc = $("#slcMaxPerc").val();
+        var minVolume = $("#txtminVolume").val(); 
+        var excludedPairs = $("#txtExcludedPairs").val().split('\n');
+
+        var settings = {
+            baseCurrencies: basecurrencies,
+            exludedPairs: excludedPairs,
+            minPerc: minPerc,
+            maxPerc: maxPerc,
+            minVolume: minVolume,
+            exchanges: exchanges,
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/setAlert",
+            data: JSON.stringify(settings),
+            success: function(data) {
+                alert(data.code);
+            },
+            error: function(err)
+            {
+                alert(err);
+            },
+            dataType: "json"
+        });
+        // Do something
+    });
 </script>

@@ -422,20 +422,23 @@ app.get('/', (req, res) => {
 app.post('/setAlert', (req, res) => {
 
 
-var options = {
+  var options = {
     method: 'POST',
     uri: 'http://bot-crypto-arbitrage.herokuapp.com/setAlert',
-    body: JSON.stringify(req.body),   
+    body:req.body,
     json: true // Automatically stringifies the body to JSON
-};
- 
-request(options)
+  };
+
+  request(options)
     .then(function (parsedBody) {
-        // POST succeeded...
+      // POST succeeded...
+      res.json(parsedBody);
     })
     .catch(function (err) {
-        // POST failed...
+      // POST failed...
+      res.json(err);
     });
+});
 
 // Notifications Route
 app.get('/Notifications', (req, res) => {
@@ -560,7 +563,7 @@ async function RemoveAloneMarkets() {
       arr.push(tickers[i].hitbtc.ask);
     if (tickers[i].bitfinex.ask != undefined)
       arr.push(tickers[i].bitfinex.ask);
-      if (tickers[i].exmo.ask != undefined)
+    if (tickers[i].exmo.ask != undefined)
       arr.push(tickers[i].exmo.ask);
 
     if (arr.length < 2) {
@@ -1156,7 +1159,7 @@ async function CryptopiaTickers(inizializza) {
       else if (currency == "WRC") {
         currency = "Warcoin"
       }
-     else if (currency == "LDC") {
+      else if (currency == "LDC") {
         currency = "Ladacoin";
       }
       else if (currency == "CMT") {
@@ -1180,7 +1183,7 @@ async function CryptopiaTickers(inizializza) {
           },
           livecoin: {},
           hitbtc: {},
-          bitfinex : {}
+          bitfinex: {}
         });
       }
       else if (ticker == null) {
@@ -1322,17 +1325,3 @@ async function KrakenTickers() {
   });
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
