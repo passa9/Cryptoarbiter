@@ -607,6 +607,11 @@ async function HitBTCTickers(inizializza) {
         currency = element.symbol.substring(0, element.symbol.length - 3);
       }
 
+      if(currency == 'EMGO')
+      {
+        currency = 'MGO';
+      }
+
       var ticker = tickers.find(x => x.id === basecurrency + '-' + currency);
 
       if (ticker == null && inizializza) // nuovo, lo inserisco
