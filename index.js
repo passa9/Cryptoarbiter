@@ -4,6 +4,7 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const https = require('https');
 const request = require("request-promise");
+const Bittrex = require('./exchanges/bittrex');
 
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
 
@@ -22,6 +23,127 @@ var queueCryptopia = [];
 var queueLivecoin = [];
 var queueLiqui = [];
 var queueHitBTC = [];
+
+
+async function BittrexTickers(inizializza) {
+  const url =
+    "https://bittrex.com/api/v1.1/public/getmarketsummaries";
+  return request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore bittrex");
+      return;
+    }
+
+    let json = JSON.parse(body);
+
+    if (!json.success) {
+      console.log(json.message);
+      return;
+    }
+    var count = 0;
+    json.result.forEach(element => {
+      var ticker = tickers.find(x => x.id === element.MarketName);
+
+      if (ticker == null && inizializza) // nuovo, lo inserisco
+      {
+        tickers.push({
+          id: element.MarketName,
+          bittrex: {
+            last: element.Last,
+            bid: element.Bid,
+            ask: element.Ask,
+          },
+          liqui: {},
+          binance: {},
+          poloniex: {},
+          cryptopia: {},
+          hitbtc: {},
+          exmo: {},
+          livecoin: {},
+          bitfinex: {}
+        });
+
+      }
+      else if (ticker == null) {
+        return;
+      }
+      else {
+        ticker.bittrex.last = element.Last;
+        ticker.bittrex.bid = element.Bid;
+        ticker.bittrex.ask = element.Ask;
+      }
+
+      count++;
+    });
+
+    if (inizializza) {
+      while (count != json.result.length) { }
+    }
+    return;
+
+  });
+}
+
+async function PoloniexTickers(inizializza) {
+  const url =
+    "https://poloniex.com/public?command=returnTicker";
+  return request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore poloniex");
+      return;
+    }
+
+    let obj = JSON.parse(body);
+    var count = 0;
+    Object.keys(obj).forEach(key => {
+
+      var basecurrency = key.split('_')[0];
+      var currency = key.split('_')[1];
+      if (currency == "BTM") {
+        currency = "Bitmark";
+      }
+
+      var ticker = tickers.find(x => x.id === (basecurrency + "-" + currency));
+
+      if (ticker == null && inizializza) // nuovo, lo inserisco
+      {
+        tickers.push({
+          id: (basecurrency + "-" + currency),
+          poloniex: {
+            last: obj[key].last,
+            ask: parseFloat(obj[key].lowestAsk),
+            bid: parseFloat(obj[key].highestBid)
+          },
+          liqui: {},
+          binance: {},
+          bittrex: {},
+          hitbtc: {},
+          exmo: {},
+          cryptopia: {},
+          livecoin: {},
+          bitfinex: {}
+        });
+      }
+      else if (ticker == null) {
+        return;
+      }
+      else {
+        ticker.poloniex.last = obj[key].last;
+        ticker.poloniex.bid = parseFloat(obj[key].highestBid);
+        ticker.poloniex.ask = parseFloat(obj[key].lowestAsk);
+      }
+      count++;
+    });
+
+    if (inizializza) {
+      while (count != Object.keys(obj).length) { }
+    }
+    return;
+  });
+}
+
 
 async function getOrderBook(exchange, type, market, res) {
 
@@ -447,7 +569,8 @@ app.get('/tickers', (req, res) => {
 async function init() {
 
   try {
-    await BittrexTickers(true);
+    Bittrex.getTickers(true, tickers);
+    // await BittrexTickers(true);
   }
   catch (e) { }
   try {
@@ -498,8 +621,8 @@ var mappingLiqui = [];
 
 function update() {
   setInterval(function () {
-
-    BittrexTickers(false);
+    Bittrex.getTickers(false, tickers);
+    // BittrexTickers(false);
     BinanceTickers(false);
     PoloniexTickers(false);
     CryptopiaTickers(false);
@@ -541,7 +664,7 @@ async function RemoveAloneMarkets() {
       arr.push(tickers[i].hitbtc.ask);
     if (tickers[i].bitfinex.ask != undefined)
       arr.push(tickers[i].bitfinex.ask);
-      if (tickers[i].exmo.ask != undefined)
+    if (tickers[i].exmo.ask != undefined)
       arr.push(tickers[i].exmo.ask);
 
     if (arr.length < 2) {
@@ -1137,7 +1260,7 @@ async function CryptopiaTickers(inizializza) {
       else if (currency == "WRC") {
         currency = "Warcoin"
       }
-     else if (currency == "LDC") {
+      else if (currency == "LDC") {
         currency = "Ladacoin";
       }
       else if (currency == "CMT") {
@@ -1161,7 +1284,7 @@ async function CryptopiaTickers(inizializza) {
           },
           livecoin: {},
           hitbtc: {},
-          bitfinex : {}
+          bitfinex: {}
         });
       }
       else if (ticker == null) {
