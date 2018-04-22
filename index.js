@@ -540,6 +540,28 @@ app.get('/', (req, res) => {
   });
 });
 
+// Index Route
+app.post('/setAlert', (req, res) => {
+
+
+  var options = {
+    method: 'POST',
+    uri: 'http://bot-crypto-arbitrage.herokuapp.com/setAlert',
+    body:req.body,
+    json: true // Automatically stringifies the body to JSON
+  };
+
+  request(options)
+    .then(function (parsedBody) {
+      // POST succeeded...
+      res.json(parsedBody);
+    })
+    .catch(function (err) {
+      // POST failed...
+      res.json(err);
+    });
+});
+
 // Notifications Route
 app.get('/Notifications', (req, res) => {
   const title = 'Notifications';
@@ -706,6 +728,11 @@ async function HitBTCTickers(inizializza) {
       else {
         basecurrency = element.symbol.substring(element.symbol.length - 3, element.symbol.length);
         currency = element.symbol.substring(0, element.symbol.length - 3);
+      }
+
+      if(currency == 'EMGO')
+      {
+        currency = 'MGO';
       }
 
       var ticker = tickers.find(x => x.id === basecurrency + '-' + currency);
@@ -1426,17 +1453,3 @@ async function KrakenTickers() {
   });
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

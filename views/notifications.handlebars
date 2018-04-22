@@ -12,13 +12,13 @@
                 <h6 class="d-inline align-middle">Exchanges:</h6>
             </div>
             <div align="left" class="col">
-                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> Bittrex</button>
-                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Binance</button>
-                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Poloniex</button>
-                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Cryptopia</button>
-                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Livecoin</button>
-                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Liqui</button>
-                <button class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> HitBTC</button>
+                <button id="chkBittrex" class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> Bittrex</button>
+                <button id="chkBinance" class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Binance</button>
+                <button id="chkPoloniex" class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Poloniex</button>
+                <button id="chkCryptopia" class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Cryptopia</button>
+                <button id="chkLivecoin" class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Livecoin</button>
+                <button id="chkLiqui" class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> Liqui</button>
+                <button id="chkHitBTC" class="btn btn-light btn-sm " type="button" data-toggle="button" aria-pressed="true"> HitBTC</button>
             </div>
         </div>
         <div class="row mb-2">
@@ -26,9 +26,9 @@
                 <h6 class="d-inline align-middle"> Base currencies:</h6>
             </div>
             <div align="left" class="col">
-                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> BTC</button>
-                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> ETH</button>
-                <button class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> USDT</button>
+                <button id="chkBTC" class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> BTC</button>
+                <button id="chkETH" class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> ETH</button>
+                <button id="chkUSDT" class="btn btn-light btn-sm" type="button" data-toggle="button" aria-pressed="true"> USDT</button>
             </div>
         </div>
         <div class="row mb-2">
@@ -36,7 +36,7 @@
                 <h6 class="d-inline align-middle"> Min %: </h6>
             </div>
             <div align="left" class="col">
-                <select style="width:110px" class="form-control form-control-sm">
+                <select id="slcMinPerc" style="width:110px" class="form-control form-control-sm">
                     <option value="2">2 %</option>
                     <option value="3">3 %</option>
                     <option value="4">4 %</option>
@@ -53,7 +53,7 @@
                 <h6 class="d-inline align-middle"> Max %:</h6>
             </div>
             <div align="left" class="col">
-                    <select style="width:110px" class="form-control form-control-sm">
+                <select id="slcMaxPerc" style="width:110px" class="form-control form-control-sm">
                     <option value="10">10 %</option>
                     <option value="15">15 %</option>
                     <option value="20">20 %</option>
@@ -68,12 +68,12 @@
                 <h6 class="d-inline align-middle"> Min Volume:</h6>
             </div>
             <div class="col" align="left">
-<div class="input-group" style="width:150px">
-  <input type="text" class="form-control form-control-sm" placeholder="es: 0.05" aria-label="es: 0.05" aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <span class="input-group-text" id="basic-addon2">BTC</span>
-  </div>
-</div>
+                <div class="input-group" style="width:150px">
+                    <input id="txtminVolume" type="text" class="form-control form-control-sm" placeholder="es: 0.05" aria-label="es: 0.05" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">BTC</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row mb-2">
@@ -81,16 +81,87 @@
                 <h6 class="d-inline align-middle"> Excluded pairs: </h6>
             </div>
             <div class="col" align="left">
-               <textarea placeholder="es: BTC-ADA
+                <textarea id="txtExcludedPairs" placeholder="es: BTC-ADA
      ETH-ARK    
      BTC-STEEM" class="form-control form-control-sm" style="width:200px" rows="5"></textarea>
             </div>
-        </div>  
+        </div>
         <div align="center" class="row mt-5">
             <div class="col">
-                <button class="btn btn-primary">
+                <button id="btnGetCode" class="btn btn-primary">
                     <i class="fab fa-telegram"></i> Get code</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $("#btnGetCode").click(function (event) {
+        event.stopPropagation();
+
+        var exchanges = [];
+
+        if ($('#chkBittrex').hasClass('active')) {
+            exchanges.push('bittrex');
+        }
+        if ($('#chkBinance').hasClass('active')) {
+            exchanges.push('binance');
+        }
+        if ($('#chkPoloniex').hasClass('active')) {
+            exchanges.push('poloniex');
+        }
+        if ($('#chkCryptopia').hasClass('active')) {
+            exchanges.push('cryptopia');
+        }
+        if ($('#chkLivecoin').hasClass('active')) {
+            exchanges.push('livecoin');
+        }
+        if ($('#chkLiqui').hasClass('active')) {
+            exchanges.push('liqui');
+        }
+        if ($('#chkHitBTC').hasClass('active')) {
+            exchanges.push('hitbtc');
+        }
+
+        var basecurrencies = [];
+        // Basecurrency
+        if ($('#chkBTC').hasClass('active')) {
+            basecurrencies.push('BTC');
+        }
+        if ($('#chkETH').hasClass('active')) {
+            basecurrencies.push('ETH');
+        }
+        if ($('#chkUSDT').hasClass('active')) {
+            basecurrencies.push('USDT');
+        }
+
+        var minPerc = $("#slcMinPerc").val();
+        var maxPerc = $("#slcMaxPerc").val();
+        var minVolume = $("#txtminVolume").val(); 
+        var excludedPairs = $("#txtExcludedPairs").val().split('\n');
+
+        var settings = {
+            baseCurrencies: basecurrencies,
+            exludedPairs: excludedPairs,
+            minPerc: minPerc,
+            maxPerc: maxPerc,
+            minVolume: minVolume,
+            exchanges: exchanges,
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/setAlert",
+            data: JSON.stringify(settings),
+            success: function(data) {
+                alert(data.code);
+            },
+            error: function(err)
+            {
+                alert(err);
+            },
+            dataType: "json"
+        });
+        // Do something
+    });
+</script>
