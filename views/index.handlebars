@@ -1,11 +1,11 @@
 <div class="card m-2">
-  <div class="card-body">
-    <h6>
-      Removed:
-    </h6>
-    <div id="dvPairRemoved" >
+    <div class="card-body">
+        <h6>
+            Removed:
+        </h6>
+        <div id="dvPairRemoved">
+        </div>
     </div>
-  </div>
 </div>
 
 
@@ -14,60 +14,60 @@
         <tr>
             <td colspan="9">
                 <div class="row">
-                <div class="col-md-8">
-                Exchange: &nbsp;
-                <button id="btnBittrex" class="btn btn-sm btn-secondary toggle-vis" data-column="1" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Bittrex
-                </button>
-                <button id="btnBinance" class="btn btn-sm btn-secondary toggle-vis" data-column="2" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Binance
-                </button>
-                <button id="btnPoloniex" class="btn btn-sm btn-secondary toggle-vis" data-column="3" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Poloniex
-                </button>
-                <button id="btnCryptopia" class="btn btn-sm btn-secondary toggle-vis" data-column="4" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Cryptopia
-                </button>
-                <button id="btnLivecoin" class="btn btn-sm btn-secondary toggle-vis" data-column="5" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Livecoin
-                </button>
-                <button id="btnLiqui" class="btn btn-sm btn-secondary toggle-vis" data-column="6" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Liqui
-                </button>
-                <button id="btnHitBTC" class="btn btn-sm btn-secondary toggle-vis" data-column="7" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    HitBTC
-                </button>
+                    <div class="col-md-8">
+                        Exchange: &nbsp;
+                        <button id="btnBittrex" class="btn btn-sm btn-secondary toggle-vis" data-column="1" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Bittrex
+                        </button>
+                        <button id="btnBinance" class="btn btn-sm btn-secondary toggle-vis" data-column="2" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Binance
+                        </button>
+                        <button id="btnPoloniex" class="btn btn-sm btn-secondary toggle-vis" data-column="3" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Poloniex
+                        </button>
+                        <button id="btnCryptopia" class="btn btn-sm btn-secondary toggle-vis" data-column="4" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Cryptopia
+                        </button>
+                        <button id="btnLivecoin" class="btn btn-sm btn-secondary toggle-vis" data-column="5" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Livecoin
+                        </button>
+                        <button id="btnLiqui" class="btn btn-sm btn-secondary toggle-vis" data-column="6" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Liqui
+                        </button>
+                        <button id="btnHitBTC" class="btn btn-sm btn-secondary toggle-vis" data-column="7" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            HitBTC
+                        </button>
+                    </div>
+                    <div align="right" class="col-md-4">
+                        <span> da:</span>
+                        <select id="minPerc" onchange="refreshDatatable()" style="width:110px" class="form-control form-control-sm d-inline">
+                            <option value="-9999999">- &infin; %</option>
+                            <option selected value="0">0 %</option>
+                            <option value="1">1 %</option>
+                            <option value="2">2 %</option>
+                            <option value="3">3 %</option>
+                            <option value="4">4 %</option>
+                            <option value="5">5 %</option>
+                            <option value="10">10 %</option>
+                        </select>
+                        <span>a:</span>
+                        <select onchange="refreshDatatable()" id="maxPerc" style="width:110px" class="form-control form-control-sm d-inline">
+                            <option value="10">10 %</option>
+                            <option value="15">15 %</option>
+                            <option value="25">25 %</option>
+                            <option value="50">50 %</option>
+                            <option selected value="9999999">&infin; %</option>
+                        </select>
+                    </div>
                 </div>
-                <div align="right" class="col-md-4">
-                   <span> da:</span>
-                    <select id="minPerc" onchange="refreshDatatable()" style="width:110px" class="form-control form-control-sm d-inline">
-                        <option value="-9999999">- &infin; %</option>
-                        <option selected value="0">0 %</option>
-                        <option value="1">1 %</option>
-                        <option value="2">2 %</option>
-                       <option value="3">3 %</option>
-                       <option value="4">4 %</option>                     
-                        <option value="5">5 %</option>
-                        <option value="10">10 %</option>
-                    </select> 
-                   <span>a:</span>
-                     <select onchange="refreshDatatable()" id="maxPerc" style="width:110px" class="form-control form-control-sm d-inline">
-                        <option value="10">10 %</option>
-                        <option value="15">15 %</option>
-                        <option value="25">25 %</option>
-                        <option  value="50">50 %</option>
-                        <option selected value="9999999">&infin; %</option>
-                    </select> 
-                </div>
-                </div>
-          <!--    <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
+                <!--    <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     Bitfinex
                 </button>
@@ -87,13 +87,17 @@
             <th>Livecoin</th>
             <th>Liqui</th>
             <th>HitBTC</th>
-        <!--    <th>Bitfinex</th>
+            <!--    <th>Bitfinex</th>
             <th>Exmo</th> -->
             <th>Percentage</th>
         </tr>
     </thead>
 </table>
 <script>
+
+    function calculatePrice(el) {
+        alert(el.nextSibling);
+    }
 
     function amountDetails(element) {
 
@@ -103,23 +107,23 @@
 
         var panel = document.getElementById(exchange + market + type);
 
-        if(panel != undefined)
-        {
-         $(panel).remove();
-          return;
+        if (panel != undefined) {
+            $(panel).remove();
+            return;
         }
 
         var content = '<i class="fa fa-spinner fa-spin text-primary" style="font-size:40px;margin:40%"></i>';
         var position = $(element).offset(); //.getBoundingClientRect();
-        
+
         var title = market + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>';
-        var template = '<div id="' + exchange + market + type + '" class="popover bs-popover-right" style="width: 550px;position:absolute;top:' + (position.top - 32) + 'px;left:' + (position.left + 70) + 'px" ><div class="arrow" style="top: 24px;"></div><h3 class="popover-header">' + title + '</h3><div class="popover-body"><div  id="' + exchange +market + type + '-content">' + content + '</div></div></div>';
+        var template = '<div id="' + exchange + market + type + '" class="popover bs-popover-right" style="width: 310px;max-width: 310px;position:absolute;top:' + (position.top - 32) + 'px;left:' + (position.left + 70) + 'px" ><div class="arrow" style="top: 24px;"></div><h3 class="popover-header">' + title + '</h3><div class="popover-body"><div  id="' + exchange + market + type + '-content">' + content + '</div></div></div>';
         $(template).appendTo(document.body);
 
         var jqxhr = $.get("/getorderbook?exchange=" + exchange + "&market=" + market + "&type=" + type, function (data, status) {
 
-            content = '<table class="table table bordered table-sm">';
-            content += '<thead><tr><th>PRICE</th><th>AMOUNT</th><th>(' + market.split('-')[0] +')</th></thead>';
+            var idTable = uniqueId();
+            content = '<table id="' + idTable + '" class="table table bordered table-sm">';
+            content += '<thead><tr><th>PRICE</th><th>AMOUNT</th><th>(' + market.split('-')[0] + ')</th></thead>';
             content += '<tbody>';
 
             for (var i = 0; i < data.arr.length; i++) {
@@ -128,12 +132,18 @@
                 content += '</td>';
                 content += '<td>' + data.arr[i].Quantity;
                 content += '</td>';
-                 content += '<td>' + (data.arr[i].Quantity * data.arr[i].Rate).toFixed(5);
+                content += '<td>' + (data.arr[i].Quantity * data.arr[i].Rate).toFixed(6);
                 content += '</td>';
                 content += '</tr>';
             }
+            var idAmount = uniqueId();
+            var idPrice = uniqueId();
             content += '</tbody></table>';
-            content += '<div class="row">';
+            content += '<div class="row mt-2 ml-1 mr-1 mb-2 bg-light">';
+            content += '<input type="text" id="' + idAmount + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:90px"> <span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[1] + '&nbsp; = &nbsp;</span>';
+            content += '<input type="text" id="' + idPrice + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:90px"><span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[0] + '</span>';
+            content += '</div>';
+            content += '<div class="row mt-2">';
             content += '<div class="col"  align="left">';
             content += '<h4>' + type + '</h4>';
             content += '</div>';
@@ -142,16 +152,108 @@
             content += '</div>';
             content += '</div>';
 
-            document.getElementById(exchange + market + type  + "-content").innerHTML = content;
+            document.getElementById(exchange + market + type + "-content").innerHTML = content;
+
+            $("#" + idAmount).keyup(function () {
+
+                var rows = document.getElementById(idTable).rows;
+
+                for (var i = 1; i < rows.length; i++) {
+                    $(rows[i]).removeClass('bg-success');
+                }
+
+                var val = parseFloat(document.getElementById(idAmount).value);
+                if (isNaN(val)) {
+                    document.getElementById(idPrice).value = '';
+                    return;
+                }
+                var currentAmount = 0;
+                var currentTotalPrice = 0;
+                var found = false;
+
+                for (var i = 0; i < data.arr.length; i++) {
+
+                    $(rows[i + 1]).addClass('bg-success');
+
+                    if ((currentAmount + parseFloat(data.arr[i].Quantity)) >= val) {
+                        currentTotalPrice += (val - currentAmount) * parseFloat(data.arr[i].Rate);
+                        found = true;
+                        break;
+                    }
+                    else {
+                        currentAmount += parseFloat(data.arr[i].Quantity);
+                        currentTotalPrice += parseFloat(data.arr[i].Quantity) * parseFloat(data.arr[i].Rate);
+                    }
+                }
+
+                if (found) {
+                    document.getElementById(idPrice).value = currentTotalPrice;
+                }
+                else {
+                    for (var i = 1; i < rows.length; i++) {
+                        $(rows[i]).removeClass('bg-success');
+                    }
+                    alert("Non ci sono abbastanza fondi");
+                }
+
+
+            });
+
+             $("#" + idPrice).keyup(function () {
+
+                var rows = document.getElementById(idTable).rows;
+
+                for (var i = 1; i < rows.length; i++) {
+                    $(rows[i]).removeClass('bg-success');
+                }
+
+                var val = parseFloat(document.getElementById(idAmount).value);
+                if (isNaN(val)) {
+                    document.getElementById(idPrice).value = '';
+                    return;
+                }
+                var currentAmount = 0;
+                var currentTotalPrice = 0;
+                var found = false;
+
+                for (var i = 0; i < data.arr.length; i++) {
+
+                    $(rows[i + 1]).addClass('bg-success');
+
+                    if ((currentAmount + parseFloat(data.arr[i].Quantity)) >= val) {
+                        currentTotalPrice += (val - currentAmount) * parseFloat(data.arr[i].Rate);
+                        found = true;
+                        break;
+                    }
+                    else {
+                        currentAmount += parseFloat(data.arr[i].Quantity);
+                        currentTotalPrice += parseFloat(data.arr[i].Quantity) * parseFloat(data.arr[i].Rate);
+                    }
+                }
+
+                if (found) {
+                    document.getElementById(idPrice).value = currentTotalPrice;
+                }
+                else {
+                    for (var i = 1; i < rows.length; i++) {
+                        $(rows[i]).removeClass('bg-success');
+                    }
+                    alert("Non ci sono abbastanza fondi");
+                }
+
+
+            })
         });
 
     }
-
+    function uniqueId() {
+        return 'id-' + Math.random().toString(36).substr(2, 16);
+    };
 </script>
 
 <style>
     .popover {
-        width: 400px;
+        width: 570px;
     }
 
     td {
