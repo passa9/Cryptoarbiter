@@ -8,6 +8,7 @@
   </div>
 </div>
 
+
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
         <tr>
@@ -112,13 +113,13 @@
         var position = $(element).offset(); //.getBoundingClientRect();
         
         var title = market + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>';
-        var template = '<div id="' + exchange + market + type + '" class="popover bs-popover-right" style="width: 500px;position:absolute;top:' + (position.top - 32) + 'px;left:' + (position.left + 70) + 'px" ><div class="arrow" style="top: 24px;"></div><h3 class="popover-header">' + title + '</h3><div class="popover-body"><div  id="' + exchange +market + type + '-content">' + content + '</div></div></div>';
+        var template = '<div id="' + exchange + market + type + '" class="popover bs-popover-right" style="width: 550px;position:absolute;top:' + (position.top - 32) + 'px;left:' + (position.left + 70) + 'px" ><div class="arrow" style="top: 24px;"></div><h3 class="popover-header">' + title + '</h3><div class="popover-body"><div  id="' + exchange +market + type + '-content">' + content + '</div></div></div>';
         $(template).appendTo(document.body);
 
         var jqxhr = $.get("/getorderbook?exchange=" + exchange + "&market=" + market + "&type=" + type, function (data, status) {
 
             content = '<table class="table table bordered table-sm">';
-            content += '<thead><tr><th>PRICE</th><th>AMOUNT</th></thead>';
+            content += '<thead><tr><th>PRICE</th><th>AMOUNT</th><th>(' + market.split('-')[0] +')</th></thead>';
             content += '<tbody>';
 
             for (var i = 0; i < data.arr.length; i++) {
@@ -126,6 +127,8 @@
                 content += '<td>' + data.arr[i].Rate;
                 content += '</td>';
                 content += '<td>' + data.arr[i].Quantity;
+                content += '</td>';
+                 content += '<td>' + (data.arr[i].Quantity * data.arr[i].Rate).toFixed(5);
                 content += '</td>';
                 content += '</tr>';
             }
@@ -148,7 +151,7 @@
 
 <style>
     .popover {
-        width: 350px;
+        width: 400px;
     }
 
     td {

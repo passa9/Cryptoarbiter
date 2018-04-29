@@ -23,8 +23,10 @@ const  Livecoin = {
           var count = 0;
           json.forEach(element => {
       
+           
             var basecurrency = element.symbol.split('/')[1];
             var currency = element.symbol.split('/')[0];
+            var quote = element.symbol.split('/')[0];
       
             if (currency == "CRC") {
               currency = "CRC2";
@@ -43,6 +45,8 @@ const  Livecoin = {
                   last: element.last,
                   bid: element.best_bid,
                   ask: element.best_ask,
+                  base: basecurrency,
+                  quote: quote
                 },
                 exmo: {},
                 liqui: {},
@@ -59,6 +63,11 @@ const  Livecoin = {
               return;
             }
             else {
+              if(inizializza)
+              {
+                ticker.livecoin.base =basecurrency;
+                ticker.livecoin.quote = quote;
+              }
               ticker.livecoin.last = element.last;
               ticker.livecoin.bid = element.best_bid;
               ticker.livecoin.ask = element.best_ask;

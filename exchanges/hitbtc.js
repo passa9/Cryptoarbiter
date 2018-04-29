@@ -21,22 +21,27 @@ const HitBTC = {
             }
             var count = 0;
             json.forEach(element => {
+                var base;
+                var quote;
                 var basecurrency;
                 var currency;
 
                 if (element.symbol.endsWith("USDT")) {
+                    base = "USDT";
                     basecurrency = "USDT";
                     currency = element.symbol.substring(0, element.symbol.length - 4);
                 }
                 else if (element.symbol.endsWith("USD")) {
+                    base = "USD";
                     basecurrency = "USDT"
                     currency = element.symbol.substring(0, element.symbol.length - 3);
                 }
                 else {
+                    base =element.symbol.substring(element.symbol.length - 3, element.symbol.length);
                     basecurrency = element.symbol.substring(element.symbol.length - 3, element.symbol.length);
                     currency = element.symbol.substring(0, element.symbol.length - 3);
                 }
-
+                quote = currency;
                 if (currency == 'EMGO') {
                     currency = 'MGO';
                 }
@@ -49,6 +54,8 @@ const HitBTC = {
                         id: basecurrency + '-' + currency,
                         binance: {},
                         hitbtc: {
+                            base: base,
+                            quote: quote,
                             last: element.last,
                             ask: parseFloat(element.ask),
                             bid: parseFloat(element.bid)
@@ -66,6 +73,11 @@ const HitBTC = {
                     return;
                 }
                 else {
+                    if (inizializza) {
+                        ticker.hitbtc.base = base;
+                        ticker.hitbtc.quote = quote;
+                      }
+
                     ticker.hitbtc.last = element.last;
                     ticker.hitbtc.ask = parseFloat(element.ask);
                     ticker.hitbtc.bid = parseFloat(element.bid);
@@ -93,6 +105,47 @@ const HitBTC = {
                 }));
             }
         }, 1000);
+    },
+    getCurrencies: async function (inizializza) {
+        const url =
+            "https://api.hitbtc.com/api/2/public/currency";
+        return request.get(url, (error, response, body) => {
+
+            if (error || response.statusCode != 200) {
+                console.log("Errore hitbtc");
+                return;
+            }
+            let json;
+            try {
+                json = JSON.parse(body);
+            }
+            catch (e) {
+                return;
+            }
+            var count = 0;
+            json.forEach(element => {
+               
+                var quoteCurrency = element.id;
+
+                var ticker = tickers.find(x => x.hitbtc.quote === quoteCurrency);
+
+                if(ticker != undefined)
+                {
+                    if(!element.payinEnabled && !element.payoutEnabled)
+                    {
+                        ticker.hitbtc.status = "locked"
+                    }
+                    else if(!element.payinEnabled)
+                    {
+                        ticker.hitbtc.status = "depositDisabled"
+                    }
+                    else if(!element.payoutEnabled)
+                    {
+                        ticker.hitbtc.status = "withdrawalsDisabled"
+                    }
+                }
+            });
+        });
     }
 };
 

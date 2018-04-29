@@ -13,13 +13,13 @@ const https = require('https');
 const request = require("request-promise");
 var tickers = require("./common/variables.js").tickers;
 
-var queueBittrex =  require("./common/variables.js").queueBittrex;
-var queuePoloniex =  require("./common/variables.js").queuePoloniex;
-var queueBinance =  require("./common/variables.js").queueBinance;
-var queueCryptopia =  require("./common/variables.js").queueCryptopia;
-var queueLivecoin =  require("./common/variables.js").queueLivecoin;
-var queueLiqui =  require("./common/variables.js").queueLiqui;
-var queueHitBTC =  require("./common/variables.js").queueHitBTC;
+var queueBittrex = require("./common/variables.js").queueBittrex;
+var queuePoloniex = require("./common/variables.js").queuePoloniex;
+var queueBinance = require("./common/variables.js").queueBinance;
+var queueCryptopia = require("./common/variables.js").queueCryptopia;
+var queueLivecoin = require("./common/variables.js").queueLivecoin;
+var queueLiqui = require("./common/variables.js").queueLiqui;
+var queueHitBTC = require("./common/variables.js").queueHitBTC;
 
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
 
@@ -101,7 +101,7 @@ app.post('/setAlert', (req, res) => {
   var options = {
     method: 'POST',
     uri: 'http://bot-crypto-arbitrage.herokuapp.com/setAlert',
-    body:req.body,
+    body: req.body,
     json: true // Automatically stringifies the body to JSON
   };
 
@@ -145,7 +145,7 @@ app.get('/tickers', (req, res) => {
 async function init() {
 
   try {
-   await Bittrex.getTickers(true);
+    await Bittrex.getTickers(true);
   }
   catch (e) { }
   try {
@@ -157,11 +157,11 @@ async function init() {
   }
   catch (e) { }
   try {
-   await Cryptopia.getTickers(true);
+    await Cryptopia.getTickers(true);
   }
   catch (e) { }
   try {
-   await Livecoin.getTickers(true);
+    await Livecoin.getTickers(true);
   }
   catch (e) { }
   try {
@@ -184,10 +184,20 @@ async function init() {
     await RemoveAloneMarkets();
   }
   catch (e) { }
-
+  updateStatus();
   update();
 
 }
+
+function updateStatus() {
+  setInterval(function () {
+    Poloniex.getCurrencies();
+    Bittrex.getCurrencies();
+    Cryptopia.getCurrencies();
+    HitBTC.getCurrencies();
+  }, 10000)
+}
+
 init();
 
 function update() {
@@ -237,8 +247,6 @@ async function RemoveAloneMarkets() {
     }
   }
 }
-
-
 
 function calcPerc(ticker) {
   var arr = [];

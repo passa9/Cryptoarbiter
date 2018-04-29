@@ -30,7 +30,9 @@ const  Liqui = {
           var count = 0;
           json.forEach(element => {
       
-            var currency = mappingLiqui.find(function (x) { return x.id == element.PairId })
+            var currency = mappingLiqui.find(function (x) { return x.id == element.PairId });
+            var base = currency.pair.split('-')[0];
+            var quote = currency.pair.split('-')[1];
             var ticker = tickers.find(x => x.id === currency.pair);
       
             if (ticker == null && inizializza) // nuovo, lo inserisco
@@ -38,6 +40,8 @@ const  Liqui = {
               tickers.push({
                 id: currency.pair,
                 liqui: {
+                  base: base,
+                  quote: quote,
                   last: element.LastPrice,
                   bid: element.Buy,
                   ask: element.Sell,
@@ -57,6 +61,11 @@ const  Liqui = {
               return;
             }
             else {
+              if(inizializza)
+              {
+                ticker.liqui.base = base;
+                ticker.liqui.quote = quote;
+              }
               ticker.liqui.last = element.LastPrice;
               ticker.liqui.bid = element.Buy;
               ticker.liqui.ask = element.Sell;
