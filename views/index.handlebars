@@ -116,7 +116,7 @@
         var position = $(element).offset(); //.getBoundingClientRect();
 
         var title = market + ' - ' + exchange + ' <button class="btn btn-sm btn-danger float-sm-right" onclick="$(this).parent().parent().remove();" value="close" style="padding:4px 6px;margin:-5px;"><i class="fa fa-times" aria-hidden="true"></i></button>';
-        var template = '<div id="' + exchange + market + type + '" class="popover bs-popover-right" style="width: 310px;max-width: 310px;position:absolute;top:' + (position.top - 32) + 'px;left:' + (position.left + 70) + 'px" ><div class="arrow" style="top: 24px;"></div><h3 class="popover-header">' + title + '</h3><div class="popover-body"><div  id="' + exchange + market + type + '-content">' + content + '</div></div></div>';
+        var template = '<div id="' + exchange + market + type + '" class="popover bs-popover-right" style="width: 330px;max-width: 330px;position:absolute;top:' + (position.top - 32) + 'px;left:' + (position.left + 70) + 'px" ><div class="arrow" style="top: 24px;"></div><h3 class="popover-header">' + title + '</h3><div class="popover-body"><div  id="' + exchange + market + type + '-content">' + content + '</div></div></div>';
         $(template).appendTo(document.body);
 
         var jqxhr = $.get("/getorderbook?exchange=" + exchange + "&market=" + market + "&type=" + type, function (data, status) {
@@ -140,8 +140,8 @@
             var idPrice = uniqueId();
             content += '</tbody></table>';
             content += '<div class="row mt-2 ml-1 mr-1 mb-2 bg-light">';
-            content += '<input type="text" id="' + idAmount + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:90px"> <span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[1] + '&nbsp; = &nbsp;</span>';
-            content += '<input type="text" id="' + idPrice + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:90px"><span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[0] + '</span>';
+            content += '<input type="text" id="' + idAmount + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:100px"> <span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[1] + '&nbsp; = &nbsp;</span>';
+            content += '<input type="text" id="' + idPrice + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:100px"><span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[0] + '</span>';
             content += '</div>';
             content += '<div class="row mt-2">';
             content += '<div class="col"  align="left">';
@@ -187,7 +187,7 @@
                 }
 
                 if (found) {
-                    document.getElementById(idPrice).value = currentTotalPrice;
+                    document.getElementById(idPrice).value = currentTotalPrice.toFixed(6);
                 }
                 else {
                     for (var i = 1; i < rows.length; i++) {
@@ -232,7 +232,7 @@
                 }
 
                 if (found) {
-                    document.getElementById(idAmount).value = currentAmount;
+                    document.getElementById(idAmount).value = currentAmount.toFixed(6);
                 }
                 else {
                     for (var i = 1; i < rows.length; i++) {
@@ -252,9 +252,7 @@
 </script>
 
 <style>
-    .popover {
-        width: 570px;
-    }
+   
 
     td {
         position: relative !important;
