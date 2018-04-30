@@ -33,7 +33,7 @@
                             Cryptopia
                         </button>
                         <button id="btnLivecoin" class="btn btn-sm btn-secondary toggle-vis" data-column="5" onclick="exchange(this)">
-                            <i class="far fa-check-square"></i>
+                            <i class="far fa-square"></i>
                             Livecoin
                         </button>
                         <button id="btnLiqui" class="btn btn-sm btn-secondary toggle-vis" data-column="6" onclick="exchange(this)">
@@ -207,9 +207,9 @@
                     $(rows[i]).removeClass('bg-success');
                 }
 
-                var val = parseFloat(document.getElementById(idAmount).value);
+                var val = parseFloat(document.getElementById(idPrice).value);
                 if (isNaN(val)) {
-                    document.getElementById(idPrice).value = '';
+                    document.getElementById(idAmount).value = '';
                     return;
                 }
                 var currentAmount = 0;
@@ -220,8 +220,8 @@
 
                     $(rows[i + 1]).addClass('bg-success');
 
-                    if ((currentAmount + parseFloat(data.arr[i].Quantity)) >= val) {
-                        currentTotalPrice += (val - currentAmount) * parseFloat(data.arr[i].Rate);
+                    if ((currentTotalPrice + (parseFloat(data.arr[i].Quantity) * parseFloat(data.arr[i].Rate))) >= val) {
+                        currentAmount += (val - currentTotalPrice) / parseFloat(data.arr[i].Rate);
                         found = true;
                         break;
                     }
@@ -232,7 +232,7 @@
                 }
 
                 if (found) {
-                    document.getElementById(idPrice).value = currentTotalPrice;
+                    document.getElementById(idAmount).value = currentAmount;
                 }
                 else {
                     for (var i = 1; i < rows.length; i++) {

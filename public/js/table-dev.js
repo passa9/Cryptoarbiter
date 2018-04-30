@@ -290,7 +290,7 @@ $(document).ready(function () {
                 }
             },
             {
-                "data": "livecoin", "orderable": true, render: function (data, type, row, meta) {
+                "data": "livecoin",  "visible": false, "orderable": true, render: function (data, type, row, meta) {
 
                     if (data.bid == undefined)
                         return "-";
