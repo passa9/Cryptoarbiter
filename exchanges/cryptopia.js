@@ -129,13 +129,19 @@ const Cryptopia = {
 
         var quoteCurrency = element.Symbol;
 
-        var ticker = tickers.find(x => x.cryptopia.quote === quoteCurrency);
+        var tickersFound = tickers.filter(x => x.cryptopia.quote === quoteCurrency);
 
-        if (ticker != undefined) {
-          if (element.Status != "OK") {
-            ticker.cryptopia.status = "locked";
+        tickersFound.forEach(ticker => {
+          if (ticker != undefined) {
+            if (element.Status != "OK") {
+              ticker.cryptopia.status = "locked";
+            }
+            else
+            {
+              ticker.cryptopia.status = "ok";
+            }
           }
-        }
+        });
       })
     });
   }
