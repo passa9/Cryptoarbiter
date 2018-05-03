@@ -49,11 +49,10 @@ $(document).ready(function () {
 
     table = $('#table').DataTable({
         "ajax": location.protocol + '//' + location.host + '/tickers',
-        responsive: true,
-        fixedHeader: true,
-        iDisplayLength: 50,
+        "responsive": true,
+        "fixedHeader": true,
+        "iDisplayLength": 50,
         "order": [[8, "desc"]],
-
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -109,10 +108,10 @@ $(document).ready(function () {
                     }
                     '</div></div></div></div>';
                     if (data.status == "locked") {
-                       cell +=  '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
                     }
-                   else if (data.status == "delayed") {
-                    cell +=  '<i class="fas fa-lock" style="position:absolute;width:9px;color:orange;right:3px;top:2px;"></i>'
+                    else if (data.status == "delayed") {
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:orange;right:3px;top:2px;"></i>'
                     }
                     cell += '</div>';
 
@@ -224,7 +223,7 @@ $(document).ready(function () {
                     }
                     '</div></div></div></div>';
                     if (data.status == "locked") {
-                        cell +=  '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
                     }
                     cell += '</div>';
 
@@ -274,14 +273,14 @@ $(document).ready(function () {
                         cell += '<a href="javascript:void(0)" data-exchange="Cryptopia" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     if (differenceBid == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Cryptopia" data-type="bid" data-pair="' + data.base + "-" + data.quote+ '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Cryptopia" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     if (differenceBid == -1) {
                         cell += '<a href="javascript:void(0)" data-exchange="Cryptopia" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     '</div></div></div></div>';
                     if (data.status == "locked") {
-                        cell +=  '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
                     }
                     cell += '</div>';
 
@@ -290,7 +289,7 @@ $(document).ready(function () {
                 }
             },
             {
-                "data": "livecoin",  "visible": false, "orderable": true, render: function (data, type, row, meta) {
+                "data": "livecoin", "visible": false, "orderable": true, render: function (data, type, row, meta) {
 
                     if (data.bid == undefined)
                         return "-";
@@ -359,7 +358,7 @@ $(document).ready(function () {
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
 
-                    if (min && max) {            
+                    if (min && max) {
                         cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
                     }
                     else if (min) {
@@ -448,13 +447,13 @@ $(document).ready(function () {
                     }
                     '</div></div></div></div>';
                     if (data.status == "locked") {
-                        cell +=  '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
                     }
                     else if (data.status == "depositDisabled") {
-                        cell +=  '<i class="fas fa-lock" style="position:absolute;width:7px;color:brown;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:7px;color:brown;right:3px;top:2px;"></i>'
                     }
-                    else  if (data.status == "withdrawalsDisabled") {
-                        cell +=  '<i class="fas fa-lock" style="position:absolute;width:7px;color:black;right:3px;top:2px;"></i>'
+                    else if (data.status == "withdrawalsDisabled") {
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:7px;color:black;right:3px;top:2px;"></i>'
                     }
                     cell += '</div>';
 
@@ -601,6 +600,19 @@ $(document).ready(function () {
             },
         ],
     });
+
+    $( document ).ready(function() {
+       
+        var row = $("#table_wrapper").children()[0];
+        var col = $(row).children()[0];
+        col.classList.remove("col-md-6");
+        col.classList.add("col-md-3");
+        $('<div class="col-md-3"><button class="btn btn-primary btn-sm">ciaooooooooooooooooooooo</button></div>').insertAfter(col);
+     //   $(row).append('<div class="col-md-3"><button class="btn btn-primary btn-sm">ciaooooooooooooooooooooo</button></div>')
+      //  $(col).append('<button class="btn btn-primary">ciaooooooooooooooooooooo</button>');
+    });
+
+
     var prevTable;
     var prevPercentage = [];
 
