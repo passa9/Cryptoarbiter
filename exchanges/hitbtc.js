@@ -56,6 +56,7 @@ const HitBTC = {
                         hitbtc: {
                             base: base,
                             quote: quote,
+                            status: "ok",
                             last: element.last,
                             ask: parseFloat(element.ask),
                             bid: parseFloat(element.bid)
@@ -76,6 +77,7 @@ const HitBTC = {
                     if (inizializza) {
                         ticker.hitbtc.base = base;
                         ticker.hitbtc.quote = quote;
+                        ticker.hitbtc.status = "ok";
                       }
 
                     ticker.hitbtc.last = element.last;
@@ -127,23 +129,30 @@ const HitBTC = {
                
                 var quoteCurrency = element.id;
 
-                var ticker = tickers.find(x => x.hitbtc.quote === quoteCurrency);
+                var tickersFound = tickers.filter(x => x.hitbtc.quote === quoteCurrency);
 
-                if(ticker != undefined)
-                {
-                    if(!element.payinEnabled && !element.payoutEnabled)
+                tickersFound.forEach(ticker =>{
+                    if(ticker != undefined)
                     {
-                        ticker.hitbtc.status = "locked"
+                        if(!element.payinEnabled && !element.payoutEnabled)
+                        {
+                            ticker.hitbtc.status = "locked"
+                        }
+                        else if(!element.payinEnabled)
+                        {
+                            ticker.hitbtc.status = "depositDisabled"
+                        }
+                        else if(!element.payoutEnabled)
+                        {
+                            ticker.hitbtc.status = "withdrawalsDisabled"
+                        }
+                        else
+                        {
+                            ticker.hitbtc.status = "ok"
+                        }
                     }
-                    else if(!element.payinEnabled)
-                    {
-                        ticker.hitbtc.status = "depositDisabled"
-                    }
-                    else if(!element.payoutEnabled)
-                    {
-                        ticker.hitbtc.status = "withdrawalsDisabled"
-                    }
-                }
+                });
+               
             });
         });
     }

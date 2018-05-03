@@ -62,6 +62,7 @@ const Cryptopia = {
             cryptopia: {
               base: basecurrency,
               quote: quoteCurrency,
+              status: "ok",
               last: element.LastPrice,
               bid: element.BidPrice,
               ask: element.AskPrice
@@ -78,6 +79,7 @@ const Cryptopia = {
           if (inizializza) {
             ticker.cryptopia.base = basecurrency;
             ticker.cryptopia.quote = quoteCurrency;
+            ticker.cryptopia.status = "ok";
           }
           ticker.cryptopia.last = element.LastPrice;
           ticker.cryptopia.bid = element.BidPrice;
@@ -129,13 +131,19 @@ const Cryptopia = {
 
         var quoteCurrency = element.Symbol;
 
-        var ticker = tickers.find(x => x.cryptopia.quote === quoteCurrency);
+        var tickersFound = tickers.filter(x => x.cryptopia.quote === quoteCurrency);
 
-        if (ticker != undefined) {
-          if (element.Status != "OK") {
-            ticker.cryptopia.status = "locked";
+        tickersFound.forEach(ticker => {
+          if (ticker != undefined) {
+            if (element.Status != "OK") {
+              ticker.cryptopia.status = "locked";
+            }
+            else
+            {
+              ticker.cryptopia.status = "ok";
+            }
           }
-        }
+        });
       })
     });
   }

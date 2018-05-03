@@ -42,6 +42,7 @@ const  Liqui = {
                 liqui: {
                   base: base,
                   quote: quote,
+                  status: "ok",
                   last: element.LastPrice,
                   bid: element.Buy,
                   ask: element.Sell,
@@ -65,6 +66,7 @@ const  Liqui = {
               {
                 ticker.liqui.base = base;
                 ticker.liqui.quote = quote;
+                ticker.liqui.status = "ok";
               }
               ticker.liqui.last = element.LastPrice;
               ticker.liqui.bid = element.Buy;

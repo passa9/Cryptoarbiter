@@ -35,6 +35,7 @@ const Bittrex = {
               last: element.Last,
               bid: element.Bid,
               ask: element.Ask,
+              status: "ok"
             },
             liqui: {},
             binance: {},
@@ -54,6 +55,7 @@ const Bittrex = {
           if (inizializza) {
             ticker.bittrex.base = baseCurrency;
             ticker.bittrex.quote = quoteCurrency;
+            ticker.bittrex.status = "ok";
           }
 
           ticker.bittrex.last = element.Last;
@@ -104,19 +106,25 @@ const Bittrex = {
       }
 
       json.result.forEach(element => {
-        var ticker = tickers.find(x => x.bittrex.quote === element.Health.Currency);
+        var tickerFound = tickers.filter(x => x.bittrex.quote == element.Health.Currency);
 
-        if (ticker != undefined) {
-          if (!element.Health.IsActive) {
-            ticker.bittrex.status = "locked";
+        tickerFound.forEach(ticker => {
+          if (ticker != undefined) {
+            if (!element.Health.IsActive) {
+              ticker.bittrex.status = "locked";
+            }
+            else if (element.Health.MinutesSinceBHUpdated > 60) {
+              ticker.bittrex.status = "locked";
+            }
+            else if (element.Health.MinutesSinceBHUpdated > 30) {
+              ticker.bittrex.status = "delayed";
+            }
+            else
+            {
+              ticker.bittrex.status = "ok";
+            }
           }
-          else if (element.Health.MinutesSinceBHUpdated > 60) {
-            ticker.bittrex.status = "locked";
-          }
-          else if (element.Health.MinutesSinceBHUpdated > 30) {
-            ticker.bittrex.status = "delayed";
-          }
-        }
+        });
 
       });
     });

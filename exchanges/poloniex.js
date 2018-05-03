@@ -33,6 +33,7 @@ const Poloniex = {
             poloniex: {
               base: basecurrency,
               quote: quoteCurrency,
+              status: "ok",
               last: obj[key].last,
               ask: parseFloat(obj[key].lowestAsk),
               bid: parseFloat(obj[key].highestBid),
@@ -51,14 +52,14 @@ const Poloniex = {
           return;
         }
         else {
-          if(inizializza)
-          {
+          if (inizializza) {
             ticker.poloniex.base = basecurrency;
             ticker.poloniex.quote = quoteCurrency;
+            ticker.poloniex.status = "ok";
           }
           ticker.poloniex.last = obj[key].last;
           ticker.poloniex.bid = parseFloat(obj[key].highestBid);
-          ticker.poloniex.ask = parseFloat(obj[key].lowestAsk);          
+          ticker.poloniex.ask = parseFloat(obj[key].lowestAsk);
 
         }
         count++;
@@ -99,12 +100,13 @@ const Poloniex = {
       var count = 0;
       Object.keys(obj).forEach(currency => {
 
-        var ticker = tickers.find(x => x.poloniex.quote === currency);
+        var tickersFound = tickers.filter(x => x.poloniex.quote === currency);
 
-        if(ticker !== undefined)
-        {
-          ticker.poloniex.status = obj[currency].disabled == 1 ? "locked" : "ok";
-        }
+        tickersFound.forEach(ticker => {
+          if (ticker !== undefined) {
+            ticker.poloniex.status = obj[currency].disabled == 1 ? "locked" : "ok";
+          }
+        });
       })
     })
   }
