@@ -68,8 +68,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "Bittrex");
-                    var max = high(row, data.bid, "Bittrex");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "Bittrex");
+                         max = high(row, data.bid, "Bittrex");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -128,8 +138,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "Binance");
-                    var max = high(row, data.bid, "Binance");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok"  && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "Binance");
+                         max = high(row, data.bid, "Binance");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -183,8 +203,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "Poloniex");
-                    var max = high(row, data.bid, "Poloniex");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "Poloniex");
+                         max = high(row, data.bid, "Poloniex");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -240,8 +270,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "Cryptopia");
-                    var max = high(row, data.bid, "Cryptopia");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "Cryptopia");
+                         max = high(row, data.bid, "Cryptopia");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -297,8 +337,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "Livecoin");
-                    var max = high(row, data.bid, "Livecoin");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "Livecoin");
+                         max = high(row, data.bid, "Livecoin");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -352,8 +402,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "Liqui");
-                    var max = high(row, data.bid, "Liqui");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "Liqui");
+                         max = high(row, data.bid, "Liqui");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -407,8 +467,18 @@ $(document).ready(function () {
                     var differenceBid = compare(meta, data.bid, "bid");
                     var differenceAsk = compare(meta, data.ask, "ask");
 
-                    var min = low(row, data.ask, "HitBTC");
-                    var max = high(row, data.bid, "HitBTC");
+                    var min;
+                    var max;
+
+                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                    {
+                         min = false;
+                         max = false;
+                    }
+                    else{
+                         min = low(row, data.ask, "HitBTC");
+                         max = high(row, data.bid, "HitBTC");
+                    }
 
                     var cell = "";
                     cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -601,16 +671,7 @@ $(document).ready(function () {
         ],
     });
 
-    $( document ).ready(function() {
-       
-        var row = $("#table_wrapper").children()[0];
-        var col = $(row).children()[0];
-        col.classList.remove("col-md-6");
-        col.classList.add("col-md-3");
-        $('<div class="col-md-3"><button class="btn btn-primary btn-sm">ciaooooooooooooooooooooo</button></div>').insertAfter(col);
-     //   $(row).append('<div class="col-md-3"><button class="btn btn-primary btn-sm">ciaooooooooooooooooooooo</button></div>')
-      //  $(col).append('<button class="btn btn-primary">ciaooooooooooooooooooooo</button>');
-    });
+
 
 
     var prevTable;
@@ -875,5 +936,23 @@ function delistHiddenPair(e) {
     e.parentNode.removeChild(e)
     table.draw();
 }
+
+$(document).ready(function () {
+
+    var row = $("#table_wrapper").children()[0];
+    var col = $(row).children()[0];
+    col.classList.remove("col-md-6");
+    col.classList.add("col-md-3");
+    $('<div class="col-md-3"><button id="btnExcludeLock"class="btn btn-secondary btn-sm">Exclude <i class="fas fa-lock"></i></button></div>').insertAfter(col);
+
+    $('#btnExcludeLock').click(function () {
+        $('#btnExcludeLock').toggleClass('btn-secondary');
+        $('#btnExcludeLock').toggleClass('btn-primary');
+
+        table.draw();
+    });
+    //   $(row).append('<div class="col-md-3"><button class="btn btn-primary btn-sm">ciaooooooooooooooooooooo</button></div>')
+    //  $(col).append('<button class="btn btn-primary">ciaooooooooooooooooooooo</button>');
+});
 
 
