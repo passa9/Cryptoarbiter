@@ -40,7 +40,8 @@ const  Binance = {
                   ask: parseFloat(element.askPrice),
                   bid: parseFloat(element.bidPrice),
                   base: basecurrency,
-                  quote: currency
+                  quote: currency,
+                  status: "ok"
                 },
                 exmo: {},
                 liqui: {},
@@ -60,7 +61,8 @@ const  Binance = {
               if(inizializza)
               {
                 ticker.binance.base = basecurrency;
-                ticker.binance.quote = currency;
+                ticker.binance.quote =  currency;
+                ticker.binance.status = "ok";
               }
               ticker.binance.last = element.price;
               ticker.binance.ask = parseFloat(element.askPrice);

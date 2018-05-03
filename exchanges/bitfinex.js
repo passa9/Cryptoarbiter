@@ -26,7 +26,8 @@ async function BitfinexTickers(inizializza) {
             bitfinex: {
               last: element[7],
               ask: parseFloat(element[3]),
-              bid: parseFloat(element[1])
+              bid: parseFloat(element[1]),
+              status : "ok"
             },
             binance: {},
             exmo: {},

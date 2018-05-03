@@ -33,6 +33,7 @@ const Poloniex = {
             poloniex: {
               base: basecurrency,
               quote: quoteCurrency,
+              status: "ok",
               last: obj[key].last,
               ask: parseFloat(obj[key].lowestAsk),
               bid: parseFloat(obj[key].highestBid),
@@ -54,6 +55,7 @@ const Poloniex = {
           if (inizializza) {
             ticker.poloniex.base = basecurrency;
             ticker.poloniex.quote = quoteCurrency;
+            ticker.poloniex.status = "ok";
           }
           ticker.poloniex.last = obj[key].last;
           ticker.poloniex.bid = parseFloat(obj[key].highestBid);

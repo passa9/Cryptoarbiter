@@ -67,6 +67,7 @@ const  Livecoin = {
               {
                 ticker.livecoin.base =basecurrency;
                 ticker.livecoin.quote = quote;
+                ticker.livecoin.status = "ok";
               }
               ticker.livecoin.last = element.last;
               ticker.livecoin.bid = element.best_bid;

@@ -56,6 +56,7 @@ const HitBTC = {
                         hitbtc: {
                             base: base,
                             quote: quote,
+                            status: "ok",
                             last: element.last,
                             ask: parseFloat(element.ask),
                             bid: parseFloat(element.bid)
@@ -76,6 +77,7 @@ const HitBTC = {
                     if (inizializza) {
                         ticker.hitbtc.base = base;
                         ticker.hitbtc.quote = quote;
+                        ticker.hitbtc.status = "ok";
                       }
 
                     ticker.hitbtc.last = element.last;

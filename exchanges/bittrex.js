@@ -35,6 +35,7 @@ const Bittrex = {
               last: element.Last,
               bid: element.Bid,
               ask: element.Ask,
+              status: "ok"
             },
             liqui: {},
             binance: {},
@@ -54,6 +55,7 @@ const Bittrex = {
           if (inizializza) {
             ticker.bittrex.base = baseCurrency;
             ticker.bittrex.quote = quoteCurrency;
+            ticker.bittrex.status = "ok";
           }
 
           ticker.bittrex.last = element.Last;
