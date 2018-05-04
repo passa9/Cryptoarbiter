@@ -12,9 +12,9 @@
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
         <tr>
-            <td colspan="9">
+            <td colspan="10">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         Exchange: &nbsp;
                         <button id="btnBittrex" class="btn btn-sm btn-secondary toggle-vis" data-column="1" onclick="exchange(this)">
                             <i class="far fa-check-square"></i>
@@ -44,10 +44,14 @@
                             <i class="far fa-check-square"></i>
                             HitBTC
                         </button>
+                        <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
+                            <i class="far fa-check-square"></i>
+                            Bitfinex
+                        </button>
                     </div>
-                    <div align="right" class="col-md-4">
+                    <div align="right" class="col-md-3">
                         <span> da:</span>
-                        <select id="minPerc" onchange="refreshDatatable()" style="width:110px" class="form-control form-control-sm d-inline">
+                        <select id="minPerc" onchange="refreshDatatable()" style="width:90px" class="form-control form-control-sm d-inline">
                             <option value="-9999999">- &infin; %</option>
                             <option selected value="0">0 %</option>
                             <option value="1">1 %</option>
@@ -58,7 +62,7 @@
                             <option value="10">10 %</option>
                         </select>
                         <span>a:</span>
-                        <select onchange="refreshDatatable()" id="maxPerc" style="width:110px" class="form-control form-control-sm d-inline">
+                        <select onchange="refreshDatatable()" id="maxPerc" style="width:90px" class="form-control form-control-sm d-inline">
                             <option value="10">10 %</option>
                             <option value="15">15 %</option>
                             <option value="25">25 %</option>
@@ -67,10 +71,7 @@
                         </select>
                     </div>
                 </div>
-                <!--    <button id="btnBitfinex" class="btn btn-sm btn-secondary toggle-vis" data-column="8" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Bitfinex
-                </button>
+                <!--   
                      <button id="btnExmo" class="btn btn-sm btn-secondary toggle-vis" data-column="9" onclick="exchange(this)">
                     <i class="far fa-check-square"></i>
                     Exmo
@@ -87,7 +88,8 @@
             <th>Livecoin</th>
             <th>Liqui</th>
             <th>HitBTC</th>
-            <!--    <th>Bitfinex</th>
+            <th>Bitfinex</th>
+            <!-- 
             <th>Exmo</th> -->
             <th>Percentage</th>
         </tr>
@@ -198,7 +200,7 @@
 
             });
 
-             $("#" + idPrice).keyup(function () {
+            $("#" + idPrice).keyup(function () {
 
                 var rows = document.getElementById(idTable).rows;
 
@@ -239,8 +241,6 @@
                     }
                     alert("Non ci sono abbastanza fondi");
                 }
-
-
             })
         });
 
@@ -251,8 +251,6 @@
 </script>
 
 <style>
-   
-
     td {
         position: relative !important;
     }

@@ -5,6 +5,7 @@ const Cryptopia = require('./exchanges/cryptopia').Cryptopia;
 const Livecoin = require('./exchanges/livecoin').Livecoin;
 const Liqui = require('./exchanges/liqui').Liqui;
 const HitBTC = require('./exchanges/hitbtc').HitBTC;
+const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
 
 const express = require('express');
 const exphbs = require('express-handlebars');
@@ -168,11 +169,11 @@ async function init() {
     await HitBTC.getTickers(true);
   }
   catch (e) { }
-  /* try {
-    await BitfinexTickers(true);
+ try {
+    await Bitfinex.getTickers(true);
   }
-  catch (e) { }
-  try {
+  catch (e) { } 
+  /*try {
     await ExmoTickers(true);
   }
   catch (e) { } */
@@ -186,7 +187,6 @@ async function init() {
   catch (e) { }
   updateStatus();
   update();
-
 }
 
 function updateStatus() {
@@ -195,7 +195,7 @@ function updateStatus() {
     Bittrex.getCurrencies();
     Cryptopia.getCurrencies();
     HitBTC.getCurrencies();
-  }, 10000)
+  }, 30000)
 }
 
 init();
@@ -209,10 +209,9 @@ function update() {
     Livecoin.getTickers(false);
     Liqui.getTickers(false);
     HitBTC.getTickers(false);
-
+    Bitfinex.getTickers(false);
   }, 3000);
 }
-
 
 async function RemoveAloneMarkets() {
 

@@ -78,9 +78,7 @@ const  Binance = {
           return;
       
         });
-      }
-
-    , 
+      }, 
     startDequequeOrderbook: function()
     {
         setInterval(async function () {

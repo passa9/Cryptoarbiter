@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[8, "desc"]],
+        "order": [[9, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -531,7 +531,7 @@ $(document).ready(function () {
 
                 }
             },
-            /*     {
+            {
                      "data": "bitfinex", "orderable": true, render: function (data, type, row, meta) {
      
                          if (data.bid == undefined)
@@ -540,8 +540,18 @@ $(document).ready(function () {
                          var differenceBid = compare(meta, data.bid, "bid");
                          var differenceAsk = compare(meta, data.ask, "ask");
      
-                         var min = low(row, data.ask, "Bitfinex");
-                         var max = high(row, data.bid, "Bitfinex");
+                         var min;
+                         var max;
+     
+                         if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
+                         {
+                              min = false;
+                              max = false;
+                         }
+                         else{
+                              min = low(row, data.ask, "Bitfinex");
+                              max = high(row, data.bid, "Bitfinex");
+                         }
      
                          var cell = "";
                          cell += '<div style="display:absolute;margin:0;padding:0">';
@@ -580,12 +590,16 @@ $(document).ready(function () {
                          }
                          '</div></div></div></div>';
      
+                         if (data.status == "locked") {
+                            cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                        }
+
                          cell += '</div>';
      
                          return cell;
      
                      }
-                 },
+                 }, /*    
                  {
                      "data": "exmo", "orderable": true, render: function (data, type, row, meta) {
      
@@ -703,9 +717,10 @@ $(document).ready(function () {
             else if (meta.col == 7) {
                 prev_data = prevTable[meta.row].hitbtc;
             }
-            /*    else if (meta.col == 8) {
+              else if (meta.col == 8) {
                     prev_data = prevTable[meta.row].bitfinex;
                 }
+                 /* 
                 else if (meta.col == 9) {
                     prev_data = prevTable[meta.row].exmo;
                 } */
@@ -801,9 +816,9 @@ function low(row, value, exchange) {
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.ask);
-    /* if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
          arr.push(row.bitfinex.ask);
-     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+   /*  if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
          arr.push(row.exmo.ask); */
 
     var min = Math.min(...arr);
@@ -831,9 +846,9 @@ function high(row, value, exchange) {
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.bid);
-    /* if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
          arr.push(row.bitfinex.bid);
-     if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+    /*  if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
          arr.push(row.exmo.bid); */
 
     var max = Math.max(...arr);
@@ -861,9 +876,9 @@ function getMin(row) {
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.ask);
-    /* if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
          arr.push(row.bitfinex.ask);
-     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+     /* if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
          arr.push(row.exmo.ask); */
 
     if (arr.length == 0)
@@ -889,9 +904,9 @@ function getMax(row) {
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.bid);
-    /*   if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square"))
+      if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
          arr.push(row.bitfinex.bid);
-   if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
+  /*  if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
          arr.push(row.exmo.bid); */
 
     if (arr.length == 0)
