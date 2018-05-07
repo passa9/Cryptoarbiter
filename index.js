@@ -21,6 +21,7 @@ var queueCryptopia = require("./common/variables.js").queueCryptopia;
 var queueLivecoin = require("./common/variables.js").queueLivecoin;
 var queueLiqui = require("./common/variables.js").queueLiqui;
 var queueHitBTC = require("./common/variables.js").queueHitBTC;
+var queueBitfinex = require("./common/variables.js").queueBitfinex;
 
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
 
@@ -63,6 +64,9 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "HitBTC") {
     queueHitBTC.push(params);
   }
+  else if (exchange == "Bitfinex") {
+    queueBitfinex.push(params);
+  }
 }
 
 Bittrex.startDequequeOrderbook();
@@ -72,6 +76,7 @@ Cryptopia.startDequequeOrderbook();
 Livecoin.startDequequeOrderbook();
 Liqui.startDequequeOrderbook();
 HitBTC.startDequequeOrderbook();
+Bitfinex.startDequequeOrderbook();
 
 
 // Handlebars Middleware
@@ -97,7 +102,6 @@ app.get('/', (req, res) => {
 
 // Index Route
 app.post('/setAlert', (req, res) => {
-
 
   var options = {
     method: 'POST',
@@ -187,6 +191,7 @@ async function init() {
   catch (e) { }
   updateStatus();
   update();
+  updateSlow();
 }
 
 function updateStatus() {
@@ -209,8 +214,13 @@ function update() {
     Livecoin.getTickers(false);
     Liqui.getTickers(false);
     HitBTC.getTickers(false);
-    Bitfinex.getTickers(false);
   }, 3000);
+}
+
+function updateSlow() {
+  setInterval(function () {
+    Bitfinex.getTickers(false);
+  }, 5000);
 }
 
 async function RemoveAloneMarkets() {
@@ -237,8 +247,8 @@ async function RemoveAloneMarkets() {
       arr.push(tickers[i].hitbtc.ask);
     if (tickers[i].bitfinex.ask != undefined)
       arr.push(tickers[i].bitfinex.ask);
-    if (tickers[i].exmo.ask != undefined)
-      arr.push(tickers[i].exmo.ask);
+  /*   if (tickers[i].exmo.ask != undefined)
+      arr.push(tickers[i].exmo.ask); */
 
     if (arr.length < 2) {
       tickers.splice(i, 1);

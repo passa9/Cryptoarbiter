@@ -1,6 +1,6 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
-var queueBinance = require('./../common/variables').queueBinance;
+var queueBitfinex = require('./../common/variables').queueBitfinex;
 
 
 const Bitfinex = {
@@ -21,8 +21,17 @@ const Bitfinex = {
         var basecurrency;
         var currency;
 
+        var quote;
+
         basecurrency = element[0].substring(element[0].length - 3, element[0].length);
         currency = element[0].substring(1, element[0].length - 3);
+
+          quote = currency;
+
+        if(currency == "DSH")
+        {
+          currency = "DASH";
+        }
 
         var ticker = tickers.find(x => x.id === basecurrency + '-' + currency);
 
@@ -35,7 +44,7 @@ const Bitfinex = {
               ask: parseFloat(element[3]),
               bid: parseFloat(element[1]),
               base: basecurrency,
-              quote: currency,
+              quote: quote,
               status: "ok"
             },
             binance: {},
@@ -55,7 +64,7 @@ const Bitfinex = {
         else {
           if (inizializza) {
             ticker.bitfinex.base = basecurrency;
-            ticker.bitfinex.quote = currency;
+            ticker.bitfinex.quote = quote;
             ticker.bitfinex.status = "ok";
           }
 
@@ -73,7 +82,59 @@ const Bitfinex = {
       return;
 
     });
-  }
+  },
+  startDequequeOrderbook: function () {
+    setInterval(async function () {
+      if (queueBitfinex.length > 0) {
+        var data = queueBitfinex.shift();
+        var res = data.res;
+        var json = await getOrderBookBitfinex(data.funct.market, data.funct.type);
+        res.contentType('application/json');
+        res.send(JSON.stringify({
+          link: "https://bittrex.com/Market/Index?MarketName=" + data.funct.market,
+          arr: json,
+        }));
+      }
+    }, 1000);
+  },
+}
+
+async function getOrderBookBitfinex(market, type) {
+
+  var data;
+  var basecurrency = market.split("-")[0];
+  var currency= market.split("-")[1];
+  const url =
+    "https://api.bitfinex.com/v1/book/" + currency + basecurrency;
+  await request.get(url, (error, response, body) => {
+
+    if (error || response.statusCode != 200) {
+      console.log("Errore bitfinex");
+      return [];
+    }
+
+    let json = JSON.parse(body);
+
+if(type == "bid")
+{
+  json = json.bids;
+}
+else
+{
+  json = json.asks;
+}
+
+    var dim = (json.length - 1 < 10 ? json.length - 1 : 10);
+    data = json.splice(0, dim).map(function (i) {
+      return {
+        Rate: i.price.toString(),
+        Quantity: i.amount
+      }
+    });;
+
+  });
+
+  return data;
 }
 
 exports.Bitfinex = Bitfinex;

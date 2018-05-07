@@ -140,6 +140,9 @@
             }
             var idAmount = uniqueId();
             var idPrice = uniqueId();
+
+var disabledClass = exchange == "Bitfinex" ? " disabled" : "";
+
             content += '</tbody></table>';
             content += '<div class="row mt-2 ml-1 mr-1 mb-2 bg-light">';
             content += '<input type="text" id="' + idAmount + '" class="form-control form-control-sm d-inline" value="0.00000" style="width:100px"> <span style="font-size:14px" class="d-inline ml-1  align-middle mt-1">' + market.split('-')[1] + '&nbsp; = &nbsp;</span>';
@@ -150,7 +153,7 @@
             content += '<h4>' + type + '</h4>';
             content += '</div>';
             content += '<div class="col" align="right">';
-            content += '<a target="_blank" class="btn btn-primary btn-sm" href="' + data.link + '">Vai <i class="fa fa-arrow-right" aria-hidden="true"></i></a>'
+            content += '<a target="_blank" class="btn btn-primary btn-sm'+ disabledClass +'" href="' + data.link + '">Vai <i class="fa fa-arrow-right" aria-hidden="true"></i></a>'
             content += '</div>';
             content += '</div>';
 

@@ -7,6 +7,7 @@ var queueCryptopia = [];
 var queueLivecoin = [];
 var queueLiqui = [];
 var queueHitBTC = [];
+var queueBitfinex = [];
 
 
 exports.tickers = tickers;
@@ -18,4 +19,5 @@ exports.queueCryptopia   = queueCryptopia;
 exports.queueLivecoin   = queueLivecoin;
 exports.queueLiqui   = queueLiqui;
 exports.queueHitBTC   = queueHitBTC;
+exports.queueBitfinex   = queueBitfinex;
 

@@ -132,7 +132,6 @@ const Bittrex = {
   }
 }
 
-
 async function getOrderBookBittrex(market, type) {
 
   if (type == "bid") {

@@ -156,7 +156,6 @@ async function getOrderBookCryptopia(market, type) {
 
   const url = "https://www.cryptopia.co.nz/api/GetMarketOrders/" + market.split("-")[1] + "_" + market.split("-")[0] + "/10";
 
-  var a = "asdasdasdasd";
   await request.get(url, (error, response, body) => {
 
     if (error || response.statusCode != 200) {
