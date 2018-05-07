@@ -915,15 +915,12 @@ function getMax(row) {
     return Math.max(...arr);
 }
 
-
-
-
 $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[8]);
+        var val = parseFloat(data[9]);
         if (val < minPerc || val > maxPerc)
             return false;
 
