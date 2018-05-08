@@ -273,6 +273,7 @@ function calcPerc(ticker) {
   var max = Math.max(...arr);
 
   return (((max / min) * 100) - 100);
+  var a;
 }
 
 const port = process.env.PORT || 5000;
