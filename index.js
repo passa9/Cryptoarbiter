@@ -6,6 +6,7 @@ const Livecoin = require('./exchanges/livecoin').Livecoin;
 const Liqui = require('./exchanges/liqui').Liqui;
 const HitBTC = require('./exchanges/hitbtc').HitBTC;
 const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
+const Exmo = require('./exchanges/exmo').Exmo;
 
 const express = require('express');
 const exphbs = require('express-handlebars');
@@ -22,6 +23,7 @@ var queueLivecoin = require("./common/variables.js").queueLivecoin;
 var queueLiqui = require("./common/variables.js").queueLiqui;
 var queueHitBTC = require("./common/variables.js").queueHitBTC;
 var queueBitfinex = require("./common/variables.js").queueBitfinex;
+var queueExmo = require("./common/variables.js").queueExmo;
 
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
 
@@ -67,6 +69,9 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "Bitfinex") {
     queueBitfinex.push(params);
   }
+  else if (exchange == "Exmo") {
+    queueExmo.push(params);
+  }
 }
 
 Bittrex.startDequequeOrderbook();
@@ -77,6 +82,7 @@ Livecoin.startDequequeOrderbook();
 Liqui.startDequequeOrderbook();
 HitBTC.startDequequeOrderbook();
 Bitfinex.startDequequeOrderbook();
+Exmo.startDequequeOrderbook();
 
 
 // Handlebars Middleware
@@ -177,10 +183,10 @@ async function init() {
     await Bitfinex.getTickers(true);
   }
   catch (e) { } 
-  /*try {
-    await ExmoTickers(true);
+  try {
+    await Exmo.getTickers(true);
   }
-  catch (e) { } */
+  catch (e) { }
   try {
     await Liqui.getTickers(true);
   }
@@ -210,16 +216,17 @@ function update() {
     Bittrex.getTickers(false);
     Binance.getTickers(false);
     Poloniex.getTickers(false);
-    Cryptopia.getTickers(false);
     Livecoin.getTickers(false);
     Liqui.getTickers(false);
     HitBTC.getTickers(false);
+    Exmo.getTickers(false);
   }, 3000);
 }
 
 function updateSlow() {
   setInterval(function () {
     Bitfinex.getTickers(false);
+    Cryptopia.getTickers(false);
   }, 5000);
 }
 
@@ -247,8 +254,8 @@ async function RemoveAloneMarkets() {
       arr.push(tickers[i].hitbtc.ask);
     if (tickers[i].bitfinex.ask != undefined)
       arr.push(tickers[i].bitfinex.ask);
-  /*   if (tickers[i].exmo.ask != undefined)
-      arr.push(tickers[i].exmo.ask); */
+    if (tickers[i].exmo.ask != undefined)
+      arr.push(tickers[i].exmo.ask);
 
     if (arr.length < 2) {
       tickers.splice(i, 1);

@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[9, "desc"]],
+        "order": [[10, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -71,14 +71,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "Bittrex");
-                         max = high(row, data.bid, "Bittrex");
+                    else {
+                        min = low(row, data.ask, "Bittrex");
+                        max = high(row, data.bid, "Bittrex");
                     }
 
                     var cell = "";
@@ -141,14 +140,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok"  && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "Binance");
-                         max = high(row, data.bid, "Binance");
+                    else {
+                        min = low(row, data.ask, "Binance");
+                        max = high(row, data.bid, "Binance");
                     }
 
                     var cell = "";
@@ -206,14 +204,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "Poloniex");
-                         max = high(row, data.bid, "Poloniex");
+                    else {
+                        min = low(row, data.ask, "Poloniex");
+                        max = high(row, data.bid, "Poloniex");
                     }
 
                     var cell = "";
@@ -273,14 +270,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "Cryptopia");
-                         max = high(row, data.bid, "Cryptopia");
+                    else {
+                        min = low(row, data.ask, "Cryptopia");
+                        max = high(row, data.bid, "Cryptopia");
                     }
 
                     var cell = "";
@@ -340,14 +336,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "Livecoin");
-                         max = high(row, data.bid, "Livecoin");
+                    else {
+                        min = low(row, data.ask, "Livecoin");
+                        max = high(row, data.bid, "Livecoin");
                     }
 
                     var cell = "";
@@ -405,14 +400,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "Liqui");
-                         max = high(row, data.bid, "Liqui");
+                    else {
+                        min = low(row, data.ask, "Liqui");
+                        max = high(row, data.bid, "Liqui");
                     }
 
                     var cell = "";
@@ -470,14 +464,13 @@ $(document).ready(function () {
                     var min;
                     var max;
 
-                    if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                    {
-                         min = false;
-                         max = false;
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
                     }
-                    else{
-                         min = low(row, data.ask, "HitBTC");
-                         max = high(row, data.bid, "HitBTC");
+                    else {
+                        min = low(row, data.ask, "HitBTC");
+                        max = high(row, data.bid, "HitBTC");
                     }
 
                     var cell = "";
@@ -520,10 +513,10 @@ $(document).ready(function () {
                         cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
                     }
                     else if (data.status == "depositDisabled") {
-                        cell += '<i class="fas fa-lock" style="position:absolute;width:7px;color:brown;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:brown;right:3px;top:2px;"></i>'
                     }
                     else if (data.status == "withdrawalsDisabled") {
-                        cell += '<i class="fas fa-lock" style="position:absolute;width:7px;color:black;right:3px;top:2px;"></i>'
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:black;right:3px;top:2px;"></i>'
                     }
                     cell += '</div>';
 
@@ -532,129 +525,131 @@ $(document).ready(function () {
                 }
             },
             {
-                     "data": "bitfinex", "orderable": true, render: function (data, type, row, meta) {
-     
-                         if (data.bid == undefined)
-                             return "-";
-     
-                         var differenceBid = compare(meta, data.bid, "bid");
-                         var differenceAsk = compare(meta, data.ask, "ask");
-     
-                         var min;
-                         var max;
-     
-                         if(data.status  != "ok" && $('#btnExcludeLock').hasClass("btn-primary"))
-                         {
-                              min = false;
-                              max = false;
-                         }
-                         else{
-                              min = low(row, data.ask, "Bitfinex");
-                              max = high(row, data.bid, "Bitfinex");
-                         }
-     
-                         var cell = "";
-                         cell += '<div style="display:absolute;margin:0;padding:0">';
-     
-                         if (min && max) {
-                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                         }
-                         else if (min) {
-                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                         }
-                         else if (max) {
-                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                         }
-                         cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
-                         cell += '<font size="2">';
-                         if (differenceAsk == 1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                         }
-                         else if (differenceAsk == 0) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                         }
-                         else if (differenceAsk == -1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + row.id + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                         }
-                         cell += '</font>'
-                         cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
-                         cell += '<font size="2">';
-                         if (differenceBid == 1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                         }
-                         if (differenceBid == 0) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                         }
-                         if (differenceBid == -1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                         }
-                         '</div></div></div></div>';
-     
-                         if (data.status == "locked") {
-                            cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
-                        }
+                "data": "bitfinex", "orderable": true, render: function (data, type, row, meta) {
 
-                         cell += '</div>';
-     
-                         return cell;
-     
-                     }
-                 }, /*    
-                 {
-                     "data": "exmo", "orderable": true, render: function (data, type, row, meta) {
-     
-                         if (data.bid == undefined)
-                             return "-";
-     
-                         var differenceBid = compare(meta, data.bid, "bid");
-                         var differenceAsk = compare(meta, data.ask, "ask");
-     
-                         var min = low(row, data.ask, "Exmo");
-                         var max = high(row, data.bid, "Exmo");
-     
-                         var cell = "";
-                         cell += '<div style="display:absolute;margin:0;padding:0">';
-     
-                         if (min && max) {
-                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                         }
-                         else if (min) {
-                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                         }
-                         else if (max) {
-                             cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                         }
-                         cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
-                         cell += '<font size="2">';
-                         if (differenceAsk == 1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                         }
-                         else if (differenceAsk == 0) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                         }
-                         else if (differenceAsk == -1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + row.id + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                         }
-                         cell += '</font>'
-                         cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
-                         cell += '<font size="2">';
-                         if (differenceBid == 1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                         }
-                         if (differenceBid == 0) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                         }
-                         if (differenceBid == -1) {
-                             cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + row.id + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                         }
-                         '</div></div></div></div>';
-     
-                         cell += '</div>';
-     
-                         return cell;
-     
-                     }
-                 }, */
+                    if (data.bid == undefined)
+                        return "-";
+
+                    var differenceBid = compare(meta, data.bid, "bid");
+                    var differenceAsk = compare(meta, data.ask, "ask");
+
+                    var min;
+                    var max;
+
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
+                    }
+                    else {
+                        min = low(row, data.ask, "Bitfinex");
+                        max = high(row, data.bid, "Bitfinex");
+                    }
+
+                    var cell = "";
+                    cell += '<div style="display:absolute;margin:0;padding:0">';
+
+                    if (min && max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (min) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                    }
+                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                    cell += '<font size="2">';
+                    if (differenceAsk == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    cell += '</font>'
+                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                    cell += '<font size="2">';
+                    if (differenceBid == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Bitfinex" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    '</div></div></div></div>';
+
+                    if (data.status == "locked") {
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                    }
+
+                    cell += '</div>';
+
+                    return cell;
+
+                }
+            },
+            {
+                "data": "exmo", "orderable": true, render: function (data, type, row, meta) {
+
+                    if (data.bid == undefined)
+                        return "-";
+
+                    var differenceBid = compare(meta, data.bid, "bid");
+                    var differenceAsk = compare(meta, data.ask, "ask");
+
+                    var min = low(row, data.ask, "Exmo");
+                    var max = high(row, data.bid, "Exmo");
+
+                    var cell = "";
+                    cell += '<div style="display:absolute;margin:0;padding:0">';
+
+                    if (min && max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (min) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                    }
+                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                    cell += '<font size="2">';
+                    if (differenceAsk == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    cell += '</font>'
+                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                    cell += '<font size="2">';
+                    if (differenceBid == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Exmo" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    '</div></div></div></div>';
+
+                    if (data.status == "locked") {
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                    }
+                    cell += '</div>';
+
+                    return cell;
+
+                }
+            },
             {
                 "data": "null", "orderable": true, render: function (data, type, row, meta) {
 
@@ -717,13 +712,12 @@ $(document).ready(function () {
             else if (meta.col == 7) {
                 prev_data = prevTable[meta.row].hitbtc;
             }
-              else if (meta.col == 8) {
-                    prev_data = prevTable[meta.row].bitfinex;
-                }
-                 /* 
-                else if (meta.col == 9) {
-                    prev_data = prevTable[meta.row].exmo;
-                } */
+            else if (meta.col == 8) {
+                prev_data = prevTable[meta.row].bitfinex;
+            }
+            else if (meta.col == 9) {
+                prev_data = prevTable[meta.row].exmo;
+            }
 
             if (prev_data == undefined)
                 return 0;
@@ -817,9 +811,9 @@ function low(row, value, exchange) {
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.ask);
     if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
-         arr.push(row.bitfinex.ask);
-   /*  if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-         arr.push(row.exmo.ask); */
+        arr.push(row.bitfinex.ask);
+     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+          arr.push(row.exmo.ask); 
 
     var min = Math.min(...arr);
 
@@ -846,10 +840,10 @@ function high(row, value, exchange) {
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.bid);
-    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
-         arr.push(row.bitfinex.bid);
-    /*  if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-         arr.push(row.exmo.bid); */
+    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+        arr.push(row.bitfinex.bid);
+     if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+         arr.push(row.exmo.bid);
 
     var max = Math.max(...arr);
 
@@ -876,10 +870,10 @@ function getMin(row) {
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.ask);
-    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
-         arr.push(row.bitfinex.ask);
-     /* if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-         arr.push(row.exmo.ask); */
+    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+        arr.push(row.bitfinex.ask);
+     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+        arr.push(row.exmo.ask); 
 
     if (arr.length == 0)
         return 0;
@@ -890,24 +884,24 @@ function getMin(row) {
 function getMax(row) {
     var arr = [];
 
-    if (row.poloniex.bid != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
+    if (row.poloniex.bid != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
         arr.push(row.poloniex.bid);
-    if (row.bittrex.bid != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
+    if (row.bittrex.bid != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
         arr.push(row.bittrex.bid);
-    if (row.cryptopia.bid != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
+    if (row.cryptopia.bid != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
         arr.push(row.cryptopia.bid);
-    if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
+    if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.bid);
-    if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.livecoin.status == "ok"))
+    if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.livecoin.status == "ok"))
         arr.push(row.livecoin.bid);
-    if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
+    if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.bid);
-    if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
+    if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.bid);
-      if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
-         arr.push(row.bitfinex.bid);
-  /*  if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square"))
-         arr.push(row.exmo.bid); */
+    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+        arr.push(row.bitfinex.bid);
+     if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+        arr.push(row.exmo.bid); 
 
     if (arr.length == 0)
         return 0;
@@ -920,7 +914,7 @@ $.fn.dataTable.ext.search.push(
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[9]);
+        var val = parseFloat(data[10]);
         if (val < minPerc || val > maxPerc)
             return false;
 

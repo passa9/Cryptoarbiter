@@ -12,7 +12,7 @@
 <table id="table" class="table table-sm table-striped table-bordered" cellspacing="0" width="100%" style="border-collapse: collapse !important">
     <thead>
         <tr>
-            <td colspan="10">
+            <td colspan="11">
                 <div class="row">
                     <div class="col-md-9">
                         Exchange: &nbsp;
@@ -48,6 +48,10 @@
                             <i class="far fa-check-square"></i>
                             Bitfinex
                         </button>
+                         <button id="btnExmo" class="btn btn-sm btn-secondary toggle-vis" data-column="9" onclick="exchange(this)">
+                    <i class="far fa-check-square"></i>
+                    Exmo
+                  </button>
                     </div>
                     <div align="right" class="col-md-3">
                         <span> da:</span>
@@ -70,12 +74,7 @@
                             <option selected value="9999999">&infin; %</option>
                         </select>
                     </div>
-                </div>
-                <!--   
-                     <button id="btnExmo" class="btn btn-sm btn-secondary toggle-vis" data-column="9" onclick="exchange(this)">
-                    <i class="far fa-check-square"></i>
-                    Exmo
-                </button> -->
+                </div>                
             </td>
         </tr>
         <tr>
@@ -88,9 +87,8 @@
             <th>Livecoin</th>
             <th>Liqui</th>
             <th>HitBTC</th>
-            <th>Bitfinex</th>
-            <!-- 
-            <th>Exmo</th> -->
+            <th>Bitfinex</th>           
+            <th>Exmo</th> 
             <th>Percentage</th>
         </tr>
     </thead>
