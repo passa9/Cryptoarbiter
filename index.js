@@ -135,6 +135,13 @@ app.get('/Notifications', (req, res) => {
   });
 });
 
+app.get('/Exchanges', (req, res) => {
+  const title = 'Exchanges';
+  res.render('exchanges', {
+    title: title
+  });
+});
+
 app.get('/getorderbook', async (req, res) => {
 
   var exchange = req.query.exchange;
@@ -204,7 +211,7 @@ function updateStatus() {
   setInterval(function () {
     Poloniex.getCurrencies();
     Bittrex.getCurrencies();
-    Cryptopia.getCurrencies();
+  //  Cryptopia.getCurrencies();
     HitBTC.getCurrencies();
   }, 30000)
 }
