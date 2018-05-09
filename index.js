@@ -167,10 +167,10 @@ async function init() {
     await Poloniex.getTickers(true);
   }
   catch (e) { }
-  try {
-    await Cryptopia.getTickers(true);
-  }
-  catch (e) { }
+  /*  try {
+     await Cryptopia.getTickers(true);
+   }
+   catch (e) { } */
   try {
     await Livecoin.getTickers(true);
   }
@@ -179,10 +179,10 @@ async function init() {
     await HitBTC.getTickers(true);
   }
   catch (e) { }
- try {
+  try {
     await Bitfinex.getTickers(true);
   }
-  catch (e) { } 
+  catch (e) { }
   try {
     await Exmo.getTickers(true);
   }
@@ -226,7 +226,7 @@ function update() {
 function updateSlow() {
   setInterval(function () {
     Bitfinex.getTickers(false);
-    Cryptopia.getTickers(false);
+ /*    Cryptopia.getTickers(false); */
   }, 5000);
 }
 
