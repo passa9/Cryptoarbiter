@@ -33,6 +33,7 @@ async function KrakenTickers() {
               },
               binance: {},
               bittrex: {},
+              huobipro: {}
               percentage: 0,
             });
   

@@ -54,7 +54,8 @@ const Bitfinex = {
             poloniex: {},
             cryptopia: {},
             hitbtc: {},
-            livecoin: {}
+            livecoin: {},
+            huobipro: {}
           });
 
         }

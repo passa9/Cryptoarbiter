@@ -50,7 +50,8 @@ const  Binance = {
                 cryptopia: {},
                 hitbtc: {},
                 livecoin: {},
-                bitfinex: {}
+                bitfinex: {},
+                huobipro: {}
               });
       
             }

@@ -55,7 +55,8 @@ const  Livecoin = {
                 cryptopia: {},
                 hitbtc: {},
                 bittrex: {},
-                bitfinex: {}
+                bitfinex: {},
+                huobipro: {}
               });
       
             }

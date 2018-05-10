@@ -41,7 +41,8 @@ const Exmo = {
                         hitbtc: {},
                         cryptopia: {},
                         livecoin: {},
-                        bitfinex: {}
+                        bitfinex: {},
+                        huobipro: {}
                     });
                 }
                 else if (ticker == null) {

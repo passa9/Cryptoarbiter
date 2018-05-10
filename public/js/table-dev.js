@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[10, "desc"]],
+        "order": [[11, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -651,6 +651,64 @@ $(document).ready(function () {
                 }
             },
             {
+                "data": "huobipro", "orderable": true, render: function (data, type, row, meta) {
+
+                    if (data.bid == undefined)
+                        return "-";
+
+                    var differenceBid = compare(meta, data.bid, "bid");
+                    var differenceAsk = compare(meta, data.ask, "ask");
+
+                    var min = low(row, data.ask, "Huobipro");
+                    var max = high(row, data.bid, "Huobipro");
+
+                    var cell = "";
+                    cell += '<div style="display:absolute;margin:0;padding:0">';
+
+                    if (min && max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (min) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                    }
+                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                    cell += '<font size="2">';
+                    if (differenceAsk == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Huobipro" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Huobipro" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Huobipro" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    cell += '</font>'
+                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                    cell += '<font size="2">';
+                    if (differenceBid == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Huobipro" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Huobipro" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Huobipro" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    '</div></div></div></div>';
+
+                    if (data.status == "locked") {
+                        cell += '<i class="fas fa-lock" style="position:absolute;width:9px;color:#cc0000;right:3px;top:2px;"></i>'
+                    }
+                    cell += '</div>';
+
+                    return cell;
+
+                }
+            },
+            {
                 "data": "null", "orderable": true, render: function (data, type, row, meta) {
 
                     var min = getMin(row);
@@ -814,6 +872,8 @@ function low(row, value, exchange) {
         arr.push(row.bitfinex.ask);
      if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
           arr.push(row.exmo.ask); 
+     if (row.huobipro.ask != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+          arr.push(row.huobipro.ask); 
 
     var min = Math.min(...arr);
 
@@ -844,6 +904,8 @@ function high(row, value, exchange) {
         arr.push(row.bitfinex.bid);
      if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
          arr.push(row.exmo.bid);
+    if (row.huobipro.bid != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+         arr.push(row.huobipro.bid);
 
     var max = Math.max(...arr);
 
@@ -874,6 +936,8 @@ function getMin(row) {
         arr.push(row.bitfinex.ask);
      if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.ask); 
+     if (row.huobipro.ask != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+        arr.push(row.huobipro.ask);
 
     if (arr.length == 0)
         return 0;
@@ -902,6 +966,8 @@ function getMax(row) {
         arr.push(row.bitfinex.bid);
      if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.bid); 
+        if (row.huobipro.bid != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+        arr.push(row.huobipro.bid); 
 
     if (arr.length == 0)
         return 0;
@@ -914,7 +980,7 @@ $.fn.dataTable.ext.search.push(
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[10]);
+        var val = parseFloat(data[11]);
         if (val < minPerc || val > maxPerc)
             return false;
 

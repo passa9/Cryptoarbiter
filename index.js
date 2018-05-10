@@ -7,6 +7,7 @@ const Liqui = require('./exchanges/liqui').Liqui;
 const HitBTC = require('./exchanges/hitbtc').HitBTC;
 const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
 const Exmo = require('./exchanges/exmo').Exmo;
+const Huobipro = require('./exchanges/huobipro').Huobipro;
 
 const express = require('express');
 const exphbs = require('express-handlebars');
@@ -24,6 +25,7 @@ var queueLiqui = require("./common/variables.js").queueLiqui;
 var queueHitBTC = require("./common/variables.js").queueHitBTC;
 var queueBitfinex = require("./common/variables.js").queueBitfinex;
 var queueExmo = require("./common/variables.js").queueExmo;
+var queueHuobipro = require("./common/variables.js").queueHuobipro;
 
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
 
@@ -72,6 +74,9 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "Exmo") {
     queueExmo.push(params);
   }
+  else if (exchange == "Huobipro") {
+    queueHuobipro.push(params);
+  }
 }
 
 Bittrex.startDequequeOrderbook();
@@ -83,7 +88,7 @@ Liqui.startDequequeOrderbook();
 HitBTC.startDequequeOrderbook();
 Bitfinex.startDequequeOrderbook();
 Exmo.startDequequeOrderbook();
-
+Huobipro.startDequequeOrderbook();
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
@@ -174,10 +179,10 @@ async function init() {
     await Poloniex.getTickers(true);
   }
   catch (e) { }
-  /*  try {
+   try {
      await Cryptopia.getTickers(true);
    }
-   catch (e) { } */
+   catch (e) { } 
   try {
     await Livecoin.getTickers(true);
   }
@@ -197,28 +202,38 @@ async function init() {
   try {
     await Liqui.getTickers(true);
   }
-  catch (e) { }
+  catch(e){}
   try {
-    await RemoveAloneMarkets();
+    await Huobipro.fillPairs();
   }
   catch (e) { }
-  updateStatus();
-  update();
-  updateSlow();
+  try {
+    setTimeout(function(){
+      RemoveAloneMarkets().then(function()
+    {
+      updateStatus();
+      updateTickers();
+      updateTickersSlow();
+      Huobipro.refreshTickers();
+    })
+    },5000);
+    
+  }
+  catch (e) { }
 }
 
 function updateStatus() {
   setInterval(function () {
     Poloniex.getCurrencies();
     Bittrex.getCurrencies();
-  //  Cryptopia.getCurrencies();
+   Cryptopia.getCurrencies();
     HitBTC.getCurrencies();
   }, 30000)
 }
 
 init();
 
-function update() {
+function updateTickers() {
   setInterval(function () {
     Bittrex.getTickers(false);
     Binance.getTickers(false);
@@ -230,11 +245,11 @@ function update() {
   }, 3000);
 }
 
-function updateSlow() {
+function updateTickersSlow() {
   setInterval(function () {
     Bitfinex.getTickers(false);
- /*    Cryptopia.getTickers(false); */
-  }, 5000);
+    Cryptopia.getTickers(false); 
+  }, 6000);
 }
 
 async function RemoveAloneMarkets() {
@@ -246,23 +261,25 @@ async function RemoveAloneMarkets() {
     var arr = [];
 
     if (tickers[i].poloniex.ask != undefined)
-      arr.push(tickers[i].poloniex.ask);
+      arr.push(1);
     if (tickers[i].bittrex.ask != undefined)
-      arr.push(tickers[i].bittrex.ask);
+      arr.push(1);
     if (tickers[i].cryptopia.ask != undefined)
-      arr.push(tickers[i].cryptopia.ask);
+      arr.push(1);
     if (tickers[i].binance.ask != undefined)
-      arr.push(tickers[i].binance.ask);
+      arr.push(1);
     if (tickers[i].livecoin.ask != undefined)
-      arr.push(tickers[i].livecoin.ask);
+      arr.push(1);
     if (tickers[i].liqui.ask != undefined)
-      arr.push(tickers[i].liqui.ask);
+      arr.push(1);
     if (tickers[i].hitbtc.ask != undefined)
-      arr.push(tickers[i].hitbtc.ask);
+      arr.push(1);
     if (tickers[i].bitfinex.ask != undefined)
-      arr.push(tickers[i].bitfinex.ask);
+      arr.push(1);
     if (tickers[i].exmo.ask != undefined)
-      arr.push(tickers[i].exmo.ask);
+      arr.push(1);
+    if (tickers[i].huobipro.status != undefined)
+      arr.push(1);
 
     if (arr.length < 2) {
       tickers.splice(i, 1);
@@ -287,7 +304,7 @@ function calcPerc(ticker) {
   var max = Math.max(...arr);
 
   return (((max / min) * 100) - 100);
-  var a;
+
 }
 
 const port = process.env.PORT || 5000;

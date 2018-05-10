@@ -44,7 +44,8 @@ const Bittrex = {
             hitbtc: {},
             exmo: {},
             livecoin: {},
-            bitfinex: {}
+            bitfinex: {},
+            huobipro: {}
           });
 
         }

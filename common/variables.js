@@ -9,6 +9,7 @@ var queueLiqui = [];
 var queueHitBTC = [];
 var queueBitfinex = [];
 var queueExmo = [];
+var queueHuobipro = [];
 
 
 exports.tickers = tickers;
@@ -22,5 +23,6 @@ exports.queueLiqui   = queueLiqui;
 exports.queueHitBTC   = queueHitBTC;
 exports.queueBitfinex   = queueBitfinex;
 exports.queueExmo  = queueExmo;
+exports.queueHuobipro  = queueHuobipro;
 
 
