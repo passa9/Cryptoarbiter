@@ -25,6 +25,13 @@ const Huobipro = {
             json.data.forEach(pair => {
                 var baseCurrency = pair["quote-currency"].toUpperCase();
                 var quoteCurrency = pair["base-currency"].toUpperCase();
+                var quote = quoteCurrency;
+
+                if(quoteCurrency == "DAT")
+                {
+                    quoteCurrency = "DATA";
+                }
+
                 var id = baseCurrency + "-" + quoteCurrency;
                 var ticker = tickers.find(x => x.id === id);
 
@@ -33,7 +40,7 @@ const Huobipro = {
                         id: id,
                         huobipro: {
                             base: baseCurrency,
-                            quote: quoteCurrency,
+                            quote: quote,
                             status: "ok"
                         },
                         liqui: {},
@@ -66,31 +73,43 @@ const Huobipro = {
 
             for (var i = 0; i < pairs.length; i++) {
 
-                var pair = pairs[i].baseCurrency + pairs[i].quoteCurrency
-                const url =
-                    "https://api.huobi.pro/market/detail/merged?symbol=" + pair;
-                await request.get(url, (error, response, body) => {
+                try {
 
-                    if (error || response.statusCode != 200) {
-                        console.log("Errore huobi");
-                        return;
-                    }
-                    let json;
-                    try {
-                        json = JSON.parse(body);
-                    }
-                    catch (e) {
-                        return;
-                    }
-                    var id = (pairs[i].quoteCurrency + "-" + pairs[i].baseCurrency).toUpperCase();
+                    var pair = pairs[i].baseCurrency + pairs[i].quoteCurrency
+
+                    var quote = pairs[i].quoteCurrency;
+                    if(pairs[i].quoteCurrency == "dat")
+                    quote = "DATA"
+                    var id = (quote + "-" + pairs[i].baseCurrency).toUpperCase();
                     var ticker = tickers.find(x => x.id === id);
 
                     if (ticker != undefined) {
-                        ticker.huobipro.bid = json.tick.bid[0];
-                        ticker.huobipro.ask = json.tick.ask[0];
+                        const url =
+                            "https://api.huobi.pro/market/detail/merged?symbol=" + pair;
+                        await request.get(url, (error, response, body) => {
+
+                            if (error || response.statusCode != 200) {
+                                console.log("Errore huobi");
+                                return;
+                            }
+                            let json;
+                            try {
+                                json = JSON.parse(body);
+                            }
+                            catch (e) {
+                                return;
+                            }
+
+                            ticker.huobipro.bid = json.tick.bid[0];
+                            ticker.huobipro.ask = json.tick.ask[0];
+                        });
                     }
 
-                });
+
+                }
+                catch (ex) {
+                    console.log("errore huobipro" + ex);
+                }
             }
         }
     },
@@ -111,35 +130,35 @@ const Huobipro = {
 }
 
 async function getOrderBookQueueHuobipro(market, type) {
-    
+
     var data;
-    const url = "https://api.huobi.pro/market/depth?symbol="+ market.split("-")[1].toLowerCase() + market.split("-")[0].toLowerCase() +"&type=step1";
+    const url = "https://api.huobi.pro/market/depth?symbol=" + market.split("-")[1].toLowerCase() + market.split("-")[0].toLowerCase() + "&type=step1";
     await request.get(url, (error, response, body) => {
-  
-      if (error || response.statusCode != 200) {
-        console.log("Errore Huobi");
-        return [];
-      }
-  
-      let json = JSON.parse(body);
-  
-      if (type == "bid") {
-        data = json.tick.bids;
-      }
-      else {
-        data = json.tick.asks;
-      }
-      var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
-      data = data.splice(0, dim);
+
+        if (error || response.statusCode != 200) {
+            console.log("Errore Huobi");
+            return [];
+        }
+
+        let json = JSON.parse(body);
+
+        if (type == "bid") {
+            data = json.tick.bids;
+        }
+        else {
+            data = json.tick.asks;
+        }
+        var dim = (data.length - 1 < 10 ? data.length - 1 : 10);
+        data = data.splice(0, dim);
     });
-  
+
     return data.map(function (i) {
-      return {
-        Rate: i[0],
-        Quantity: i[1]
-      }
+        return {
+            Rate: i[0],
+            Quantity: i[1]
+        }
     });
-  }
+}
 
 
 exports.Huobipro = Huobipro;
