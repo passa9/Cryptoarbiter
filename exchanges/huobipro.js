@@ -1,3 +1,5 @@
+import { setTimeout } from "timers";
+
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueHuobipro = require('./../common/variables').queueHuobipro;
@@ -7,13 +9,15 @@ var pairs = [];
 
 const Huobipro = {
     fillPairs: async function () {
+
         const url =
             "https://api.huobi.pro/v1/common/symbols";
         return request.get(url, (error, response, body) => {
 
             if (error || response.statusCode != 200) {
-                console.log("Errore huobipro");
-                return;
+                console.log("Errore huobipro");   
+                setTimeout(()=>{ this.fillPairs();},3000);          
+               
             }
             let json;
             try {
