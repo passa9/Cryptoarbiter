@@ -1,5 +1,3 @@
-import { setTimeout } from "timers";
-
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueHuobipro = require('./../common/variables').queueHuobipro;
