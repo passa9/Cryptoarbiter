@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[11, "desc"]],
+        "order": [[10, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -324,70 +324,7 @@ $(document).ready(function () {
 
                 }
             },
-            {
-                "data": "livecoin", "visible": false, "orderable": true, render: function (data, type, row, meta) {
-
-                    if (data.bid == undefined)
-                        return "-";
-
-                    var differenceBid = compare(meta, data.bid, "bid");
-                    var differenceAsk = compare(meta, data.ask, "ask");
-
-                    var min;
-                    var max;
-
-                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
-                        min = false;
-                        max = false;
-                    }
-                    else {
-                        min = low(row, data.ask, "Livecoin");
-                        max = high(row, data.bid, "Livecoin");
-                    }
-
-                    var cell = "";
-                    cell += '<div style="display:absolute;margin:0;padding:0">';
-
-                    if (min && max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (min) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
-                    }
-                    else if (max) {
-                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
-                    }
-                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
-                    cell += '<font size="2">';
-                    if (differenceAsk == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Livecoin" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    else if (differenceAsk == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Livecoin" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    else if (differenceAsk == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Livecoin" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
-                    }
-                    cell += '</font>'
-                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
-                    cell += '<font size="2">';
-                    if (differenceBid == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Livecoin" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    if (differenceBid == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Livecoin" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    if (differenceBid == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="Livecoin" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
-                    }
-                    '</div></div></div></div>';
-
-                    cell += '</div>';
-
-                    return cell;
-
-                }
-            },
+          
             {
                 "data": "liqui", "orderable": true, render: function (data, type, row, meta) {
 
@@ -762,18 +699,15 @@ $(document).ready(function () {
                 prev_data = prevTable[meta.row].cryptopia;
             }
             else if (meta.col == 5) {
-                prev_data = prevTable[meta.row].livecoin;
-            }
-            else if (meta.col == 6) {
                 prev_data = prevTable[meta.row].liqui;
             }
-            else if (meta.col == 7) {
+            else if (meta.col == 6) {
                 prev_data = prevTable[meta.row].hitbtc;
             }
-            else if (meta.col == 8) {
+            else if (meta.col == 7) {
                 prev_data = prevTable[meta.row].bitfinex;
             }
-            else if (meta.col == 9) {
+            else if (meta.col == 8) {
                 prev_data = prevTable[meta.row].exmo;
             }
 
@@ -862,8 +796,6 @@ function low(row, value, exchange) {
         arr.push(row.cryptopia.ask);
     if (row.binance.ask != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.ask);
-    if (row.livecoin.ask != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.livecoin.status == "ok"))
-        arr.push(row.livecoin.ask);
     if (row.liqui.ask != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
@@ -894,8 +826,6 @@ function high(row, value, exchange) {
         arr.push(row.cryptopia.bid);
     if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.bid);
-    if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.livecoin.status == "ok"))
-        arr.push(row.livecoin.bid);
     if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
@@ -926,8 +856,6 @@ function getMin(row) {
         arr.push(row.cryptopia.ask);
     if (row.binance.ask != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.ask);
-    if (row.livecoin.ask != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.livecoin.status == "ok"))
-        arr.push(row.livecoin.ask);
     if (row.liqui.ask != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.ask);
     if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
@@ -956,8 +884,6 @@ function getMax(row) {
         arr.push(row.cryptopia.bid);
     if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.bid);
-    if (row.livecoin.bid != undefined && document.getElementById("btnLivecoin").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.livecoin.status == "ok"))
-        arr.push(row.livecoin.bid);
     if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.bid);
     if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))

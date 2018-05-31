@@ -128,6 +128,7 @@ const Cryptopia = {
       if (json == null)
         return;
       var count = 0;
+      try{
       json.Data.forEach(element => {
 
         var quoteCurrency = element.Symbol;
@@ -146,6 +147,11 @@ const Cryptopia = {
           }
         });
       })
+    }
+    catch(e)
+    {
+      console.log("error cryptopia");
+    }
     });
   }
 };

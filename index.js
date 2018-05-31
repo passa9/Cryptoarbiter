@@ -2,7 +2,6 @@ const Bittrex = require('./exchanges/bittrex').Bittrex;
 const Binance = require('./exchanges/binance').Binance;
 const Poloniex = require('./exchanges/poloniex').Poloniex;
 const Cryptopia = require('./exchanges/cryptopia').Cryptopia;
-const Livecoin = require('./exchanges/livecoin').Livecoin;
 const Liqui = require('./exchanges/liqui').Liqui;
 const HitBTC = require('./exchanges/hitbtc').HitBTC;
 const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
@@ -20,7 +19,6 @@ var queueBittrex = require("./common/variables.js").queueBittrex;
 var queuePoloniex = require("./common/variables.js").queuePoloniex;
 var queueBinance = require("./common/variables.js").queueBinance;
 var queueCryptopia = require("./common/variables.js").queueCryptopia;
-var queueLivecoin = require("./common/variables.js").queueLivecoin;
 var queueLiqui = require("./common/variables.js").queueLiqui;
 var queueHitBTC = require("./common/variables.js").queueHitBTC;
 var queueBitfinex = require("./common/variables.js").queueBitfinex;
@@ -36,6 +34,8 @@ const appInsights = require("applicationinsights");
 appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
   .setAutoCollectDependencies(false)
   .start();
+
+
 
 
 async function getOrderBook(exchange, type, market, res) {
@@ -59,9 +59,6 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "Cryptopia") {
     queueCryptopia.push(params);
   }
-  else if (exchange == "Livecoin") {
-    queueLivecoin.push(params);
-  }
   else if (exchange == "Liqui") {
     queueLiqui.push(params);
   }
@@ -83,7 +80,6 @@ Bittrex.startDequequeOrderbook();
 Poloniex.startDequequeOrderbook();
 Binance.startDequequeOrderbook();
 Cryptopia.startDequequeOrderbook();
-Livecoin.startDequequeOrderbook();
 Liqui.startDequequeOrderbook();
 HitBTC.startDequequeOrderbook();
 Bitfinex.startDequequeOrderbook();
@@ -147,6 +143,7 @@ app.get('/Exchanges', (req, res) => {
   });
 });
 
+
 app.get('/getorderbook', async (req, res) => {
 
   var exchange = req.query.exchange;
@@ -164,6 +161,8 @@ app.get('/tickers', (req, res) => {
   res.contentType('application/json');
   res.send(JSON.stringify(json));
 });
+
+
 
 async function init() {
 
@@ -184,11 +183,7 @@ async function init() {
    }
    catch (e) { } 
   try {
-    await Livecoin.getTickers(true);
-  }
-  catch (e) { }
-  try {
-    await HitBTC.getTickers(true);
+   // await HitBTC.getTickers(true);
   }
   catch (e) { }
   try {
@@ -227,7 +222,7 @@ function updateStatus() {
     Poloniex.getCurrencies();
     Bittrex.getCurrencies();
    Cryptopia.getCurrencies();
-    HitBTC.getCurrencies();
+ //   HitBTC.getCurrencies();
   }, 30000)
 }
 
@@ -238,11 +233,10 @@ function updateTickers() {
     Bittrex.getTickers(false);
     Binance.getTickers(false);
     Poloniex.getTickers(false);
-    Livecoin.getTickers(false);
     Liqui.getTickers(false);
-    HitBTC.getTickers(false);
+  //  HitBTC.getTickers(false);
     Exmo.getTickers(false);
-  }, 3000);
+  }, 4000);
 }
 
 function updateTickersSlow() {
@@ -268,8 +262,6 @@ async function RemoveAloneMarkets() {
       arr.push(1);
     if (tickers[i].binance.ask != undefined)
       arr.push(1);
-    if (tickers[i].livecoin.ask != undefined)
-      arr.push(1);
     if (tickers[i].liqui.ask != undefined)
       arr.push(1);
     if (tickers[i].hitbtc.ask != undefined)
@@ -286,25 +278,6 @@ async function RemoveAloneMarkets() {
       i = i - 1;
     }
   }
-}
-
-function calcPerc(ticker) {
-  var arr = [];
-
-  if (ticker.poloniex.last != undefined)
-    arr.push(ticker.poloniex.last);
-  if (ticker.bittrex.last != undefined)
-    arr.push(ticker.bittrex.last);
-  if (ticker.cryptopia.last != undefined)
-    arr.push(ticker.cryptopia.last);
-  if (ticker.binance.last != undefined)
-    arr.push(ticker.binance.last);
-
-  var min = Math.min(...arr);
-  var max = Math.max(...arr);
-
-  return (((max / min) * 100) - 100);
-
 }
 
 const port = process.env.PORT || 5000;
