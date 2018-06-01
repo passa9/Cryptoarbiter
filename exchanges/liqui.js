@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueLiqui = require('./../common/variables').queueLiqui;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 var mappingLiqui = [];
 
@@ -79,6 +80,7 @@ const  Liqui = {
           if (inizializza) {
             while (count != json.length) { }
           }
+          lastupdateWs("liqui");
           return;
       
         });

@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueExmo = require('./../common/variables').queueExmo;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 const Exmo = {
     getTickers: async function (inizializza) {
@@ -8,6 +9,8 @@ const Exmo = {
             "https://api.exmo.com/v1/ticker/";
         return request.get(url, (error, response, body) => {
 
+            try
+            {
             if (error || response.statusCode != 200) {
                 console.log("Errore exmo");
                 return;
@@ -64,7 +67,13 @@ const Exmo = {
             if (inizializza) {
                 while (count != Object.keys(obj).length) { }
             }
+            lastupdateWs("exmo");
             return;
+        }
+        catch(e)
+        {
+            console.log("errore Exmo");
+        }
         });
     },
     startDequequeOrderbook: function () {

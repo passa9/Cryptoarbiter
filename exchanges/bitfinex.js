@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueBitfinex = require('./../common/variables').queueBitfinex;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 
 const Bitfinex = {
@@ -80,6 +81,7 @@ const Bitfinex = {
       if (inizializza) {
         while (count != json.length) { }
       }
+      lastupdateWs("bitfinex");
       return;
 
     });

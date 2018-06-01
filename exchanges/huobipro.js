@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueHuobipro = require('./../common/variables').queueHuobipro;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 var pairs = [];
 
@@ -113,6 +114,7 @@ const Huobipro = {
                     console.log("errore huobipro" + ex);
                 }
             }
+            lastupdateWs("huobipro");
         }
     },
     startDequequeOrderbook: function () {

@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueCryptopia = require('./../common/variables').queueCryptopia;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 const Cryptopia = {
   getTickers: async function (inizializza) {
@@ -93,6 +94,7 @@ const Cryptopia = {
       if (inizializza) {
         while (count != json.Data.length) { }
       }
+      lastupdateWs("cryptopia");
       return;
 
     });

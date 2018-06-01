@@ -406,8 +406,8 @@ $(document).ready(function () {
                         max = false;
                     }
                     else {
-                        min = low(row, data.ask, "HitBTC");
-                        max = high(row, data.bid, "HitBTC");
+                        min = low(row, data.ask, "Hitbtc");
+                        max = high(row, data.bid, "Hitbtc");
                     }
 
                     var cell = "";
@@ -425,25 +425,25 @@ $(document).ready(function () {
                     cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
                     cell += '<font size="2">';
                     if (differenceAsk == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="HitBTC" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Hitbtc" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     else if (differenceAsk == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="HitBTC" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Hitbtc" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     else if (differenceAsk == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="HitBTC" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Hitbtc" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
                     }
                     cell += '</font>'
                     cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
                     cell += '<font size="2">';
                     if (differenceBid == 1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="HitBTC" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Hitbtc" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     if (differenceBid == 0) {
-                        cell += '<a href="javascript:void(0)" data-exchange="HitBTC" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Hitbtc" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     if (differenceBid == -1) {
-                        cell += '<a href="javascript:void(0)" data-exchange="HitBTC" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                        cell += '<a href="javascript:void(0)" data-exchange="Hitbtc" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
                     }
                     '</div></div></div></div>';
                     if (data.status == "locked") {
@@ -764,7 +764,7 @@ $(document).ready(function () {
         table.ajax.reload(null, false); // user paging is not reset on reload
     }, 3000);
 
-    $('button.toggle-vis').on('click', function (e) {
+/*     $('input.toggle-vis').on('click', function (e) {
         e.preventDefault();
 
         // Get the column API object
@@ -772,44 +772,53 @@ $(document).ready(function () {
 
         // Toggle the visibility
         column.visible(!column.visible());
-    });
+    }); */
 
 });
 
-
 function exchange(element) {
+
+    
+            // Get the column API object
+            var column = table.column($(element).attr('data-column'));
+    
+            // Toggle the visibility
+            column.visible(!column.visible());
+    refreshDatatable();
+}
+/* function exchange(element) {
     var icon = element.children[0];
 
     element.children[0].classList.toggle('fa-square');
     element.children[0].classList.toggle('fa-check-square');
     refreshDatatable();
-}
+} */
 
 function low(row, value, exchange) {
     var arr = [];
 
-    if (row.poloniex.ask != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
+    if (row.poloniex.ask != undefined && $('#chk-Poloniex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
         arr.push(row.poloniex.ask);
-    if (row.bittrex.ask != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
+    if (row.bittrex.ask != undefined && $('#chk-Bittrex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
         arr.push(row.bittrex.ask);
-    if (row.cryptopia.ask != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
+    if (row.cryptopia.ask != undefined && $('#chk-Cryptopia').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
         arr.push(row.cryptopia.ask);
-    if (row.binance.ask != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
+    if (row.binance.ask != undefined && $('#chk-Binance').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.ask);
-    if (row.liqui.ask != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
+    if (row.liqui.ask != undefined && $('#chk-Liqui').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.ask);
-    if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
+    if (row.hitbtc.ask != undefined && $('#chk-Hitbtc').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.ask);
-    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+    if (row.bitfinex.ask != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.ask);
-     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+     if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
           arr.push(row.exmo.ask); 
-     if (row.huobipro.ask != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
           arr.push(row.huobipro.ask); 
 
     var min = Math.min(...arr);
 
-    if (min == value && document.getElementById("btn" + exchange).children[0].classList.contains("fa-check-square"))
+    if (min == value && $('#chk-'+ exchange).is(":checked"))
         return true;
     else
         return false;
@@ -818,28 +827,28 @@ function low(row, value, exchange) {
 function high(row, value, exchange) {
     var arr = [];
 
-    if (row.poloniex.bid != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
+    if (row.poloniex.bid != undefined && $('#chk-Poloniex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
         arr.push(row.poloniex.bid);
-    if (row.bittrex.bid != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
+    if (row.bittrex.bid != undefined && $('#chk-Bittrex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
         arr.push(row.bittrex.bid);
-    if (row.cryptopia.bid != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
+    if (row.cryptopia.bid != undefined && $('#chk-Cryptopia').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
         arr.push(row.cryptopia.bid);
-    if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
+    if (row.binance.bid != undefined && $('#chk-Binance').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.bid);
-    if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
+    if (row.liqui.bid != undefined && $('#chk-Liqui').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.bid);
-    if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
+    if (row.hitbtc.bid != undefined && $('#chk-Hitbtc').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.bid);
-    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+    if (row.bitfinex.bid != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.bid);
-     if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+     if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
          arr.push(row.exmo.bid);
-    if (row.huobipro.bid != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+    if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
          arr.push(row.huobipro.bid);
 
     var max = Math.max(...arr);
 
-    if (max == value && document.getElementById("btn" + exchange).children[0].classList.contains("fa-check-square"))
+    if (max == value && $('#chk-'+ exchange).is(":checked"))
         return true;
     else
         return false;
@@ -848,23 +857,23 @@ function high(row, value, exchange) {
 function getMin(row) {
     var arr = [];
 
-    if (row.poloniex.ask != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
+    if (row.poloniex.ask != undefined && $('#chk-Poloniex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
         arr.push(row.poloniex.ask);
-    if (row.bittrex.ask != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
+    if (row.bittrex.ask != undefined && $('#chk-Bittrex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
         arr.push(row.bittrex.ask);
-    if (row.cryptopia.ask != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
+    if (row.cryptopia.ask != undefined && $('#chk-Cryptopia').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
         arr.push(row.cryptopia.ask);
-    if (row.binance.ask != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
+    if (row.binance.ask != undefined && $('#chk-Binance').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.ask);
-    if (row.liqui.ask != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
+    if (row.liqui.ask != undefined && $('#chk-Liqui').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.ask);
-    if (row.hitbtc.ask != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
+    if (row.hitbtc.ask != undefined && $('#chk-Hitbtc').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.ask);
-    if (row.bitfinex.ask != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+    if (row.bitfinex.ask != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.ask);
-     if (row.exmo.ask != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+     if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.ask); 
-     if (row.huobipro.ask != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
         arr.push(row.huobipro.ask);
 
     if (arr.length == 0)
@@ -876,23 +885,23 @@ function getMin(row) {
 function getMax(row) {
     var arr = [];
 
-    if (row.poloniex.bid != undefined && document.getElementById("btnPoloniex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
+    if (row.poloniex.bid != undefined && $('#chk-Poloniex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.poloniex.status == "ok"))
         arr.push(row.poloniex.bid);
-    if (row.bittrex.bid != undefined && document.getElementById("btnBittrex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
+    if (row.bittrex.bid != undefined && $('#chk-Bittrex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bittrex.status == "ok"))
         arr.push(row.bittrex.bid);
-    if (row.cryptopia.bid != undefined && document.getElementById("btnCryptopia").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
+    if (row.cryptopia.bid != undefined && $('#chk-Cryptopia').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.cryptopia.status == "ok"))
         arr.push(row.cryptopia.bid);
-    if (row.binance.bid != undefined && document.getElementById("btnBinance").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
+    if (row.binance.bid != undefined && $('#chk-Binance').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.binance.status == "ok"))
         arr.push(row.binance.bid);
-    if (row.liqui.bid != undefined && document.getElementById("btnLiqui").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
+    if (row.liqui.bid != undefined && $('#chk-Liqui').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.liqui.status == "ok"))
         arr.push(row.liqui.bid);
-    if (row.hitbtc.bid != undefined && document.getElementById("btnHitBTC").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
+    if (row.hitbtc.bid != undefined && $('#chk-Hitbtc').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.hitbtc.status == "ok"))
         arr.push(row.hitbtc.bid);
-    if (row.bitfinex.bid != undefined && document.getElementById("btnBitfinex").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
+    if (row.bitfinex.bid != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.bid);
-     if (row.exmo.bid != undefined && document.getElementById("btnExmo").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+     if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.bid); 
-        if (row.huobipro.bid != undefined && document.getElementById("btnHuobipro").children[0].classList.contains("fa-check-square") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+        if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
         arr.push(row.huobipro.bid); 
 
     if (arr.length == 0)
@@ -906,7 +915,7 @@ $.fn.dataTable.ext.search.push(
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[11]);
+        var val = parseFloat(data[10]);
         if (val < minPerc || val > maxPerc)
             return false;
 

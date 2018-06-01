@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueHitBTC = require('./../common/variables').queueHitBTC;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 const HitBTC = {
     getTickers: async function (inizializza) {
@@ -91,6 +92,7 @@ const HitBTC = {
             if (inizializza) {
                 while (count != json.length) { }
             }
+            lastupdateWs("hitbtc");
             return;
 
         });

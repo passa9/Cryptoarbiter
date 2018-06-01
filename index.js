@@ -1,3 +1,29 @@
+const express = require('express');
+const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const https = require('https');
+const request = require("request-promise");
+
+var expressWs = require('express-ws')
+expressWs = expressWs(express());
+var app = expressWs.app;
+
+app.ws('/lastupdate', function(ws, req) {
+});
+lastupdateWs = expressWs.getWss('/lastupdate');
+
+exports.lastUpdateWS = function(exchange)
+{
+  lastupdateWs.clients.forEach(function (client) {
+
+    var data = {
+      exchange: exchange,
+      date: new Date()
+    }
+    client.send(JSON.stringify(data));
+  });
+};
+
 const Bittrex = require('./exchanges/bittrex').Bittrex;
 const Binance = require('./exchanges/binance').Binance;
 const Poloniex = require('./exchanges/poloniex').Poloniex;
@@ -8,11 +34,6 @@ const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
 const Exmo = require('./exchanges/exmo').Exmo;
 const Huobipro = require('./exchanges/huobipro').Huobipro;
 
-const express = require('express');
-const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
-const https = require('https');
-const request = require("request-promise");
 var tickers = require("./common/variables.js").tickers;
 
 var queueBittrex = require("./common/variables.js").queueBittrex;
@@ -25,9 +46,10 @@ var queueBitfinex = require("./common/variables.js").queueBitfinex;
 var queueExmo = require("./common/variables.js").queueExmo;
 var queueHuobipro = require("./common/variables.js").queueHuobipro;
 
+
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
 
-const app = express();
+//const app = express();
 
 // Application insights
 const appInsights = require("applicationinsights");
@@ -35,8 +57,16 @@ appInsights.setup("26c089d4-a984-4155-9dd3-6c3890d64b9b")
   .setAutoCollectDependencies(false)
   .start();
 
+  
 
-
+ 
+  
+/*   setInterval(function () {
+    aWss.clients.forEach(function (client) {
+      client.send('hello');
+    });
+  }, 5000); */
+  
 
 async function getOrderBook(exchange, type, market, res) {
 
@@ -62,7 +92,7 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "Liqui") {
     queueLiqui.push(params);
   }
-  else if (exchange == "HitBTC") {
+  else if (exchange == "Hitbtc") {
     queueHitBTC.push(params);
   }
   else if (exchange == "Bitfinex") {
@@ -75,6 +105,7 @@ async function getOrderBook(exchange, type, market, res) {
     queueHuobipro.push(params);
   }
 }
+
 
 Bittrex.startDequequeOrderbook();
 Poloniex.startDequequeOrderbook();
@@ -183,7 +214,7 @@ async function init() {
    }
    catch (e) { } 
   try {
-   // await HitBTC.getTickers(true);
+   await HitBTC.getTickers(true);
   }
   catch (e) { }
   try {
@@ -210,6 +241,8 @@ async function init() {
       updateTickers();
       updateTickersSlow();
       Huobipro.refreshTickers();
+
+  
     })
     },5000);
     
@@ -222,7 +255,7 @@ function updateStatus() {
     Poloniex.getCurrencies();
     Bittrex.getCurrencies();
    Cryptopia.getCurrencies();
- //   HitBTC.getCurrencies();
+   HitBTC.getCurrencies();
   }, 30000)
 }
 
@@ -234,7 +267,7 @@ function updateTickers() {
     Binance.getTickers(false);
     Poloniex.getTickers(false);
     Liqui.getTickers(false);
-  //  HitBTC.getTickers(false);
+   HitBTC.getTickers(false);
     Exmo.getTickers(false);
   }, 4000);
 }
@@ -284,3 +317,4 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
+

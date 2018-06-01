@@ -1,7 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueBinance = require('./../common/variables').queueBinance;
-
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 const Binance = {
   getTickers: async function (inizializza) {
@@ -75,6 +75,8 @@ const Binance = {
       if (inizializza) {
         while (count != json.length) { }
       }
+      lastupdateWs("binance");
+     
       return;
 
     });

@@ -1,6 +1,7 @@
 const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queuePoloniex = require('./../common/variables').queuePoloniex;
+var lastupdateWs = require("./../index").lastUpdateWS;
 
 const Poloniex = {
   getTickers: async function (inizializza) {
@@ -69,6 +70,7 @@ const Poloniex = {
       if (inizializza) {
         while (count != Object.keys(obj).length) { }
       }
+      lastupdateWs("poloniex");
       return;
     });
   },
