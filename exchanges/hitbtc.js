@@ -69,7 +69,8 @@ const HitBTC = {
                         cryptopia: {},
                         livecoin: {},
                         bitfinex: {},
-                        huobipro: {}
+                        huobipro: {},
+                        qryptos: {}
                     });
                 }
                 else if (ticker == null) {

@@ -51,7 +51,8 @@ const Binance = {
             hitbtc: {},
             livecoin: {},
             bitfinex: {},
-            huobipro: {}
+            huobipro: {},
+            qryptos: {}
           });
 
         }

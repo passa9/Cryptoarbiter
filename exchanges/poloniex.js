@@ -47,7 +47,8 @@ const Poloniex = {
             cryptopia: {},
             livecoin: {},
             bitfinex: {},
-            huobipro: {}
+            huobipro: {},
+            qryptos: {}
           });
         }
         else if (ticker == null) {

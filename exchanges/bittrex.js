@@ -46,7 +46,8 @@ const Bittrex = {
             exmo: {},
             livecoin: {},
             bitfinex: {},
-            huobipro: {}
+            huobipro: {},
+            qryptos: {}
           });
 
         }

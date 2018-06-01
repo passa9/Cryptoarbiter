@@ -33,6 +33,7 @@ const HitBTC = require('./exchanges/hitbtc').HitBTC;
 const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
 const Exmo = require('./exchanges/exmo').Exmo;
 const Huobipro = require('./exchanges/huobipro').Huobipro;
+const Qryptos = require('./exchanges/qryptos').Qryptos;
 
 var tickers = require("./common/variables.js").tickers;
 
@@ -45,6 +46,7 @@ var queueHitBTC = require("./common/variables.js").queueHitBTC;
 var queueBitfinex = require("./common/variables.js").queueBitfinex;
 var queueExmo = require("./common/variables.js").queueExmo;
 var queueHuobipro = require("./common/variables.js").queueHuobipro;
+var queueQryptos = require("./common/variables.js").queueQryptos;
 
 
 // https://api.kraken.com/0/public/Ticker?pair=BCHEUR,BCHUSD,BCHXBT,DASHEUR,DASHUSD,DASHXBT,EOSETH,EOSEUR,EOSUSD,EOSXBT,GNOETH,GNOEUR,GNOUSD,GNOXBT,USDTUSD,ETCETH,ETCXBT,ETCEUR,ETCUSD,ETHXBT,ETHXBT.d,ETHCAD,ETHCAD.d,ETHEUR,ETHEUR.d,ETHGBP,ETHGBP.d,ETHJPY,ETHJPY.d,ETHUSD,ETHUSD.d,ICNETH,ICNXBT,LTCXBT,LTCEUR,LTCUSD,MLNETH,MLNXBT,REPETH,REPXBT,REPEUR,REPUSD,XBTCAD,XBTCAD.d,XBTEUR,XBTEUR.d,XBTGBP,XBTGBP.d,XBTJPY,XBTJPY.d,XBTUSD,XBTUSD.d,XDGXBT,XLMXBT,XLMEUR,XLMUSD,XMRXBT,XMREUR,XMRUSD,XRPXBT,XRPCAD,XRPEUR,XRPJPY,XRPUSD,ZECXBT,ZECEUR,ZECJPY,ZECUSD
@@ -104,6 +106,9 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "Huobipro") {
     queueHuobipro.push(params);
   }
+  else if (exchange == "Qryptos") {
+    queueQryptos.push(params);
+  }
 }
 
 
@@ -116,6 +121,7 @@ HitBTC.startDequequeOrderbook();
 Bitfinex.startDequequeOrderbook();
 Exmo.startDequequeOrderbook();
 Huobipro.startDequequeOrderbook();
+Qryptos.startDequequeOrderbook();
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({
@@ -230,6 +236,10 @@ async function init() {
   }
   catch(e){}
   try {
+    await Qryptos.getTickers(true);
+  }
+  catch(e){}
+  try {
     await Huobipro.fillPairs();
   }
   catch (e) { }
@@ -269,6 +279,7 @@ function updateTickers() {
     Liqui.getTickers(false);
    HitBTC.getTickers(false);
     Exmo.getTickers(false);
+    Qryptos.getTickers(false);
   }, 4000);
 }
 
@@ -304,6 +315,8 @@ async function RemoveAloneMarkets() {
     if (tickers[i].exmo.ask != undefined)
       arr.push(1);
     if (tickers[i].huobipro.status != undefined)
+      arr.push(1);
+      if (tickers[i].qryptos.status != undefined)
       arr.push(1);
 
     if (arr.length < 2) {

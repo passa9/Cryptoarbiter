@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[10, "desc"]],
+        "order": [[11, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -646,6 +646,70 @@ $(document).ready(function () {
                 }
             },
             {
+                "data": "qryptos", "orderable": true, render: function (data, type, row, meta) {
+
+                    if (data.bid == undefined)
+                        return "-";
+
+                    var differenceBid = compare(meta, data.bid, "bid");
+                    var differenceAsk = compare(meta, data.ask, "ask");
+
+                    var min;
+                    var max;
+
+                    if (data.status != "ok" && $('#btnExcludeLock').hasClass("btn-primary")) {
+                        min = false;
+                        max = false;
+                    }
+                    else {
+                        min = low(row, data.ask, "Qryptos");
+                        max = high(row, data.bid, "Qryptos");
+                    }
+
+                    var cell = "";
+                    cell += '<div style="display:absolute;margin:0;padding:0">';
+
+                    if (min && max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:blue;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (min) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:red;right:2px;bottom:-2px;"></i>'; // style="position:absolute;left:2%;bottom:-0.8px;width:6px;color:green"
+                    }
+                    else if (max) {
+                        cell += '<i class="fas fa-circle" style="position:absolute;width:7px;color:green;right:2px;bottom:-2px;"></i>';
+                    }
+                    cell += '<div class="divTable"><div class="divTableBody"><div class="divTableRow"><div class="divTableCell">'
+                    cell += '<font size="2">';
+                    if (differenceAsk == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Qryptos" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:green">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Qryptos" data-type="ask" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" style="color:black">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    else if (differenceAsk == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Qryptos" data-type="ask" data-pair="' + data.base + "-" + data.quote + '" onclick="amountDetails(this)" style="color:red">' + ((data.ask != undefined) ? data.ask.toFixed(8) : '0') + '</a>'
+                    }
+                    cell += '</font>'
+                    cell += '</div></div><div class="divTableRow"><div class="divTableCell">';
+                    cell += '<font size="2">';
+                    if (differenceBid == 1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Qryptos" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:green">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == 0) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Qryptos" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:black">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    if (differenceBid == -1) {
+                        cell += '<a href="javascript:void(0)" data-exchange="Qryptos" data-type="bid" data-pair="' + data.base + "-" + data.quote + '"  onclick="amountDetails(this)" href="#" style="color:red">' + ((data.bid != undefined) ? data.bid.toFixed(8) : '0') + '</a>'
+                    }
+                    '</div></div></div></div>';
+
+                    cell += '</div>';
+
+                    return cell;
+
+                }
+            },
+            {
                 "data": "null", "orderable": true, render: function (data, type, row, meta) {
 
                     var min = getMin(row);
@@ -709,6 +773,12 @@ $(document).ready(function () {
             }
             else if (meta.col == 8) {
                 prev_data = prevTable[meta.row].exmo;
+            }
+            else if (meta.col == 9) {
+                prev_data = prevTable[meta.row].huobipro;
+            }
+            else if (meta.col == 10) {
+                prev_data = prevTable[meta.row].qryptos;
             }
 
             if (prev_data == undefined)
@@ -815,6 +885,8 @@ function low(row, value, exchange) {
           arr.push(row.exmo.ask); 
      if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
           arr.push(row.huobipro.ask); 
+          if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+          arr.push(row.qryptos.ask); 
 
     var min = Math.min(...arr);
 
@@ -845,6 +917,8 @@ function high(row, value, exchange) {
          arr.push(row.exmo.bid);
     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
          arr.push(row.huobipro.bid);
+         if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+         arr.push(row.qryptos.bid);
 
     var max = Math.max(...arr);
 
@@ -875,6 +949,8 @@ function getMin(row) {
         arr.push(row.exmo.ask); 
      if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
         arr.push(row.huobipro.ask);
+        if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+        arr.push(row.qryptos.ask);
 
     if (arr.length == 0)
         return 0;
@@ -903,6 +979,8 @@ function getMax(row) {
         arr.push(row.exmo.bid); 
         if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
         arr.push(row.huobipro.bid); 
+        if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+        arr.push(row.qryptos.bid); 
 
     if (arr.length == 0)
         return 0;
@@ -915,7 +993,7 @@ $.fn.dataTable.ext.search.push(
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[10]);
+        var val = parseFloat(data[11]);
         if (val < minPerc || val > maxPerc)
             return false;
 

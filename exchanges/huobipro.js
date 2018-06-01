@@ -2,6 +2,7 @@ const request = require("request-promise");
 var tickers = require('./../common/variables').tickers;
 var queueHuobipro = require('./../common/variables').queueHuobipro;
 var lastupdateWs = require("./../index").lastUpdateWS;
+const delay = require('delay');
 
 var pairs = [];
 
@@ -54,7 +55,8 @@ const Huobipro = {
                         exmo: {},
                         livecoin: {},
                         bitfinex: {},
-                        bittrex: {}
+                        bittrex: {},
+                        qryptos: {}
                     });
                 }
                 else {
@@ -76,8 +78,7 @@ const Huobipro = {
 
             for (var i = 0; i < pairs.length; i++) {
 
-                try {
-
+                try {              
                     var pair = pairs[i].baseCurrency + pairs[i].quoteCurrency
 
                     var quote = pairs[i].quoteCurrency;
@@ -87,6 +88,9 @@ const Huobipro = {
                     var ticker = tickers.find(x => x.id === id);
 
                     if (ticker != undefined) {
+
+                        await delay(1000);
+
                         const url =
                             "https://api.huobi.pro/market/detail/merged?symbol=" + pair;
                         await request.get(url, (error, response, body) => {
@@ -100,6 +104,7 @@ const Huobipro = {
                                 json = JSON.parse(body);
                             }
                             catch (e) {
+                                console.log("Errore huobipro")
                                 return;
                             }
 

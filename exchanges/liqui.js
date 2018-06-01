@@ -56,7 +56,8 @@ const  Liqui = {
                 hitbtc: {},
                 bittrex: {},
                 bitfinex: {},
-                huobipro: {}
+                huobipro: {},
+                qryptos: {}
               });
       
             }
