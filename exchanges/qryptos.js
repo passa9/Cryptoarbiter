@@ -8,7 +8,7 @@ var lstId = [];
 const Qryptos = {
     getTickers: async function (inizializza) {
         const url =
-            "https://api.qryptos.com/products";
+            "https://api.liquid.com/products";
         return request.get(url, (error, response, body) => {
 
             if (error || response.statusCode != 200) {
@@ -101,7 +101,7 @@ const Qryptos = {
                 var json = await getOrderBookQryptos(data.funct.market, data.funct.type);
                 res.contentType('application/json');
                 res.send(JSON.stringify({
-                    link: "https://home.qryptos.com/basic/" + data.funct.market.split("-")[1] + data.funct.market.split("-")[0],
+                    link: "https://app.liquid.com/exchange/" + data.funct.market.split("-")[1] + data.funct.market.split("-")[0],
                     arr: json,
                 }));
             }
@@ -120,7 +120,7 @@ async function getOrderBookQryptos(market, type) {
         var pair = lstId.filter(function (x) { return x.base == basecurrency && x.quote == quotecurrency });
         var id = pair[0].id;
     
-        const url = "https://api.qryptos.com/products/" + id + "/price_levels";
+        const url = "https://api.liquid.com/products/" + id + "/price_levels";
     
         await request.get(url, (error, response, body) => {
     

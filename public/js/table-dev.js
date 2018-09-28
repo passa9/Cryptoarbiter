@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[9, "desc"]],
+        "order": [[10, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -644,7 +644,7 @@ $(document).ready(function () {
                     return cell;
 
                 }
-            },
+            },*/
             {
                 "data": "qryptos", "orderable": true, render: function (data, type, row, meta) {
 
@@ -708,7 +708,7 @@ $(document).ready(function () {
                     return cell;
 
                 }
-            }, */
+            },
             {
                 "data": "null", "orderable": true, render: function (data, type, row, meta) {
 
@@ -776,10 +776,10 @@ $(document).ready(function () {
             }
             /*           else if (meta.col == 9) {
                           prev_data = prevTable[meta.row].huobipro;
-                      }
-                      else if (meta.col == 10) {
-                          prev_data = prevTable[meta.row].qryptos;
                       } */
+            else if (meta.col == 10) {
+                prev_data = prevTable[meta.row].qryptos;
+            }
 
             if (prev_data == undefined)
                 return 0;
@@ -883,10 +883,10 @@ function low(row, value, exchange) {
         arr.push(row.bitfinex.ask);
     if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.ask);
-/*     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-        arr.push(row.huobipro.ask);
-    if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-        arr.push(row.qryptos.ask); */
+    /*     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+            arr.push(row.huobipro.ask);*/
+        if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+            arr.push(row.qryptos.ask); 
 
     var min = Math.min(...arr);
 
@@ -915,10 +915,10 @@ function high(row, value, exchange) {
         arr.push(row.bitfinex.bid);
     if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.bid);
-/*     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-        arr.push(row.huobipro.bid);
-    if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-        arr.push(row.qryptos.bid); */
+    /*     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+            arr.push(row.huobipro.bid);*/
+        if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+            arr.push(row.qryptos.bid); 
 
     var max = Math.max(...arr);
 
@@ -947,10 +947,10 @@ function getMin(row) {
         arr.push(row.bitfinex.ask);
     if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.ask);
-/*     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-        arr.push(row.huobipro.ask);
-    if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-        arr.push(row.qryptos.ask); */
+    /*     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+            arr.push(row.huobipro.ask);*/
+        if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+            arr.push(row.qryptos.ask); 
 
     if (arr.length == 0)
         return 0;
@@ -977,10 +977,10 @@ function getMax(row) {
         arr.push(row.bitfinex.bid);
     if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
         arr.push(row.exmo.bid);
-/*     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-        arr.push(row.huobipro.bid);
-    if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-        arr.push(row.qryptos.bid); */
+    /*     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+            arr.push(row.huobipro.bid);*/
+        if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+            arr.push(row.qryptos.bid); 
 
     if (arr.length == 0)
         return 0;
@@ -993,7 +993,7 @@ $.fn.dataTable.ext.search.push(
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[9]); //*********************************************************************************************************** */
+        var val = parseFloat(data[10]); //*********************************************************************************************************** */
         if (val < minPerc || val > maxPerc)
             return false;
 

@@ -15,7 +15,7 @@
                             Exchange
                         </th>
                         <th>
-                             Enabled
+                            Enabled
                         </th>
                         <th>
                             Last update
@@ -29,7 +29,7 @@
                                 style="max-width:100%;">
                         </td>
                         <td>
-                            <label  class="switch" >
+                            <label class="switch">
                                 <input id="chk-Bittrex" type="checkbox" data-column="1" onclick="exchange(this)" checked>
                                 <span class="slider"></span>
                             </label>
@@ -59,13 +59,13 @@
                                 style="max-width:100%;">
                         </td>
                         <td>
-                              <label class="switch">
+                            <label class="switch">
                                 <input id="chk-Poloniex" type="checkbox" onclick="exchange(this)" data-column="3" onclick="exchange(this)" checked>
                                 <span class="slider"></span>
                             </label>
                         </td>
                         <td>
-                        <span id="lu-poloniex"></span>
+                            <span id="lu-poloniex"></span>
                         </td>
                     </tr>
                     <tr>
@@ -95,7 +95,7 @@
                             </label>
                         </td>
                         <td>
-                             <span id="lu-liqui"></span>
+                            <span id="lu-liqui"></span>
                         </td>
                     </tr>
                     <tr>
@@ -125,7 +125,7 @@
                             </label>
                         </td>
                         <td>
-                              <span id="lu-bitfinex"></span>
+                            <span id="lu-bitfinex"></span>
                         </td>
                     </tr>
                     <tr>
@@ -140,16 +140,17 @@
                             </label>
                         </td>
                         <td>
-                        <span id="lu-exmo"></span>
+                            <span id="lu-exmo"></span>
                         </td>
                     </tr>
                     </tr>
-                   {{!--  <tr>
+                    {{!--
+                    <tr>
                         <td>
                             <img src="https://user-images.githubusercontent.com/1294454/27766569-15aa7b9a-5edd-11e7-9e7f-44791f4ee49c.jpg" alt="huobipro"
                                 style="max-width:100%;">
                         </td>
-                        <td >
+                        <td>
                             <label class="switch">
                                 <input id="chk-Huobipro" type="checkbox" data-column="9" onclick="exchange(this)" checked>
                                 <span class="slider"></span>
@@ -158,13 +159,13 @@
                         <td>
                             <span id="lu-huobipro"></span>
                         </td>
-                    </tr>
+                    </tr>--}}
                     <tr>
                         <td>
                             <img src="https://user-images.githubusercontent.com/1294454/30953915-b1611dc0-a436-11e7-8947-c95bd5a42086.jpg" alt="qryptos"
                                 style="max-width:100%;">
                         </td>
-                        <td >
+                        <td>
                             <label class="switch">
                                 <input id="chk-Qryptos" type="checkbox" data-column="10" onclick="exchange(this)" checked>
                                 <span class="slider"></span>
@@ -173,7 +174,7 @@
                         <td>
                             <span id="lu-qryptos"></span>
                         </td>
-                    </tr> --}}
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -195,7 +196,7 @@
         <tr>
             <td colspan="12">
                 <div class="row">
-                   
+
                     <div align="right" class="col-md-12">
                         <span> da:</span>
                         <select id="minPerc" onchange="refreshDatatable()" style="width:90px" class="form-control form-control-sm d-inline">
@@ -231,12 +232,14 @@
             <th>HitBTC</th>
             <th>Bitfinex</th>
             <th>Exmo</th>
+            <th>Qryptos</th>
             <th>Percentage</th>
         </tr>
     </thead>
 </table>
-          {{!--   <th>Huobipro</th>
-             <th>Qryptos</th> --}}
+{{!--
+<th>Huobipro</th>--}}
+
 <script>
 
     function calculatePrice(el) {
@@ -394,27 +397,27 @@
         return 'id-' + Math.random().toString(36).substr(2, 16);
     };
 
- const socket = new WebSocket('ws://' + window.location.hostname + ":" + location.port + "/lastupdate");
+    const socket = new WebSocket('ws://' + window.location.hostname + ":" + location.port + "/lastupdate");
 
-socket.onopen = () => {
-  socket.send('ws open'); 
-}
+    socket.onopen = () => {
+        socket.send('ws open');
+    }
 
-function js_yyyy_mm_dd_hh_mm_ss () {
-  now = new Date();
-  year = "" + now.getFullYear();
-  month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
-  day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
-  hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
-  minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
-  second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
-  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-}
+    function js_yyyy_mm_dd_hh_mm_ss() {
+        now = new Date();
+        year = "" + now.getFullYear();
+        month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
+        day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
+        hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
+        minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
+        second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
+        return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+    }
 
-socket.onmessage = e => {
-var data = JSON.parse(event.data);
-  document.getElementById("lu-" + data.exchange).innerText = js_yyyy_mm_dd_hh_mm_ss();
-}
+    socket.onmessage = e => {
+        var data = JSON.parse(event.data);
+        document.getElementById("lu-" + data.exchange).innerText = js_yyyy_mm_dd_hh_mm_ss();
+    }
 </script>
 
 <style>
@@ -482,7 +485,4 @@ var data = JSON.parse(event.data);
     .card-header .collapsed .fa {
         transform: rotate(90deg);
     }
-
-
-    
 </style>
