@@ -52,7 +52,7 @@ $(document).ready(function () {
         "responsive": true,
         "fixedHeader": true,
         "iDisplayLength": 50,
-        "order": [[11, "desc"]],
+        "order": [[9, "desc"]],
         "columns": [
             {
                 "data": "id", "orderable": true, render: function (data, type, row, meta) {
@@ -324,7 +324,7 @@ $(document).ready(function () {
 
                 }
             },
-          
+
             {
                 "data": "liqui", "orderable": true, render: function (data, type, row, meta) {
 
@@ -587,7 +587,7 @@ $(document).ready(function () {
 
                 }
             },
-            {
+            /* {
                 "data": "huobipro", "orderable": true, render: function (data, type, row, meta) {
 
                     if (data.bid == undefined)
@@ -708,7 +708,7 @@ $(document).ready(function () {
                     return cell;
 
                 }
-            },
+            }, */
             {
                 "data": "null", "orderable": true, render: function (data, type, row, meta) {
 
@@ -774,12 +774,12 @@ $(document).ready(function () {
             else if (meta.col == 8) {
                 prev_data = prevTable[meta.row].exmo;
             }
-            else if (meta.col == 9) {
-                prev_data = prevTable[meta.row].huobipro;
-            }
-            else if (meta.col == 10) {
-                prev_data = prevTable[meta.row].qryptos;
-            }
+            /*           else if (meta.col == 9) {
+                          prev_data = prevTable[meta.row].huobipro;
+                      }
+                      else if (meta.col == 10) {
+                          prev_data = prevTable[meta.row].qryptos;
+                      } */
 
             if (prev_data == undefined)
                 return 0;
@@ -834,26 +834,26 @@ $(document).ready(function () {
         table.ajax.reload(null, false); // user paging is not reset on reload
     }, 3000);
 
-/*     $('input.toggle-vis').on('click', function (e) {
-        e.preventDefault();
-
-        // Get the column API object
-        var column = table.column($(this).attr('data-column'));
-
-        // Toggle the visibility
-        column.visible(!column.visible());
-    }); */
+    /*     $('input.toggle-vis').on('click', function (e) {
+            e.preventDefault();
+    
+            // Get the column API object
+            var column = table.column($(this).attr('data-column'));
+    
+            // Toggle the visibility
+            column.visible(!column.visible());
+        }); */
 
 });
 
 function exchange(element) {
 
-    
-            // Get the column API object
-            var column = table.column($(element).attr('data-column'));
-    
-            // Toggle the visibility
-            column.visible(!column.visible());
+
+    // Get the column API object
+    var column = table.column($(element).attr('data-column'));
+
+    // Toggle the visibility
+    column.visible(!column.visible());
     refreshDatatable();
 }
 /* function exchange(element) {
@@ -881,16 +881,16 @@ function low(row, value, exchange) {
         arr.push(row.hitbtc.ask);
     if (row.bitfinex.ask != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.ask);
-     if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
-          arr.push(row.exmo.ask); 
-     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-          arr.push(row.huobipro.ask); 
-          if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-          arr.push(row.qryptos.ask); 
+    if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+        arr.push(row.exmo.ask);
+/*     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+        arr.push(row.huobipro.ask);
+    if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+        arr.push(row.qryptos.ask); */
 
     var min = Math.min(...arr);
 
-    if (min == value && $('#chk-'+ exchange).is(":checked"))
+    if (min == value && $('#chk-' + exchange).is(":checked"))
         return true;
     else
         return false;
@@ -913,16 +913,16 @@ function high(row, value, exchange) {
         arr.push(row.hitbtc.bid);
     if (row.bitfinex.bid != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.bid);
-     if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
-         arr.push(row.exmo.bid);
-    if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-         arr.push(row.huobipro.bid);
-         if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked")  && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-         arr.push(row.qryptos.bid);
+    if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+        arr.push(row.exmo.bid);
+/*     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+        arr.push(row.huobipro.bid);
+    if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+        arr.push(row.qryptos.bid); */
 
     var max = Math.max(...arr);
 
-    if (max == value && $('#chk-'+ exchange).is(":checked"))
+    if (max == value && $('#chk-' + exchange).is(":checked"))
         return true;
     else
         return false;
@@ -945,12 +945,12 @@ function getMin(row) {
         arr.push(row.hitbtc.ask);
     if (row.bitfinex.ask != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.ask);
-     if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
-        arr.push(row.exmo.ask); 
-     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+    if (row.exmo.ask != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+        arr.push(row.exmo.ask);
+/*     if (row.huobipro.ask != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
         arr.push(row.huobipro.ask);
-        if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-        arr.push(row.qryptos.ask);
+    if (row.qryptos.ask != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+        arr.push(row.qryptos.ask); */
 
     if (arr.length == 0)
         return 0;
@@ -975,12 +975,12 @@ function getMax(row) {
         arr.push(row.hitbtc.bid);
     if (row.bitfinex.bid != undefined && $('#chk-Bitfinex').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.bitfinex.status == "ok"))
         arr.push(row.bitfinex.bid);
-     if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
-        arr.push(row.exmo.bid); 
-        if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
-        arr.push(row.huobipro.bid); 
-        if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
-        arr.push(row.qryptos.bid); 
+    if (row.exmo.bid != undefined && $('#chk-Exmo').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.exmo.status == "ok"))
+        arr.push(row.exmo.bid);
+/*     if (row.huobipro.bid != undefined && $('#chk-Huobipro').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.huobipro.status == "ok"))
+        arr.push(row.huobipro.bid);
+    if (row.qryptos.bid != undefined && $('#chk-Qryptos').is(":checked") && ($('#btnExcludeLock').hasClass("btn-secondary") || row.qryptos.status == "ok"))
+        arr.push(row.qryptos.bid); */
 
     if (arr.length == 0)
         return 0;
@@ -993,7 +993,7 @@ $.fn.dataTable.ext.search.push(
         var name = data[0]; // use data for the age column
         var minPerc = parseFloat(document.getElementById("minPerc").value);
         var maxPerc = parseFloat(document.getElementById("maxPerc").value);
-        var val = parseFloat(data[11]);
+        var val = parseFloat(data[9]); //*********************************************************************************************************** */
         if (val < minPerc || val > maxPerc)
             return false;
 
@@ -1036,8 +1036,6 @@ $(document).ready(function () {
 
         table.draw();
     });
-    //   $(row).append('<div class="col-md-3"><button class="btn btn-primary btn-sm">ciaooooooooooooooooooooo</button></div>')
-    //  $(col).append('<button class="btn btn-primary">ciaooooooooooooooooooooo</button>');
 });
 
 
