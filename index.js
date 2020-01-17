@@ -26,8 +26,8 @@ exports.lastUpdateWS = function (exchange) {
 const Bittrex = require('./exchanges/bittrex').Bittrex;
 const Binance = require('./exchanges/binance').Binance;
 const Poloniex = require('./exchanges/poloniex').Poloniex;
-const Cryptopia = require('./exchanges/cryptopia').Cryptopia;
-const Liqui = require('./exchanges/liqui').Liqui;
+//const Cryptopia = require('./exchanges/cryptopia').Cryptopia;
+//const Liqui = require('./exchanges/liqui').Liqui;
 const HitBTC = require('./exchanges/hitbtc').HitBTC;
 const Bitfinex = require('./exchanges/bitfinex').Bitfinex;
 const Exmo = require('./exchanges/exmo').Exmo;
@@ -39,8 +39,8 @@ var tickers = require("./common/variables.js").tickers;
 var queueBittrex = require("./common/variables.js").queueBittrex;
 var queuePoloniex = require("./common/variables.js").queuePoloniex;
 var queueBinance = require("./common/variables.js").queueBinance;
-var queueCryptopia = require("./common/variables.js").queueCryptopia;
-var queueLiqui = require("./common/variables.js").queueLiqui;
+//var queueCryptopia = require("./common/variables.js").queueCryptopia;
+//var queueLiqui = require("./common/variables.js").queueLiqui;
 var queueHitBTC = require("./common/variables.js").queueHitBTC;
 var queueBitfinex = require("./common/variables.js").queueBitfinex;
 var queueExmo = require("./common/variables.js").queueExmo;
@@ -86,12 +86,12 @@ async function getOrderBook(exchange, type, market, res) {
   else if (exchange == "Binance") {
     queueBinance.push(params);
   }
-  else if (exchange == "Cryptopia") {
+ /*  else if (exchange == "Cryptopia") {
     queueCryptopia.push(params);
-  }
-  else if (exchange == "Liqui") {
+  } */
+ /*  else if (exchange == "Liqui") {
     queueLiqui.push(params);
-  }
+  } */
   else if (exchange == "Hitbtc") {
     queueHitBTC.push(params);
   }
@@ -113,8 +113,8 @@ async function getOrderBook(exchange, type, market, res) {
 Bittrex.startDequequeOrderbook();
 Poloniex.startDequequeOrderbook();
 Binance.startDequequeOrderbook();
-Cryptopia.startDequequeOrderbook();
-Liqui.startDequequeOrderbook();
+//Cryptopia.startDequequeOrderbook();
+//Liqui.startDequequeOrderbook();
 HitBTC.startDequequeOrderbook();
 Bitfinex.startDequequeOrderbook();
 Exmo.startDequequeOrderbook();
@@ -213,10 +213,10 @@ async function init() {
     await Poloniex.getTickers(true);
   }
   catch (e) { }
-  try {
+ /*  try {
     await Cryptopia.getTickers(true);
   }
-  catch (e) { }
+  catch (e) { } */
   try {
     await HitBTC.getTickers(true);
   }
@@ -229,10 +229,10 @@ async function init() {
     await Exmo.getTickers(true);
   }
   catch (e) { }
-  try {
+/*   try {
     await Liqui.getTickers(true);
   }
-  catch (e) { }
+  catch (e) { } */
   try {
     await Qryptos.getTickers(true);
   }
@@ -261,7 +261,7 @@ function updateStatus() {
   setInterval(function () {
     Poloniex.getCurrencies();
     Bittrex.getCurrencies();
-    Cryptopia.getCurrencies();
+  //  Cryptopia.getCurrencies();
     HitBTC.getCurrencies();
   }, 30000)
 }
@@ -273,7 +273,7 @@ function updateTickers() {
     Bittrex.getTickers(false);
     Binance.getTickers(false);
     Poloniex.getTickers(false);
-    Liqui.getTickers(false);
+   // Liqui.getTickers(false);
     HitBTC.getTickers(false);
     Exmo.getTickers(false);
     Qryptos.getTickers(false);
@@ -283,7 +283,7 @@ function updateTickers() {
 function updateTickersSlow() {
   setInterval(function () {
     Bitfinex.getTickers(false);
-    Cryptopia.getTickers(false);
+  //  Cryptopia.getTickers(false);
   }, 6000);
 }
 
@@ -299,12 +299,12 @@ async function RemoveAloneMarkets() {
       arr.push(1);
     if (tickers[i].bittrex.ask != undefined)
       arr.push(1);
-    if (tickers[i].cryptopia.ask != undefined)
-      arr.push(1);
+ /*    if (tickers[i].cryptopia.ask != undefined)
+      arr.push(1); */
     if (tickers[i].binance.ask != undefined)
       arr.push(1);
-    if (tickers[i].liqui.ask != undefined)
-      arr.push(1);
+/*     if (tickers[i].liqui.ask != undefined)
+      arr.push(1); */
     if (tickers[i].hitbtc.ask != undefined)
       arr.push(1);
     if (tickers[i].bitfinex.ask != undefined)
