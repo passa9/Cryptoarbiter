@@ -27,7 +27,7 @@
     "parser": "^0.1.4",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.4.0",
     "telegram-mtproto": "^2.2.2",
     "tg-cli-node": "0.0.8"
   }
