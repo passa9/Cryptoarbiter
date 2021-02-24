@@ -18,7 +18,7 @@
     "applicationinsights": "^1.0.2",
     "body": "^5.1.0",
     "delay": "^3.0.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.18.2",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
     "express-ws": "^3.0.0",
